@@ -1,1 +1,56 @@
 <h2>Jobs#edit</h2>
+
+<% form_for(:job, @job, :url => job_url(@job.id), :html => {:method => :put}) do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label(:job_title) %><br />
+    <%= f.text_field(:job_title) %>
+  </p>
+  
+  <p>
+    <%= f.label(:job_category) %><br />
+    <%= f.text_field(:job_category) %>
+  </p>
+
+  <p>
+    <%= f.label(:job_description) %><br />
+    <%= f.text_area(:job_description, :rows => 2) %>
+  </p>
+
+  <p>
+    <%= f.label(:start_date) %><br />
+    <%= f.text_field(:start_date) %>
+  </p>
+
+  <p>
+    <%= f.label(:end_date) %><br />
+    <%= f.text_field(:end_date) %>
+  </p>
+
+  <p>
+    <%= f.label(:salary_low_range) %><br />
+    <%= f.text_field(:salary_low_range) %>
+  </p>
+
+  <p>
+    <%= f.label(:salary_high_range) %><br />
+    <%= f.text_field(:salary_high_range) %>
+  </p>
+
+  <p>
+    <%= f.label(:other_information) %><br />
+    <%= f.text_area(:other_information, :rows => 5) %>
+  </p>
+
+  <p>
+    <%= f.label(:application_followup_message) %><br />
+    <%= f.text_area(:application_followup_message, :rows => 5) %>
+  </p>
+
+  <p>
+    <%= submit_tag('Update') %>
+  </p>
+
+<% end %>
+<br />
+<%= link_to 'Back', jobs_url %>

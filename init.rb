@@ -13,8 +13,10 @@ Redmine::Plugin.register :redmine_apptracker do
   # permission :create_jobs, :jobs => :create
   project_module :application_tracker do
     permission :view_application_trackers, :apptrackers => :index
-    permission :create_an_apptracker, :apptrackers => :create
-    permission :new_apptracker, :apptrackers => :new
+    permission :create_an_apptracker, :apptrackers => :new
+    #permission :new_apptracker, :apptrackers => :new
+    permission :view_jobs, :jobs => :index
+    permission :create_a_job, :jobs => :new
   end
 
   # set menu options; :if used for setting menu to visible if logged in
