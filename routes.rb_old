@@ -1,0 +1,9 @@
+map.resource :apptrackers
+=begin
+map.connect 'projects/:project_id/apptrackers', :controller => 'apptrackers', :action => 'index'
+map.connect 'projects/:project_id/apptrackers/new', :controller => 'apptrackers', :action => 'new'
+map.connect 'projects/:project_id/apptrackers/edit', :controller => 'apptrackers', :action => 'edit'
+map.connect 'projects/:project_id/apptrackers/create', :controller => 'apptrackers', :action => 'create'
+=end
+
+

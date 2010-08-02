@@ -1,0 +1,20 @@
+<h2>Apptrackers#index</h2>
+
+<table>
+  <tr>
+    <th>Title</th>
+    <th>Description</th>
+  </tr>
+
+  <% @apptrackers.each do |apptracker| %>
+    <tr>
+      <td><%=h apptracker.title %></td>
+      <td><%=h apptracker.description %></td>
+      <td><%= link_to 'Show', {:controller => :apptrackers, :action => :show}%></td>
+      <td><%= link_to 'Edit', {:controller => :apptrackers, :action => :edit} %></td>
+      <td><%= link_to 'Destroy', {:controller => :apptrackers, :action => :destroy} %></td>
+    </tr>
+  <% end %>
+</table><br />
+
+<%= link_to 'New AppTracker', {:controller => :apptrackers, :action => :new} %>
