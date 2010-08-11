@@ -9,6 +9,8 @@ map.connect 'projects/:project_id/apptrackers/create', :controller => 'apptracke
 
 ActionController::Routing::Routes.draw do |map| 
 #  map.destroy_apptracker '/apptrackers/:id', :controller => 'apptrackers', :action => 'destroy', :method => 'delete'
+  map.resources :applicants
+  map.resources :application_materials
   map.resources :apptrackers
   map.resources :jobs
 end

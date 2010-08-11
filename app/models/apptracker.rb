@@ -1,7 +1,8 @@
 class Apptracker < ActiveRecord::Base
   # associations
   has_many :jobs, :dependent => :destroy
-  
+  has_many :applicants, :dependent => :destroy
+
   # validation
   validates_presence_of :title, :message => 'Please enter a title'
   validates_uniqueness_of :title

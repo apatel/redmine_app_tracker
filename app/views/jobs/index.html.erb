@@ -1,24 +1,6 @@
 <% flash[:notice] %>
-
-<h2>Jobs#index</h2>
-
-<div class="tabs"> 
-  <ul> 
-      <li><a href="/jobs" id="tab-Jobs" onclick="showTab('Jobs'); this.blur(); return false;">Jobs</a></li> 
-      <li><a href="/custom_fields?tab=ProjectCustomField" id="tab-ProjectCustomField" onclick="showTab('ProjectCustomField'); this.blur(); return false;">Applicants</a></li> 
-      <li><a href="/custom_fields?tab=VersionCustomField" id="tab-VersionCustomField" onclick="showTab('VersionCustomField'); this.blur(); return false;">Application Materials</a></li> 
-      <li><a href="/custom_fields?tab=UserCustomField" id="tab-UserCustomField" onclick="showTab('UserCustomField'); this.blur(); return false;">Communication</a></li>
-      <!-- <li><a href="/custom_fields?tab=GroupCustomField" id="tab-GroupCustomField" onclick="showTab('GroupCustomField'); this.blur(); return false;">Groups</a></li> 
-      <li><a href="/custom_fields?tab=TimeEntryActivityCustomField" id="tab-TimeEntryActivityCustomField" onclick="showTab('TimeEntryActivityCustomField'); this.blur(); return false;">Activities (time tracking)</a></li> 
-      <li><a href="/custom_fields?tab=IssuePriorityCustomField" id="tab-IssuePriorityCustomField" onclick="showTab('IssuePriorityCustomField'); this.blur(); return false;">Issue priorities</a></li> 
-      <li><a href="/custom_fields?tab=DocumentCategoryCustomField" id="tab-DocumentCategoryCustomField" onclick="showTab('DocumentCategoryCustomField'); this.blur(); return false;">Document categories</a></li> -->
-    </ul> 
-  <div class="tabs-buttons" style="display:none;"> 
-  	<button class="tab-left" onclick="moveTabLeft(this);"></button> 
-  	<button class="tab-right" onclick="moveTabRight(this);"></button> 
-  </div> 
-</div> 
-
+<h2>Jobs (<%=h session[:apptracker_title] %>)</h2>
+<%= render :partial => 'shared/tabs' %>
 
 <table class="list" style="width:65%">
 <thead>
@@ -34,13 +16,13 @@
 <tbody>
   <% @jobs.each do |job| %>
     <tr>
-      <td style="width:25%"><%= link_to "#{job.job_title}", job_url(job.id) %></a></td>
-      <td style="width:10%"><%=h job.job_category %></a></td>
-      <td style="width:45%"><%=h job.job_description %></td>
+      <td style="width:25%"><%= link_to "#{job.title}", job_url(job.id) %></a></td>
+      <td style="width:10%"><%=h job.category %></a></td>
+      <td style="width:45%"><%=h job.description %></td>
 
       <!--<td style="width:5%"><%= link_to 'Show', job_url(job.id) %></td>-->
       <td style="width:5%"><%= link_to 'Edit', edit_job_url(job.id) %></td>
-      <td style="width:5%"><%= link_to 'Delete', job_url(:id => job.id), :confirm => "All links to applicants will be destroyed.  Are you sure you want to delete the \"#{job.job_title}\" job?", :method => :delete %></td>
+      <td style="width:5%"><%= link_to 'Delete', job_url(:id => job.id), :confirm => "All links to applicants will be destroyed.  Are you sure you want to delete the \"#{job.title}\" job?", :method => :delete %></td>
     </tr>
   <% end %>
 </tbody>

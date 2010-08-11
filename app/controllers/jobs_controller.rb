@@ -4,8 +4,11 @@ class JobsController < ApplicationController
 
   # GET /jobs
   # GET jobs_url
+  # REVISE: change the index action to show all jobs maintained in the system?
+  # REVISE: move the index code to another action, showing jobs owned by a specific apptracker
   def index
-    @jobs = Job.find(:all)
+    # CHECK: what if session[:apptracker_id] doesn't exist?
+    @jobs = Job.find(:all, :conditions => ["apptracker_id = ?", session[:apptracker_id]])
   end
   
   # GET /jobs/1
@@ -30,7 +33,11 @@ class JobsController < ApplicationController
   # POST jobs_url
   def create
     @job = Job.create(params[:job])
-    @job.save ? flash[:notice] = "#{@job.title} has been created." : flash.now[:error] = "#{@job.title} could not be created"
+
+    # revise the following for when an apptracker_id doesn't exist
+    @job.apptracker_id = session[:apptracker_id]
+
+    @job.save ? flash[:notice] = "\'#{@job.title}\' has been created." : flash.now[:error] = "\'#{@job.title}\' could not be created"
     redirect_to(jobs_url)
   end
 
@@ -38,7 +45,7 @@ class JobsController < ApplicationController
   # PUT job_url(:id => 1)
   def update
     @job = Job.find(params[:id])
-    @job.update_attributes(params[:job]) ? flash[:notice] = "#{@job.title} has been updated." : flash[:error] = "#{@job.title} could not be updated."
+    @job.update_attributes(params[:job]) ? flash[:notice] = "\'#{@job.title}\' has been updated." : flash[:error] = "\'#{@job.title}\' could not be updated."
     redirect_to(jobs_url)
   end
 
@@ -46,8 +53,7 @@ class JobsController < ApplicationController
   # DELETE job_url(:id => 1)
   def destroy
     @job = Job.find(params[:id])
-    flash[:notice] = "#{@job.title} has been deleted."
-    @job.destroy ? flash[:notice] = "#{@job.title} has been deleted." : flash[:error] = "Error: #{job.title} could not be deleted."
+    @job.destroy ? flash[:notice] = "\'#{@job.title}\' has been deleted." : flash[:error] = "Error: \'#{@job.title}\' could not be deleted."
     redirect_to(jobs_url)
   end
 end

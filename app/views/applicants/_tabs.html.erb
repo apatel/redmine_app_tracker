@@ -1,0 +1,13 @@
+got to tabs partial
+<div class="tabs"> 
+  <ul> 
+      <li><a href="/applicants" id="tab-Jobs" onclick="showTab('Jobs'); this.blur(); return false;">Jobs</a></li> 
+      <li><a href="/applicants" id="tab-Applicants" onclick="showTab('Applicants'); this.blur(); return false;">Applicants</a></li> 
+      <li><a href="/application_materials" id="tab-ApplicationMaterials" onclick="showTab('ApplicationMaterials'); this.blur(); return false;">Application Materials</a></li> 
+      <li><a href="/custom_fields?tab=UserCustomField" id="tab-UserCustomField" onclick="showTab('UserCustomField'); this.blur(); return false;">Communication</a></li>
+  </ul> 
+  <div class="tabs-buttons" style="display:none;"> 
+  	<button class="tab-left" onclick="moveTabLeft(this);"></button> 
+  	<button class="tab-right" onclick="moveTabRight(this);"></button> 
+  </div> 
+</div> 

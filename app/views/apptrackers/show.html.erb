@@ -1,17 +1,3 @@
-<div class="tabs"> 
-  <ul> 
-      <li><a href="/custom_fields?tab=IssueCustomField" class="selected" id="tab_apptracker_main" onclick="showTab('IssueCustomField'); this.blur(); return false;">Main</a></li> 
-      <li><a href="/custom_fields?tab=TimeEntryCustomField" id="tab-TimeEntryCustomField" onclick="showTab('TimeEntryCustomField'); this.blur(); return false;">Jobs</a></li> 
-      <li><a href="/custom_fields?tab=ProjectCustomField" id="tab-ProjectCustomField" onclick="showTab('ProjectCustomField'); this.blur(); return false;">Applicants</a></li> 
-      <li><a href="/custom_fields?tab=VersionCustomField" id="tab-VersionCustomField" onclick="showTab('VersionCustomField'); this.blur(); return false;">Application Materials</a></li> 
-      <li><a href="/custom_fields?tab=UserCustomField" id="tab-UserCustomField" onclick="showTab('UserCustomField'); this.blur(); return false;">Communication</a></li>
-      <!-- <li><a href="/custom_fields?tab=GroupCustomField" id="tab-GroupCustomField" onclick="showTab('GroupCustomField'); this.blur(); return false;">Groups</a></li> 
-      <li><a href="/custom_fields?tab=TimeEntryActivityCustomField" id="tab-TimeEntryActivityCustomField" onclick="showTab('TimeEntryActivityCustomField'); this.blur(); return false;">Activities (time tracking)</a></li> 
-      <li><a href="/custom_fields?tab=IssuePriorityCustomField" id="tab-IssuePriorityCustomField" onclick="showTab('IssuePriorityCustomField'); this.blur(); return false;">Issue priorities</a></li> 
-      <li><a href="/custom_fields?tab=DocumentCategoryCustomField" id="tab-DocumentCategoryCustomField" onclick="showTab('DocumentCategoryCustomField'); this.blur(); return false;">Document categories</a></li> -->
-    </ul> 
-  <div class="tabs-buttons" style="display:none;"> 
-  	<button class="tab-left" onclick="moveTabLeft(this);"></button> 
-  	<button class="tab-right" onclick="moveTabRight(this);"></button> 
-  </div> 
-</div> 
+<% flash[:notice] %>
+<h2>Application Tracker: <%= @apptracker.title %></h2>
+<%= render :partial => 'shared/tabs' %>

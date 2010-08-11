@@ -12,6 +12,8 @@ class ApptrackersController < ApplicationController
   # GET apptracker_url(:id => 1)
   def show
     @apptracker = Apptracker.find(params[:id])
+    session[:apptracker_id] = params[:id]
+    session[:apptracker_title] = @apptracker.title
   end
 
   # GET /apptrackers/new
@@ -46,8 +48,7 @@ class ApptrackersController < ApplicationController
   # DELETE apptracker_url(:id => 1)
   def destroy
     @apptracker = Apptracker.find(params[:id])
-    flash[:notice] = "#{@apptracker.title} has been deleted."
-    @apptracker.destroy ? flash[:notice] = "#{@apptracker.title} has been deleted." : flash[:error] = "Error: #{apptracker.title} could not be deleted."
+    @apptracker.destroy ? flash[:notice] = "#{@apptracker.title} has been deleted." : flash[:error] = "Error: #{@apptracker.title} could not be deleted."
     redirect_to(apptrackers_url)
   end
 end

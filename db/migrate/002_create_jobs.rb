@@ -1,9 +1,10 @@
 class CreateJobs < ActiveRecord::Migration
   def self.up
     create_table :jobs do |t|
-      t.column :job_title, :string
-      t.column :job_category, :string
-      t.column :job_description, :string
+      t.column :apptracker_id, :integer
+      t.column :title, :string
+      t.column :category, :string
+      t.column :description, :string
       t.column :start_date, :date
       t.column :end_date, :date
       t.column :salary_range_low, :integer
