@@ -1,14 +1,14 @@
 <% flash[:notice] %>
-<h2>Applicants (<%=h session[:apptracker_title] %>)</h2>
+<h2><%=h session[:apptracker_title] %>: Applicants</h2>
 <%= render :partial =>'shared/tabs' %>
 
 <table class="list" style="width:65%">
 <thead>
   <tr>
-    <th>Name</th>
-    <th>User Name</th>
-    <th></th>
-    <th></th>
+    <th style="width:50%; text-align:left;">Name</th>
+    <th style="width:40%; text-align:left;">User Name</th>
+    <th style="width:5%; text-align:left;"></th>
+    <th style="width:5%; text-align:left;"></th>
   </tr>
 </thead>
 <tbody>

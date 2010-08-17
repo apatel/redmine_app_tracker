@@ -54,5 +54,5 @@ class ApplicantsController < ApplicationController
     @applicant = Applicant.find(params[:id])
     @applicant.destroy ? flash[:notice] = "#{@applicant.first_name} #{@applicant.last_name}\'s record has been deleted." : flash[:error] = "Error: #{@applicant.first_name} #{@applicant.last_name}\'s record could not be deleted."
     redirect_to(applicants_url)
-  end
+  end 
 end
