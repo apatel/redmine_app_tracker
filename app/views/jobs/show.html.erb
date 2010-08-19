@@ -1,1 +1,14 @@
-<h2>Jobs#show</h2>
+<% flash[:notice] %>
+<h2><%=h session[:apptracker_title] %>: Jobs: <em><%=h @job.title %></em></h2>
+<%= render :partial => 'shared/tabs' %>
+<p>
+Category: <%=h @job.category %><br />
+Description: <%=h @job.description %><br />
+Start Date: <%=h @job.start_date %>  End Date: <%=h @job.end_date %><br />
+Salary Range (Low): <%=h @job.salary_range_low %> Salary Range (High): <%=h @job.salary_range_high %><br />
+Other Information: <%=h @job.other_information %><br />
+</p>
+<br /><br />
+<%= submit_tag "Apply to this job" %> 
+<br /><br />
+<%= link_to 'Back', jobs_url %>

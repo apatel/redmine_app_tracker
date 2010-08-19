@@ -1,1 +1,52 @@
-<h2>Applicants#show</h2>
+<% flash[:notice] %>
+<h2><%=h session[:apptracker_title] %>: Jobs: <em><%=h "#{@applicant.last_name}, #{@applicant.first_name} "%></em></h2>
+<%= render :partial => 'shared/tabs' %>
+
+<h3>General Information</h3>
+<p>
+Name: <%=h "#{@applicant.last_name}, #{@applicant.first_name}"%><br /> 
+User name: <%=h @applicant.user_name %><br /> 
+Email: <%=h @applicant.email %><br /> 
+Mobile phone: <%=h @applicant.mobile_phone %> <br /> 
+Date of birth: <%=h @applicant.dob %> <br /> 
+Gender: <%=h @applicant.gender %> <br /> 
+</p>
+<br />
+
+<h3>College Information</h3>
+<p>
+Graduation month: <%=h @applicant.grad_month %> year: <%=h @applicant.grad_year %> <br /> 
+Highest degree level: <%=h @applicant.highest_degree_level %> <br /> 
+School name: <%=h @applicant.school_name %> <br /> 
+School town/city: <%=h @applicant.school_town_city %> <br /> 
+School state/province: <%=h @applicant.school_state_province %> <br /> 
+School country: <%=h @applicant.school_country %><br /> 
+</p>
+<br />
+
+<h3>Dorm/Apartment Address</h3>
+<p>
+Dorm street address 1: <%=h @applicant.dorm_street1 %><br /> 
+Dorm street address 2: <%=h @applicant.dorm_street2 %> <br /> 
+Dorm town/city: <%=h @applicant.dorm_town_city %> <br /> 
+Dorm state/province: <%=h @applicant.dorm_state_province %> <br /> 
+Dorm postal code: <%=h @applicant.dorm_postal_code %> <br /> 
+Dorm country: <%=h @applicant.dorm_country %><br /> 
+Dorm phone: <%=h @applicant.dorm_phone %><br /> 
+</p>
+
+<h3>Home Address (if applicable)</h3>
+<p>
+Home street address 1: <%=h @applicant.home_street1 %> <br /> 
+Home street address 2: <%=h @applicant.home_street2 %> <br /> 
+Home town/city: <%=h @applicant.home_town_city %> <br /> 
+Home state/province: <%=h @applicant.home_state_province %> <br /> 
+Home postal code: <%=h @applicant.home_postal_code %> <br /> 
+Home country: <%=h @applicant.home_country %><br /> 
+Home phone: <%=h @applicant.home_phone %><br /> 
+</p>
+
+<br /><br />
+<%= submit_tag "See student's job applications" %> <%= submit_tag "See student's application materials" %> 
+<br /><br />
+<%= link_to 'Back', applicants_url %>

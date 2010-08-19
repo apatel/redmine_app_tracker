@@ -1,20 +1,26 @@
 class JobsController < ApplicationController
   unloadable # don't keep reloading this
-  before_filter :require_admin, :except => [:index, :show] 
+  # before_filter :require_admin, :except => [:index, :show] 
 
   # GET /jobs
   # GET jobs_url
-  # REVISE: change the index action to show all jobs maintained in the system?
-  # REVISE: move the index code to another action, showing jobs owned by a specific apptracker
   def index
-    # CHECK: what if session[:apptracker_id] doesn't exist?
     @jobs = Job.find(:all, :conditions => ["apptracker_id = ?", session[:apptracker_id]])
+  
+    # no job currently selected, session should reflect this
+    session[:job_id] = nil
   end
   
   # GET /jobs/1
   # GET job_url(:id => 1)
   def show
     @job = Job.find(params[:id])
+
+    # refresh the parent project and apptracker session settings; important if a link to the
+    # current job are provided on other websites
+    session[:job_id] = @job.id
+    session[:apptracker_id] = @job.apptracker_id
+    session[:project_id] = Apptracker.find(session[:apptracker_id]).project_id
   end
 
   # GET /jobs/new
@@ -34,9 +40,10 @@ class JobsController < ApplicationController
   def create
     @job = Job.create(params[:job])
 
-    # revise the following for when an apptracker_id doesn't exist
+    # set the parent apptracker
     @job.apptracker_id = session[:apptracker_id]
 
+    # attempt to save the job; flash result to the user
     @job.save ? flash[:notice] = "\'#{@job.title}\' has been created." : flash.now[:error] = "\'#{@job.title}\' could not be created"
     redirect_to(jobs_url)
   end
@@ -45,7 +52,10 @@ class JobsController < ApplicationController
   # PUT job_url(:id => 1)
   def update
     @job = Job.find(params[:id])
+
+    # update the job's attributes, and indicate a message to the user opon success/failure
     @job.update_attributes(params[:job]) ? flash[:notice] = "\'#{@job.title}\' has been updated." : flash[:error] = "\'#{@job.title}\' could not be updated."
+
     redirect_to(jobs_url)
   end
 
@@ -53,7 +63,10 @@ class JobsController < ApplicationController
   # DELETE job_url(:id => 1)
   def destroy
     @job = Job.find(params[:id])
+
+    # destroy the job, and indicate a message to the user upon success/failure
     @job.destroy ? flash[:notice] = "\'#{@job.title}\' has been deleted." : flash[:error] = "Error: \'#{@job.title}\' could not be deleted."
+
     redirect_to(jobs_url)
   end
 end

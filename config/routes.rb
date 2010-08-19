@@ -2,9 +2,9 @@
 ActionController::Routing::Routes.draw do |map| 
   map.resources :applicants
   map.resources :application_materials
+  map.connect 'application_materials/download/:id', :controller => 'application_materials', :action => 'download'
   map.resources :apptrackers
   map.resources :jobs
-  #  map.destroy_apptracker '/apptrackers/:id', :controller => 'apptrackers', :action => 'destroy', :method => 'delete'
 end
 
 # Previous syntax for creating routes to controller actions

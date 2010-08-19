@@ -1,12 +1,15 @@
 class ApplicationMaterialsController < ApplicationController
   unloadable # don't keep reloading this
-  before_filter :require_admin, :except => [:index, :show] 
-
+  # before_filter :require_admin, :except => [:index, :show] 
+  
   # GET /application_materials
   # GET application_materials_url
+  # view application materials from an administrative scope
   def index
-    # CHECK: what if session[:applicant_id] doesn't exist? 
-    @application_materials = ApplicationMaterial.find(:all, :conditions => ["applicant_id = ? AND apptracker_id = ?", session[:user_id], session[:apptracker_id]])
+
+    @application_materials = ApplicationMaterial.find(:all, 
+                            :conditions => ["applicant_id = ? AND apptracker_id = ?", 
+                            session[:user_id], session[:apptracker_id]])
   end
   
   # GET /application_materials/1
@@ -63,9 +66,16 @@ class ApplicationMaterialsController < ApplicationController
     @application_material.destroy ? flash[:notice] = "\'#{@application_material.filename}\' has been deleted." : flash[:error] = "Error: \'#{@application_material.filename}\' could not be deleted."
     redirect_to(application_materials_url)
   end
-  
+ 
+  # TODO Add RESTful resource route to routes.rb 
+  # download an application file
   def download
-    ApplicationMaterial.download_file(params[:id])
-    redirect_to(application_materials_url)
+    application_file = ApplicationMaterial.find(params[:id])
+    storage_directory = "#{RAILS_ROOT}/vendor/plugins/#{Apptracker::APPTRACKER_PLUGIN_FOLDER}/assets/applicant_files"
+    #TODO Check if the Berkman Apache server can make use of the :x_sendfile option
+    if(application_file.filename)
+      send_file("#{storage_directory}/#{application_file.filename}")
+    end
   end
+
 end

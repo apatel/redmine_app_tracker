@@ -1,7 +1,9 @@
-<h2>Applicants#new</h2>
+<% flash[:notice] %>
+<h2><%=h session[:apptracker_title] %>: New Applicant</h2>
 
 <% form_for(:applicant, @applicant, :url => applicants_url(@applicant), :html => {:method => :post}) do |f| %>
   <%= f.error_messages %>
+  <h3>General Information</h3>
   <p>
     <%= f.label(:first_name) %><br />
     <%= f.text_field(:first_name) %>
@@ -13,12 +15,12 @@
   </p>
 
   <p>
-    <%= f.label("user_name:") %><br />
+    <%= f.label(:user_name) %><br />
     <%= f.text_field(:user_name) %>
   </p>
 
   <p>
-    <%= f.label(":email") %><br />
+    <%= f.label(:email) %><br />
     <%= f.text_field(:email) %>
   </p>
 
@@ -37,7 +39,7 @@
     <%= f.text_field(:gender) %>
   </p>
   
-  College Information
+  <h3>College Information</h3>
   <p>
     <%= f.label(:grad_month) %><br />
     <%= f.text_field(:grad_month) %>
@@ -73,7 +75,7 @@
     <%= f.text_field(:school_country) %>
   </p>
 
-  Dorm/Apartment Address
+  <h3>Dorm/Apartment Address</h3>
   <p>
     <%= f.label(:dorm_street1) %><br />
     <%= f.text_field(:dorm_street1) %>
@@ -109,7 +111,7 @@
     <%= f.text_field(:dorm_phone) %>
   </p>
   
-  Home Address
+  <h3>Home Address</h3>
   <p>
     <%= f.label(:home_street1) %><br />
     <%= f.text_field(:home_street1) %>

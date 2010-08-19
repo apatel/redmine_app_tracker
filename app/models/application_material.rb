@@ -17,16 +17,6 @@ class ApplicationMaterial < ActiveRecord::Base
     File.open(path, "wb") { |f| f.write(application_file[:data].read) }
   end
 
-  # download an application file
-  def self.download_file(application_file_id)
-    application_file = ApplicationMaterial.find(application_file_id)
-    storage_directory = "#{RAILS_ROOT}/vendor/plugins/#{Apptracker::APPTRACKER_PLUGIN_FOLDER}/assets/applicant_files"
-    #TODO Check if the Berkman Apache server can make use of the :x_sendfile option
-    if(application_file.filename)
-      send_file("#{storage_directory}/#{application_file.filename}")
-    end
-  end
-
   # clean up filename text (IE)
 
 end

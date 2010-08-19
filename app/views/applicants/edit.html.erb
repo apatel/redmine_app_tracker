@@ -1,1 +1,155 @@
-<h2>Applicants#edit</h2>
+<% flash[:notice] %>
+<h2><%=h session[:apptracker_title] %>: Applicant: <em><%=h "#{@applicant.last_name},#{@applicant.first_name}"%></em></h2>
+
+<% form_for(:applicant, @applicant, :url => applicant_url(@applicant.id), :html => {:method => :put}) do |f| %>
+  <%= f.error_messages %>
+  <h3>General Information</h3>
+  <p>
+    <%= f.label(:first_name) %><br />
+    <%= f.text_field(:first_name) %>
+  </p>
+
+  <p>
+    <%= f.label(:last_name) %><br />
+    <%= f.text_field(:last_name) %>
+  </p>
+
+  <p>
+    <%= f.label(:user_name) %><br />
+    <%= f.text_field(:user_name) %>
+  </p>
+
+  <p>
+    <%= f.label(:email) %><br />
+    <%= f.text_field(:email) %>
+  </p>
+
+  <p>
+    <%= f.label(:mobile_phone) %><br />
+    <%= f.text_field(:mobile_phone) %>
+  </p>
+
+  <p>
+    <%= f.label(:dob) %><br />
+    <%= f.text_field(:dob) %>
+  </p>
+
+  <p>
+    <%= f.label(:gender) %><br />
+    <%= f.text_field(:gender) %>
+  </p>
+  
+  <h3>College Information</h3>
+  <p>
+    <%= f.label(:grad_month) %><br />
+    <%= f.text_field(:grad_month) %>
+  </p>
+
+  <p>
+    <%= f.label(:grad_year) %><br />
+    <%= f.text_field(:grad_year) %>
+  </p>
+
+  <p>
+    <%= f.label(:highest_degree_level) %><br />
+    <%= f.text_field(:highest_degree_level) %>
+  </p>
+
+  <p>
+    <%= f.label(:school_name) %><br />
+    <%= f.text_field(:school_name) %>
+  </p>
+
+  <p>
+    <%= f.label(:school_town_city) %><br />
+    <%= f.text_field(:school_town_city) %>
+  </p>
+
+  <p>
+    <%= f.label(:school_state_province) %><br />
+    <%= f.text_field(:school_state_province) %>
+  </p>
+
+  <p>
+    <%= f.label(:school_country) %><br />
+    <%= f.text_field(:school_country) %>
+  </p>
+
+  <h3>Dorm/Apartment Address</h3>
+  <p>
+    <%= f.label(:dorm_street1) %><br />
+    <%= f.text_field(:dorm_street1) %>
+  </p>
+
+  <p>
+    <%= f.label(:dorm_street2) %><br />
+    <%= f.text_field(:dorm_street2) %>
+  </p>
+
+  <p>
+    <%= f.label(:dorm_town_city) %><br />
+    <%= f.text_field(:dorm_town_city) %>
+  </p>
+
+  <p>
+    <%= f.label(:dorm_state_province) %><br />
+    <%= f.text_field(:dorm_state_province) %>
+  </p>
+
+  <p>
+    <%= f.label(:dorm_postal_code) %><br />
+    <%= f.text_field(:dorm_postal_code) %>
+  </p>
+
+  <p>
+    <%= f.label(:dorm_country) %><br />
+    <%= f.text_field(:dorm_country) %>
+  </p>
+
+  <p>
+    <%= f.label(:dorm_phone) %><br />
+    <%= f.text_field(:dorm_phone) %>
+  </p>
+  
+  <h3>Home Address</h3>
+  <p>
+    <%= f.label(:home_street1) %><br />
+    <%= f.text_field(:home_street1) %>
+  </p>
+
+  <p>
+    <%= f.label(:home_street2) %><br />
+    <%= f.text_field(:home_street2) %>
+  </p>
+
+  <p>
+    <%= f.label(:home_town_city) %><br />
+    <%= f.text_field(:home_town_city) %>
+  </p>
+
+  <p>
+    <%= f.label(:home_state_province) %><br />
+    <%= f.text_field(:home_state_province) %>
+  </p>
+
+  <p>
+    <%= f.label(:home_postal_code) %><br />
+    <%= f.text_field(:home_postal_code) %>
+  </p>
+
+  <p>
+    <%= f.label(:home_country) %><br />
+    <%= f.text_field(:home_country) %>
+  </p>
+
+  <p>
+    <%= f.label(:home_phone) %><br />
+    <%= f.text_field(:home_phone) %>
+  </p>
+ 
+  <p>
+    <%= submit_tag('Update') %>
+  </p>
+<% end %>
+<br />
+<%= link_to 'Back', applicants_url %>

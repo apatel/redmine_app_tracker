@@ -1,4 +1,4 @@
-<h2>Jobs#edit</h2>
+<h2>Jobs: Edit <%=h @job.title %></h2>
 
 <% form_for(:job, @job, :url => job_url(@job.id), :html => {:method => :put}) do |f| %>
   <%= f.error_messages %>
