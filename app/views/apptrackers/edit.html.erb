@@ -1,19 +1,6 @@
-<h2>Apptrackers#edit</h2>
+<h2><%=h session[:apptracker_title] %>: <em>Edit</em></h2>
 
-<% form_for(:apptracker, @apptracker, :url => apptracker_url(@apptracker.id), :html => {:method => :put}) do |f| %>
-  <%= f.error_messages %>
-  <p>
-    <%= f.label(:title) %><br />
-    <%= f.text_field(:title) %>
-  </p>
+<%= render :partial => "form" %>
 
-  <p>
-    <%= f.label(:description) %><br />
-    <%= f.text_area(:description, :rows => 2) %>
-  </p>
-
-  <p>
-    <%= submit_tag('Update') %>
-  </p>
-<% end %>
+<br />
 <%= link_to 'Back', apptrackers_url %>

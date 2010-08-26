@@ -1,55 +1,6 @@
-<h2>Jobs#new</h2>
+<h2><%=h session[:apptracker_title]%>: <em>New Job</em></h2>
 
-<% form_for(:job, @job, :url => jobs_url(@job), :html => {:method => :post}) do |f| %>
-  <%= f.error_messages %>
-  <p>
-    <%= f.label(:title) %><br />
-    <%= f.text_field(:title) %>
-  </p>
-  
-  <p>
-    <%= f.label(:category) %><br />
-    <%= f.text_field(:category) %>
-  </p>
+<%= render :partial => "form" %>
 
-  <p>
-    <%= f.label(:description) %><br />
-    <%= f.text_area(:description, :rows => 2) %>
-  </p>
-
-  <p>
-    <%= f.label(:start_date) %><br />
-    <%= f.text_field(:start_date) %>
-  </p>
-
-  <p>
-    <%= f.label(:end_date) %><br />
-    <%= f.text_field(:end_date) %>
-  </p>
-
-  <p>
-    <%= f.label(:salary_range_low) %><br />
-    <%= f.text_field(:salary_range_low) %>
-  </p>
-
-  <p>
-    <%= f.label(:salary_range_high) %><br />
-    <%= f.text_field(:salary_range_high) %>
-  </p>
-
-  <p>
-    <%= f.label(:other_information) %><br />
-    <%= f.text_area(:other_information, :rows => 5) %>
-  </p>
-
-  <p>
-    <%= f.label(:application_followup_message) %><br />
-    <%= f.text_area(:application_followup_message, :rows => 5) %>
-  </p>
-
-  <p>
-    <%= submit_tag('Create') %>
-  </p>
-<% end %>
 <br />
 <%= link_to 'Back', jobs_url %>

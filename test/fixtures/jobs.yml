@@ -1,23 +1,5 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 one:
   id: 1
-  job_title: MyString
-  job_category: MyString
-  job_description: MyString
-  start_date: 2010-08-01
-  end_date: 2010-08-01
-  salary_range_low: 1
-  salary_range_high: 1
-  other_information: MyString
-  application_followup_message: MyString
 two:
   id: 2
-  job_title: MyString
-  job_category: MyString
-  job_description: MyString
-  start_date: 2010-08-01
-  end_date: 2010-08-01
-  salary_range_low: 1
-  salary_range_high: 1
-  other_information: MyString
-  application_followup_message: MyString

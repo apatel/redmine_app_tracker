@@ -2,7 +2,8 @@
 <h2><%=h session[:apptracker_title] %>: Jobs: <em><%=h "#{@applicant.last_name}, #{@applicant.first_name} "%></em></h2>
 <%= render :partial => 'shared/tabs' %>
 
-<h3>General Information</h3>
+<h2>Applicant Information</h2>
+<b>General Information</b>
 <p>
 Name: <%=h "#{@applicant.last_name}, #{@applicant.first_name}"%><br /> 
 User name: <%=h @applicant.user_name %><br /> 
@@ -13,7 +14,7 @@ Gender: <%=h @applicant.gender %> <br />
 </p>
 <br />
 
-<h3>College Information</h3>
+<b>College Information</b>
 <p>
 Graduation month: <%=h @applicant.grad_month %> year: <%=h @applicant.grad_year %> <br /> 
 Highest degree level: <%=h @applicant.highest_degree_level %> <br /> 
@@ -24,21 +25,10 @@ School country: <%=h @applicant.school_country %><br />
 </p>
 <br />
 
-<h3>Dorm/Apartment Address</h3>
+<b>Home Address (if applicable)</b>
 <p>
-Dorm street address 1: <%=h @applicant.dorm_street1 %><br /> 
-Dorm street address 2: <%=h @applicant.dorm_street2 %> <br /> 
-Dorm town/city: <%=h @applicant.dorm_town_city %> <br /> 
-Dorm state/province: <%=h @applicant.dorm_state_province %> <br /> 
-Dorm postal code: <%=h @applicant.dorm_postal_code %> <br /> 
-Dorm country: <%=h @applicant.dorm_country %><br /> 
-Dorm phone: <%=h @applicant.dorm_phone %><br /> 
-</p>
-
-<h3>Home Address (if applicable)</h3>
-<p>
-Home street address 1: <%=h @applicant.home_street1 %> <br /> 
-Home street address 2: <%=h @applicant.home_street2 %> <br /> 
+Home street address 1: <%=h @applicant.home_street_1 %> <br /> 
+Home street address 2: <%=h @applicant.home_street_2 %> <br /> 
 Home town/city: <%=h @applicant.home_town_city %> <br /> 
 Home state/province: <%=h @applicant.home_state_province %> <br /> 
 Home postal code: <%=h @applicant.home_postal_code %> <br /> 
@@ -46,7 +36,50 @@ Home country: <%=h @applicant.home_country %><br />
 Home phone: <%=h @applicant.home_phone %><br /> 
 </p>
 
-<br /><br />
-<%= submit_tag "See student's job applications" %> <%= submit_tag "See student's application materials" %> 
+<b>Dorm/Apartment Address</b>
+<p>
+Dorm street address 1: <%=h @applicant.dorm_street_1 %><br /> 
+Dorm street address 2: <%=h @applicant.dorm_street_2 %> <br /> 
+Dorm town/city: <%=h @applicant.dorm_town_city %> <br /> 
+Dorm state/province: <%=h @applicant.dorm_state_province %> <br /> 
+Dorm postal code: <%=h @applicant.dorm_postal_code %> <br /> 
+Dorm country: <%=h @applicant.dorm_country %><br /> 
+Dorm phone: <%=h @applicant.dorm_phone %><br /> 
+</p>
+
 <br /><br />
 <%= link_to 'Back', applicants_url %>
+
+<h2>Job Applications</h2>
+
+<h2>Application Materials</h2>
+<table class="list" style="width:90%; margin-right:10%;">
+<thead>
+  <tr>
+    <th style="width:30%; text-align:left;">File Name</th>
+    <th style="width:40%; text-align:left;">Title</th>
+    <th style="width:10%; text-align:left;">Created On</th>
+    <th style="width:10%; text-align:left;">Updated On</th>
+    <th style="width:6%; text-align:left;"></th>
+    <th style="width:4%; text-align:left;"></th>
+  </tr>
+</thead>
+<tbody>
+  <% @application_materials.each do |application_material| %>
+    <tr>
+      <td style="width:30%"><%=h application_material.filename %></a></td>
+      <td style="width:40%"><%=h application_material.title%></a></td>
+      <td style="width:10%"><%=h application_material.created_at %> 
+      <td style="width:10%"><%=h application_material.updated_at %>  
+      <td style="width:6%"><%= link_to 'Download', :controller => 'application_materials', :id => application_material.id, :action => 'download' %></td>
+      <td style="width:4%"><%= link_to 'Delete', application_material_url(:id => application_material.id), 
+        :confirm => "Are you sure you want to delete #{application_material.filename}?", 
+        :method => :delete %></td>
+    </tr>
+  <% end %>
+</tbody>
+</table>
+
+<h2>Referrers</h2>
+
+

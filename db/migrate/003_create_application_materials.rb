@@ -1,11 +1,12 @@
 class CreateApplicationMaterials < ActiveRecord::Migration
   def self.up
     create_table :application_materials do |t|
-      t.column :applicant_id, :integer
-      t.column :category, :string
-      t.column :filename, :string
-      t.column :title, :string
-      t.column :description, :string
+      t.integer :applicant_id
+      t.string :material_type
+      t.string :title
+      t.string :filename
+      
+      t.timestamps
     end
   end
 

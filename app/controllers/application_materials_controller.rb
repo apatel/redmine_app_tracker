@@ -4,12 +4,15 @@ class ApplicationMaterialsController < ApplicationController
   
   # GET /application_materials
   # GET application_materials_url
-  # view application materials from an administrative scope
+  # ADMIN VIEW: view all application materials for an apptracker
+  # TODO USER VIEW: add a section that finds application materials for a particular user
   def index
+    @apptracker = Apptracker.find(session[:apptracker_id])
+    
+    # The following will find all application materials for an apptracker
+    @application_materials = @apptracker.application_materials
 
-    @application_materials = ApplicationMaterial.find(:all, 
-                            :conditions => ["applicant_id = ? AND apptracker_id = ?", 
-                            session[:user_id], session[:apptracker_id]])
+    #@application_materials = ApplicationMaterial.find(:all, :conditions => ["applicant_id = ? AND apptracker_id = ?", session[:user_id], session[:apptracker_id]])
   end
   
   # GET /application_materials/1

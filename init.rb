@@ -24,7 +24,7 @@ Redmine::Plugin.register :redmine_apptracker do
   end
 
   # set menu options; :if used for setting menu to visible if logged in
-  menu(:project_menu, :apptrackers, {:controller => 'apptrackers', :action => 'index'}, :caption => "AppTracker", :after => :overview, :param => :project_id) #, :if => Proc.new{User.current.logged?})
+  menu(:project_menu, :apptrackers, {:controller => 'apptrackers', :action => 'index'}, :caption => "AppTracker", :after => :overview, :param => :project_name) #, :if => Proc.new{User.current.logged?})
 
   if RAILS_ENV == 'development'
     ActiveSupport::Dependencies.load_once_paths.reject!{|x| x =~ /^#{Regexp.escape(File.dirname(__FILE__))}/}

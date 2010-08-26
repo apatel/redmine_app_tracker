@@ -1,0 +1,20 @@
+<h2>Apptrackers#new</h2>
+
+<% form_for(:apptracker, @apptracker, :url => apptrackers_url(@apptracker), :html => {:method => :post}) do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label(:title) %><br />
+    <%= f.text_field(:title) %>
+  </p>
+
+  <p>
+    <%= f.label(:description) %><br />
+    <%= f.text_area(:description, :rows => 2) %>
+  </p>
+
+  <p>
+    <%= submit_tag('Create') %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', apptrackers_url %>

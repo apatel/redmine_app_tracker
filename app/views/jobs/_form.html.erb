@@ -1,0 +1,32 @@
+<% form_for(@job) do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label(:category) %><br />
+    <%= f.select(:category, Job::JOB_CATEGORIES, {:include_blank => true}) %>
+  </p>
+
+  <p>
+    <%= f.label(:status) %><br />
+    <%= f.select(:status, Job::JOB_STATUS, {:include_blank => true}) %>
+  </p>
+
+  <p>
+    <%= f.label(:title) %><br />
+    <%= f.text_field(:title) %>
+  </p>
+ 
+  <p>
+    <%= f.label(:description) %><br />
+    <%= f.text_area(:description, :size => "60x12") %>
+  </p>
+
+  <p>
+    <%= f.label(:application_followup_message) %><br />
+    <%= f.text_area(:application_followup_message, :size => "60x5") %>
+  </p>
+
+  <p>
+    <%= f.submit('Save') %>
+  </p>
+<% end %>
+

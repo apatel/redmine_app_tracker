@@ -1,11 +1,14 @@
 class JobsController < ApplicationController
   unloadable # don't keep reloading this
   # before_filter :require_admin, :except => [:index, :show] 
-
+  # TODO find out how to access the parent apptracker via association
+  
   # GET /jobs
   # GET jobs_url
   def index
-    @jobs = Job.find(:all, :conditions => ["apptracker_id = ?", session[:apptracker_id]])
+    # secure the parent apptracker id and find its jobs
+    @apptracker = Apptracker.find(session[:apptracker_id])
+    @jobs = @apptracker.jobs
   
     # no job currently selected, session should reflect this
     session[:job_id] = nil
@@ -14,59 +17,90 @@ class JobsController < ApplicationController
   # GET /jobs/1
   # GET job_url(:id => 1)
   def show
-    @job = Job.find(params[:id])
+    # secure the parent apptracker id and find requested job
+    @apptracker = Apptracker.find(session[:apptracker_id])
+    @job = @apptracker.jobs.find(params[:id])
 
     # refresh the parent project and apptracker session settings; important if a link to the
     # current job are provided on other websites
     session[:job_id] = @job.id
     session[:apptracker_id] = @job.apptracker_id
     session[:project_id] = Apptracker.find(session[:apptracker_id]).project_id
+
+    respond_to do |format|
+      format.html #show.html.erb
+    end
   end
 
   # GET /jobs/new
   # Get new_job_url
   def new
-    @job = Job.new
+    # secure the parent apptracker id and create a new job
+    @apptracker = Apptracker.find(session[:apptracker_id])
+    @job = @apptracker.jobs.new
+
+    respond_to do |format|
+      format.html # new.html.erb
+    end
   end
 
   # GET /jobs/1/edit
   # GET edit_job_url(:id => 1)
   def edit
-    @job = Job.find(params[:id])
+    # secure the parent apptracker id and find the job to edit
+    @apptracker = Apptracker.find(session[:apptracker_id])
+    @job = @apptracker.jobs.find(params[:id])
   end
   
   # POST /jobs
   # POST jobs_url
   def create
-    @job = Job.create(params[:job])
-
-    # set the parent apptracker
-    @job.apptracker_id = session[:apptracker_id]
-
-    # attempt to save the job; flash result to the user
-    @job.save ? flash[:notice] = "\'#{@job.title}\' has been created." : flash.now[:error] = "\'#{@job.title}\' could not be created"
-    redirect_to(jobs_url)
+    # create a job in its parent apptracker
+    @apptracker = Apptracker.find(session[:apptracker_id])
+    @job = @apptracker.jobs.new(params[:job])
+ 
+    respond_to do |format|
+      if(@job.save)
+        # no errors, redirect with success message
+        format.html { redirect_to(@job, :notice => "\'#{@job.title}\' has been created.") }
+      else
+        # validation prevented save; redirect back to new.html.erb with error messages
+        format.html { render :action => "new" }
+      end
+    end
   end
 
   # PUT /jobs/1
   # PUT job_url(:id => 1)
   def update
-    @job = Job.find(params[:id])
+    # find the job within its parent apptracker
+    @apptracker = Apptracker.find(session[:apptracker_id])
+    @job = @apptracker.jobs.find(params[:id])
 
     # update the job's attributes, and indicate a message to the user opon success/failure
-    @job.update_attributes(params[:job]) ? flash[:notice] = "\'#{@job.title}\' has been updated." : flash[:error] = "\'#{@job.title}\' could not be updated."
-
-    redirect_to(jobs_url)
+    respond_to do |format|
+      if(@job.update_attributes(params[:job]))
+        # no errors, redirect with success message
+        format.html { redirect_to(jobs_url, :notice => "\'#{@job.title}\' has been updated.") }
+      else
+        # validation prevented update; redirect to edit form with error messages
+        format.html { render :action => "edit"}
+      end
+    end
   end
 
   # DELETE /jobs/1
   # DELETE job_url(:id => 1)
   def destroy
-    @job = Job.find(params[:id])
+    # create a job in its parent apptracker
+    @apptracker = Apptracker.find(session[:apptracker_id])
+    @job = @apptracker.jobs.find(params[:id])
 
     # destroy the job, and indicate a message to the user upon success/failure
     @job.destroy ? flash[:notice] = "\'#{@job.title}\' has been deleted." : flash[:error] = "Error: \'#{@job.title}\' could not be deleted."
-
-    redirect_to(jobs_url)
+    
+    respond_to do |format|
+      format.html { redirect_to(jobs_url) }
+    end
   end
 end
