@@ -1,0 +1,16 @@
+<% form_for(@job_application) do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label(:title) %><br />
+    <%= f.text_field(:title) %>
+  </p>
+ 
+  <p>
+    <%= f.label(:description) %><br />
+    <%= f.text_area(:description, :size => "60x12") %>
+  </p>
+
+  <p>
+    <%= f.submit('Save') %>
+  </p>
+<% end %>

@@ -9,9 +9,15 @@ class ApplicationMaterialsController < ApplicationController
   def index
     @apptracker = Apptracker.find(session[:apptracker_id])
     
-    # The following will find all application materials for an apptracker
-    @application_materials = @apptracker.application_materials
-
+    if(User.current.admin?)
+      @application_materials = @apptracker.application_materials
+    elsif(User.current.logged?)
+      # The following line will find all application materials in terms of an apptracker
+      # @application_materials = @apptracker.application_materials.find(:all, :conditions => ["applicant_id = ?", session[:applicant_id]])
+      # But it seems to make more sense to allow a user to see a collective pool of 
+      # their own application materials, regardless of apptracker associtation:
+      @application_materials = Applicant.find(session[:applicant_id]).application_materials
+    end
     #@application_materials = ApplicationMaterial.find(:all, :conditions => ["applicant_id = ? AND apptracker_id = ?", session[:user_id], session[:apptracker_id]])
   end
   

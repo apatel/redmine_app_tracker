@@ -1,0 +1,39 @@
+<table class="list" style="width:90%">
+<thead>
+  <tr>
+    <!-- Admin Scope -->
+    <% if(User.current.admin?)%>
+      <th style="width:35%; text-align:left">Title</th>
+      <th style="width:50%; text-align:left">Description</th>
+      <th style="width:5%; text-align:left"></th>
+      <th style="width:5%; text-align:left"></th>
+    <% else %>
+      <!-- Anonymous and Applicant Scope -->
+      <th style="width:35%; text-align:left">Title</th>
+      <th style="width:65%; text-align:left">Description</th>
+    <% end %>
+  </tr>
+</thead>
+<tbody>
+  <% if !@apptrackers.nil? %>
+    <% @apptrackers.each do |apptracker| %>
+      <tr>
+        <% if(User.current.admin?)%>
+          <!-- Admin Scope -->
+          <td style="width:35%"><%= link_to "#{apptracker.title}", apptracker_url(apptracker.id) %></a></td>
+          <td style="width:50%"><%=h apptracker.description %></td>
+          <td style="width:5%"><%= link_to 'Edit', edit_apptracker_url(apptracker.id) %></td>
+          <td style="width:5%"><%= link_to 'Delete', apptracker_url(:id => apptracker.id), 
+            :confirm => "All records will be destroyed.  Are you sure you want to delete the 
+            \"#{apptracker.title}\" application tracker?", 
+            :method => :delete %></td>
+        <% else %>
+          <!-- Anonymous and Applicant Scope -->
+          <td style="width:35%"><%= link_to "#{apptracker.title}", apptracker_url(apptracker.id) %></a></td>
+          <td style="width:65%"><%=h apptracker.description %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  <% end %>
+</tbody>
+</table>

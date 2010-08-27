@@ -1,10 +1,12 @@
 class ApplicantsController < ApplicationController
   unloadable # don't keep reloading this
   # TODO figure out a better way of accessing the parent apptracker via association
-  # before_filter :require_admin, :except => [:index, :show] 
+  #before_filter :require_admin, :except => ['index', 'show']
+  before_filter :require_admin
 
   # GET /applicants
   # GET applicants_url
+  # show listing of all applicants maintained by a single apptracker 
   def index
     # take advantage of model associations for finding applicants
     @apptracker = Apptracker.find(session[:apptracker_id])
@@ -16,13 +18,14 @@ class ApplicantsController < ApplicationController
   
   # GET /applicants/1
   # GET applicant_url(:id => 1)
+  # show an apptlicant's info
   def show 
     @apptracker = Apptracker.find(session[:apptracker_id])
     @applicant = @apptracker.applicants.find(params[:id])
     
     @application_materials = @applicant.application_materials
     # TODO enable the following variables after referrer and job_applications are implemented
-    #@referrers = @applicant.referrers
+    @referrers = @applicant.referrers
     #@job_application = @applicant.job_applications
      
     # update session info
@@ -105,5 +108,5 @@ class ApplicantsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to(applicants_url) }
     end
-  end 
+  end
 end

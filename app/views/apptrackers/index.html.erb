@@ -2,31 +2,10 @@
 
 <h2>Application Trackers</h2>
 
-<table class="list" style="width:65%">
-<thead>
-  <tr>
-    <th style="width:35%; text-align:left">Title</th>
-    <th style="width:50%; text-align:left">Description</th>
-    <th style="width:5%; text-align:left"></th>
-    <th style="width:5%; text-align:left"></th>
-  </tr>
-</thead>
-<tbody>
-  <% if !@apptrackers.nil? %>
-    <% @apptrackers.each do |apptracker| %>
-      <tr>
-        <td style="width:35%"><%= link_to "#{apptracker.title}", apptracker_url(apptracker.id) %></a></td>
-        <td style="width:50%"><%=h apptracker.description %></td>
-        <!--<td style="width:5%"><%= link_to 'Show', apptracker_url(apptracker.id) %></td>-->
-        <td style="width:5%"><%= link_to 'Edit', edit_apptracker_url(apptracker.id) %></td>
-        <td style="width:5%"><%= link_to 'Delete', apptracker_url(:id => apptracker.id), 
-          :confirm => "All records will be destroyed.  Are you sure you want to delete the 
-          \"#{apptracker.title}\" application tracker?", 
-          :method => :delete %></td>
-      </tr>
-    <% end %>
-  <% end %>
-</tbody>
-</table>
+<%= render(:partial => "apptracker_tables") %>
+
 <br /><br />
-<%= link_to 'New AppTracker', new_apptracker_url %>
+
+<% if(User.current.admin?) %>
+  <%= link_to('New AppTracker', new_apptracker_url)%>
+<% end %>

@@ -1,12 +1,24 @@
 <% flash[:notice] %>
 <h2><%=h session[:apptracker_title] %>: Jobs: <em><%=h @job.title %></em></h2>
-<%= render :partial => 'shared/tabs' %>
+
+<%= render :partial => "shared/tabs" %>
+
 <p>
 Category: <%=h @job.category %><br />
 Status: <%=h @job.status %><br />
 Description: <%=h @job.description %><br />
 </p>
 <br /><br />
-<%= submit_tag "Apply to this job" %> 
+<% if User.current.admin? %>
+  <!-- render Job Applications partial -->
+  <!-- render students applying to this job -->
+  <!-- render Application materials associated with this job -->
+<% elsif User.current.logged? %>
+  <%= submit_tag "Apply to this job" %>
+  <!-- go to job application -->
+<% else %>
+  <%= submit_tag "Log In/Register to Apply to This Job" %>
+  <!-- remember location, then take user to registration page -->
+<% end %>
 <br /><br />
 <%= link_to 'Back', jobs_url %>

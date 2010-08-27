@@ -1,8 +1,8 @@
 class JobsController < ApplicationController
   unloadable # don't keep reloading this
-  # before_filter :require_admin, :except => [:index, :show] 
   # TODO find out how to access the parent apptracker via association
-  
+  before_filter :require_admin, :except => [:index, :show] 
+
   # GET /jobs
   # GET jobs_url
   def index

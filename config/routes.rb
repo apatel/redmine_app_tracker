@@ -6,8 +6,9 @@ ActionController::Routing::Routes.draw do |map|
   #map.connect 'apptrackers/new', :controller => 'apptrackers', :action => 'new', :conditions => {:method => :post}
   map.resources :applicants
   map.resources :application_materials
-  map.connect 'application_materials/download/:id', :controller => 'application_materials', :action => 'download'
+  map.connect   'application_materials/download/:id', :controller => 'application_materials', :action => 'download'
   map.resources :jobs
+  map.resources :referrers
 
   # default routes
   #map.connect ':controller/:action/:id'

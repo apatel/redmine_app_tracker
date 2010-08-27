@@ -7,10 +7,9 @@ Redmine::Plugin.register :redmine_apptracker do
   version '0.0.1'
 
   # Set controller action access permissions
-  # - All unnacounted for controller actions in the following list will result in a denial of access to
-  #   those controller actions for any users of the redmine system without admin status.
-  # - When a permission is declared in the following list, the admin will also need to check/uncheck each
-  #   matching permission found in the administration section of the site under "roles and permissions"
+  # - any controller filter (such as before_filter) that sets permissions (such as :require_admin) 
+  # will always override any permissions set in this file or in the redmine roles/permission GUI
+  # 
   project_module :application_tracker do
     # apptracker privileges
     permission :view_apptrackers, :apptrackers => :index
@@ -21,6 +20,10 @@ Redmine::Plugin.register :redmine_apptracker do
     # job privileges
     permission :view_jobs, :jobs => :index
     permission :create_a_job, :jobs => :new
+
+    # referrer privileges
+    permission :create_a_referrer, :referrers => :new
+    permission :edit_a_referrer, :referrers => :edit
   end
 
   # set menu options; :if used for setting menu to visible if logged in

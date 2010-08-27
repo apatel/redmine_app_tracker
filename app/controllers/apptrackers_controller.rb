@@ -1,6 +1,6 @@
 class ApptrackersController < ApplicationController
   #unloadable # don't keep reloading this
-  #before_filter :require_admin, :except => [:index, :show] 
+  before_filter :require_admin, :except => [:index, :show] 
 
   # The landing page; displays all apptrackers owned by the project
   # GET /apptrackers
@@ -20,6 +20,10 @@ class ApptrackersController < ApplicationController
     else
       # otherwise, display a project's apptrackers
       @apptrackers = Apptracker.find(:all, :conditions => ["project_id = ?", session[:project_id]])
+      # if a logged-in, non-admin user has landed here, then session[:applicant_id] will need to be set to session[:user_id]
+      if(!User.current.admin? && User.current.logged?)
+        session[:applicant_id] = session[:user_id]
+      end
     end
   end
   
@@ -50,7 +54,7 @@ class ApptrackersController < ApplicationController
   def create
     @apptracker = Apptracker.new(params[:apptracker])
     @apptracker.project_id = session[:project_id]
-    @apptracker.apptracker_status = 1
+    @apptracker.apptracker_status = 'active'
 
     # attempt to save the apptracker; flash results to the user
     respond_to do |format|

@@ -4,7 +4,8 @@ class Job < ActiveRecord::Base
   has_many :applicants, :through => :apptracker
 
   # TODO check this association
-  has_many :job_applications, :through => :applicant
+  has_many :job_applications 
+  # has_many :job_applications, :through => :applicant
 
   # has_one :job_application_template #, :through => :applicants
 

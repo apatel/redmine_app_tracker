@@ -1,12 +1,13 @@
 <% flash[:notice] %>
 <h2><%=h session[:apptracker_title] %>: Application Materials</h2>
+
 <%= render :partial => 'shared/tabs' %>
 
-<table class="list" style="width:65%">
+<table class="list" style="width:90%">
 <thead>
   <tr>
+    <th style="width:40%; text-align:left;">Title</th>
     <th style="width:30%; text-align:left;">File Name</th>
-    <th style="width:40%; text-align:left;">Description</th>
     <th style="width:20%; text-align:left;">User Name</th>
     <th style="width:6%; text-align:left;"></th>
     <th style="width:4%; text-align:left;"></th>
@@ -15,8 +16,8 @@
 <tbody>
   <% @application_materials.each do |application_material| %>
     <tr>
+      <td style="width:40%"><%=h application_material.title%></a></td>
       <td style="width:30%"><%=h application_material.filename %></a></td>
-      <td style="width:40%"><%=h application_material.description%></a></td>
       <td style="width:20%"><%=h "#{Applicant.find(application_material.applicant_id).last_name}, 
         #{Applicant.find(application_material.applicant_id).first_name}"%>
         <td style="width:6%"><%= link_to 'Download', :controller => 'application_materials', :id => application_material.id, :action => 'download' %></td>

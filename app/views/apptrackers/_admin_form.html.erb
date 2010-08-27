@@ -11,6 +11,11 @@
   </p>
 
   <p>
+    <%= f.label(:status) %><br />
+    <%= f.select(:status, Apptracker::STATUS_OPTIONS, {:include_blank => true}) %>   
+  </p>
+
+  <p>
     <%= f.submit('Save') %>
   </p>
 <% end %>

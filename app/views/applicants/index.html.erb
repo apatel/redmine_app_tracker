@@ -1,8 +1,12 @@
 <% flash[:notice] %>
 <h2><%=h session[:apptracker_title] %>: Applicants</h2>
-<%= render :partial =>'shared/tabs' %>
 
-<table class="list" style="width:65%">
+<% # Provide a tab set for the admin role %>
+<% if(User.current.admin?)%>
+  <%= render :partial => "shared/tabs" %>
+<% end %>
+
+<table class="list" style="width:90%">
 <thead>
   <tr>
     <th style="width:50%; text-align:left;">Name</th>

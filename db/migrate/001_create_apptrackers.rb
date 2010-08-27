@@ -4,7 +4,7 @@ class CreateApptrackers < ActiveRecord::Migration
       t.integer :project_id
       t.string :title
       t.string :description
-      t.boolean :apptracker_status
+      t.string :status
       
       t.timestamps
     end

@@ -7,6 +7,10 @@ class CreateJobs < ActiveRecord::Migration
       t.string :description 
       t.string :application_followup_message
       t.string :status
+      t.string :custom_fields
+      t.integer :attachment_count
+      t.string :attachment_filenames
+      t.string :referrer_count
 
       t.timestamps
     end

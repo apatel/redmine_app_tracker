@@ -1,9 +1,11 @@
 class Applicant < ActiveRecord::Base
   # associations
-  belongs_to :apptracker
+  # belongs_to :apptracker
+  has_and_belongs_to_many :apptrackers
+
   has_many :application_materials, :dependent => :destroy
-  # has_many :referrers, :dependent => :destroy
-  # has_many :job_applications, :dependent => :destroy
+  has_many :referrers, :dependent => :destroy
+  has_many :job_applications, :dependent => :destroy
 
   # validation
   validates_presence_of :first_name, :last_name, :user_name, :email, :mobile_phone, :dob, :gender,

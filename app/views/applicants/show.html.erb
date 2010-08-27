@@ -1,8 +1,12 @@
 <% flash[:notice] %>
 <h2><%=h session[:apptracker_title] %>: Jobs: <em><%=h "#{@applicant.last_name}, #{@applicant.first_name} "%></em></h2>
-<%= render :partial => 'shared/tabs' %>
+
+<%= render :partial => "shared/tabs" %>
 
 <h2>Applicant Information</h2>
+<table>
+  <tr>
+    <td>
 <b>General Information</b>
 <p>
 Name: <%=h "#{@applicant.last_name}, #{@applicant.first_name}"%><br /> 
@@ -13,7 +17,8 @@ Date of birth: <%=h @applicant.dob %> <br />
 Gender: <%=h @applicant.gender %> <br /> 
 </p>
 <br />
-
+</td>
+<td style="padding-left:20px;">
 <b>College Information</b>
 <p>
 Graduation month: <%=h @applicant.grad_month %> year: <%=h @applicant.grad_year %> <br /> 
@@ -24,7 +29,10 @@ School state/province: <%=h @applicant.school_state_province %> <br />
 School country: <%=h @applicant.school_country %><br /> 
 </p>
 <br />
-
+</td>
+</tr>
+<tr>
+<td>
 <b>Home Address (if applicable)</b>
 <p>
 Home street address 1: <%=h @applicant.home_street_1 %> <br /> 
@@ -35,7 +43,8 @@ Home postal code: <%=h @applicant.home_postal_code %> <br />
 Home country: <%=h @applicant.home_country %><br /> 
 Home phone: <%=h @applicant.home_phone %><br /> 
 </p>
-
+</td>
+<td style="padding-left:20px;">
 <b>Dorm/Apartment Address</b>
 <p>
 Dorm street address 1: <%=h @applicant.dorm_street_1 %><br /> 
@@ -46,11 +55,14 @@ Dorm postal code: <%=h @applicant.dorm_postal_code %> <br />
 Dorm country: <%=h @applicant.dorm_country %><br /> 
 Dorm phone: <%=h @applicant.dorm_phone %><br /> 
 </p>
-
+</td>
+</tr>
+</table>
 <br /><br />
 <%= link_to 'Back', applicants_url %>
 
 <h2>Job Applications</h2>
+
 
 <h2>Application Materials</h2>
 <table class="list" style="width:90%; margin-right:10%;">
@@ -81,5 +93,5 @@ Dorm phone: <%=h @applicant.dorm_phone %><br />
 </table>
 
 <h2>Referrers</h2>
-
+<%= render :partial => "referrers/referrer_tables" %>
 

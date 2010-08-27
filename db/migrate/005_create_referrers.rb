@@ -6,7 +6,6 @@ class CreateReferrers < ActiveRecord::Migration
       t.string :last_name
       t.string :email
       t.string :phone
-      t.string :reference_text
 
       t.timestamps
     end

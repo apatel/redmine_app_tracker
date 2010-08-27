@@ -7,5 +7,6 @@ class Referrer < ActiveRecord::Base
   # validations
 
   # constants
+  REFERENCE_STATUS = ['Unsubmitted', 'Submitted']
 
 end
