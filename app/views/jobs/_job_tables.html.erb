@@ -28,21 +28,25 @@
     <tr>
       <% if(User.current.admin?)%>
         <!-- Admin scope -->
-        <td style="width:25%"><%= link_to "#{job.title}", job_url(job.id) %></a></td>
+        <td style="width:25%"><%= link_to "#{job.title}", job_url(job.id, :apptracker_id => params[:apptracker_id]) %></a></td>
         <td style="width:10%"><%=h job.category %></a></td>
         <td style="width:50%"><%=h job.description %></td>
         <td style="width:10%"><%=h job.status %></td>
-        <td style="width:5%"><%= link_to 'Edit', edit_job_url(job.id) %></td>
-        <td style="width:5%"><%= link_to 'Delete', job_url(:id => job.id), :confirm => "All links to applicants will be destroyed.  Are you sure you want to delete the \"#{job.title}\" job?", :method => :delete %></td>
+        <td style="width:5%"><%= link_to 'Edit', edit_job_url(job.id), :class => 'icon icon-edit' %></td>
+        <td style="width:5%"><%= link_to 'Delete', job_url(:id => job.id), 
+          :confirm => "All links to applicants will be destroyed.  Are you sure you want to delete the \"#{job.title}\" job?", 
+          :method => :delete,
+          :class => 'icon icon-del' %>
+        </td>
       <% elsif (User.current.logged?)%>
         <!-- Applicant scope -->
-        <td style="width:25%"><%= link_to "#{job.title}", job_url(job.id) %></td>
+        <td style="width:25%"><%= link_to "#{job.title}", job_url(job.id, :apptracker_id => params[:apptracker_id]) %></td>
         <td style="width:15%"><%=h job.category %></td>
         <td style="width:50%"><%=h job.description %></td>
         <td style="width:10%"></td>
       <% else %>
         <!-- Anonymous scope -->
-        <td style="width:30%"><%= link_to "#{job.title}", job_url(job.id) %></a></td>
+        <td style="width:30%"><%= link_to "#{job.title}", job_url(job.id, :apptracker_id => params[:apptracker_id]) %></a></td>
         <td style="width:15%"><%=h job.category %></a></td>
         <td style="width:55%"><%=h job.description %></td>
       <% end %>

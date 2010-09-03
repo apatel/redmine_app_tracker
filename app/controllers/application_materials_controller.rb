@@ -7,18 +7,13 @@ class ApplicationMaterialsController < ApplicationController
   # ADMIN VIEW: view all application materials for an apptracker
   # TODO USER VIEW: add a section that finds application materials for a particular user
   def index
-    @apptracker = Apptracker.find(session[:apptracker_id])
-    
+    @apptracker = Apptracker.find(params[:apptracker_id])
+    @applicant = Applicant.find(params[:applicant_id])
     if(User.current.admin?)
       @application_materials = @apptracker.application_materials
     elsif(User.current.logged?)
-      # The following line will find all application materials in terms of an apptracker
-      # @application_materials = @apptracker.application_materials.find(:all, :conditions => ["applicant_id = ?", session[:applicant_id]])
-      # But it seems to make more sense to allow a user to see a collective pool of 
-      # their own application materials, regardless of apptracker associtation:
-      @application_materials = Applicant.find(session[:applicant_id]).application_materials
+      @application_materials = Applicant.find(User.current.id).application_materials
     end
-    #@application_materials = ApplicationMaterial.find(:all, :conditions => ["applicant_id = ? AND apptracker_id = ?", session[:user_id], session[:apptracker_id]])
   end
   
   # GET /application_materials/1
@@ -46,17 +41,18 @@ class ApplicationMaterialsController < ApplicationController
       attempt_save = ApplicationMaterial.save_file(params[:application_file])
       if(attempt_save)
         @application_material = ApplicationMaterial.create(params[:application_material])
-        @application_material.applicant_id = session[:user_id]
-        @application_material.apptracker_id = session[:apptracker_id]
+        # TODO move the following values as hidden fields in the form
+        @application_material.applicant_id = params[:applicant_id]
+        @application_material.apptracker_id = params[:apptracker_id]
         @application_material.filename = params[:application_file][:data].original_filename
         @application_material.save
       else
         flash[:error] = "There was an error during file upload. Please try gain, and if the problem persists, please contact the system admin."
       end
-      redirect_to(application_materials_url)
+      redirect_to(application_materials_url(:apptracker_id => params[:apptracker_id]))
     else 
       flash[:error] = "No file added. Please try uploading again."
-      redirect_to(new_application_material_url)
+      redirect_to(new_application_material_url(:apptracker_id => params[:apptracker_id]))
     end
   end
 

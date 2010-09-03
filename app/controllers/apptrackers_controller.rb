@@ -5,37 +5,25 @@ class ApptrackersController < ApplicationController
   # The landing page; displays all apptrackers owned by the project
   # GET /apptrackers
   # GET apptrackers_url
-  # TODO find out if there's a field in redmine that indicates the most recent project accessed
-  # TODO implement XML routing?
   def index
-    # if calling from a project's apptracker tab, :project_name will exist, and apptrackers
-    # owned by the project can be searched for
-    if(!params[:project_name].nil?)
-      session[:project_id] = Project.find(params[:project_name]).id
+    # The :project_identifier parameter must exist, otherwise redirect back to projects
+    if(!params[:project_identifier].nil?)
+      @project = Project.find_by_identifier(params[:project_identifier])
+    else
+      redirect_to('/projects')
     end
 
-    if(session[:project_id].nil?)
-      # if no :project_id exists, a project's apptrackers can't be found, so redirect back to projects
-      redirect_to('/projects')
-    else
-      # otherwise, display a project's apptrackers
-      @apptrackers = Apptracker.find(:all, :conditions => ["project_id = ?", session[:project_id]])
-      # if a logged-in, non-admin user has landed here, then session[:applicant_id] will need to be set to session[:user_id]
-      if(!User.current.admin? && User.current.logged?)
-        session[:applicant_id] = session[:user_id]
-      end
-    end
+    # display a project's apptrackers
+    @apptrackers = Apptracker.find(:all, :conditions => ["project_id = ?", @project.id])
   end
   
   # GET /apptrackers/1
   # GET apptracker_url(:id => 1)
   def show
     @apptracker = Apptracker.find(params[:id])
-    session[:apptracker_id] = @apptracker.id
-    session[:apptracker_title] = @apptracker.title
 
     respond_to do |format|
-      format.html #show.html.erb
+      format.html { redirect_to(jobs_url(:apptracker_id => @apptracker.id)) }#show.html.erb
     end
   end
 
@@ -52,9 +40,9 @@ class ApptrackersController < ApplicationController
   # POST /apptrackers
   # POST apptrackers_url
   def create
+    debugger
     @apptracker = Apptracker.new(params[:apptracker])
-    @apptracker.project_id = session[:project_id]
-    @apptracker.apptracker_status = 'active'
+    @apptracker.project = @project
 
     # attempt to save the apptracker; flash results to the user
     respond_to do |format|

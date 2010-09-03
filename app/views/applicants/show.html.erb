@@ -1,5 +1,9 @@
 <% flash[:notice] %>
-<h2><%=h session[:apptracker_title] %>: Jobs: <em><%=h "#{@applicant.last_name}, #{@applicant.first_name} "%></em></h2>
+<div class="contextual">
+  <%= link_to 'Back', applicants_url, :class => 'icon icon-history' %>
+</div>
+
+<h2><%=h Apptracker.find(params[:apptracker_id]).title %>: Jobs: <em><%=h "#{@applicant.last_name}, #{@applicant.first_name} "%></em></h2>
 
 <%= render :partial => "shared/tabs" %>
 
@@ -59,38 +63,12 @@ Dorm phone: <%=h @applicant.dorm_phone %><br />
 </tr>
 </table>
 <br /><br />
-<%= link_to 'Back', applicants_url %>
 
 <h2>Job Applications</h2>
 
 
 <h2>Application Materials</h2>
-<table class="list" style="width:90%; margin-right:10%;">
-<thead>
-  <tr>
-    <th style="width:30%; text-align:left;">File Name</th>
-    <th style="width:40%; text-align:left;">Title</th>
-    <th style="width:10%; text-align:left;">Created On</th>
-    <th style="width:10%; text-align:left;">Updated On</th>
-    <th style="width:6%; text-align:left;"></th>
-    <th style="width:4%; text-align:left;"></th>
-  </tr>
-</thead>
-<tbody>
-  <% @application_materials.each do |application_material| %>
-    <tr>
-      <td style="width:30%"><%=h application_material.filename %></a></td>
-      <td style="width:40%"><%=h application_material.title%></a></td>
-      <td style="width:10%"><%=h application_material.created_at %> 
-      <td style="width:10%"><%=h application_material.updated_at %>  
-      <td style="width:6%"><%= link_to 'Download', :controller => 'application_materials', :id => application_material.id, :action => 'download' %></td>
-      <td style="width:4%"><%= link_to 'Delete', application_material_url(:id => application_material.id), 
-        :confirm => "Are you sure you want to delete #{application_material.filename}?", 
-        :method => :delete %></td>
-    </tr>
-  <% end %>
-</tbody>
-</table>
+<%= render :partial => "application_materials/application_material_tables" %>
 
 <h2>Referrers</h2>
 <%= render :partial => "referrers/referrer_tables" %>

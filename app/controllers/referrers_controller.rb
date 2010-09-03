@@ -8,12 +8,9 @@ class ReferrersController < ApplicationController
   # GET referrers_url
   def index
     # secure the parent apptracker id and find its referrers
-    @apptracker = Apptracker.find(session[:apptracker_id])
-    @applicant = @apptracker.applicants.find(session[:applicant_id])
+    @apptracker = Apptracker.find(params[:apptracker_id])
+    @applicant = @apptracker.applicants.find(params[:applicant_id])
     @referrers = @applicant.referrers
-  
-    # no referrer currently selected, session should reflect this
-    session[:referrer_id] = nil
   end
   
   # GET /referrers/1
@@ -22,10 +19,6 @@ class ReferrersController < ApplicationController
     # secure the parent apptracker id and find requested referrer
     @referrer = Referrer.find(params[:id])
     @applicant = @referrer.applicant
-
-    # indicate current referrer id and applicant id in the session
-    session[:referrer_id] = @referrer.id
-    session[:applicant_id] = @referrer.applicant.id
 
     respond_to do |format|
       format.html #show.html.erb
@@ -36,7 +29,7 @@ class ReferrersController < ApplicationController
   # Get new_referrer_url
   def new
     # secure the parent applicant id and create a new referrer
-    @applicant = Applicant.find(session[:applicant_id])
+    @applicant = Applicant.find(params[:applicant_id])
     @referrer = @applicant.referrers.new
 
     respond_to do |format|
@@ -54,7 +47,7 @@ class ReferrersController < ApplicationController
   # POST referrers_url
   def create
     # create a referrer connected to its parent applicant
-    @applicant = Applicant.find(session[:applicant_id])
+    @applicant = Applicant.find(params[:applicant_id])
     @referrer = @applicant.referrers.new(params[:referrer])
  
     respond_to do |format|
@@ -72,8 +65,6 @@ class ReferrersController < ApplicationController
   # PUT referrer_url(:id => 1)
   def update
     # find the referrer within its parent applicant
-    #@applicant = Applicant.find(session[:applicant_id])
-    #@referrer = @applicant.referrers.find(params[:id])
     @referrer = Referrer.find(params[:id])
     @applicant = @referrer.applicant
 
@@ -92,8 +83,8 @@ class ReferrersController < ApplicationController
   # DELETE /referrers/1
   # DELETE referrer_url(:id => 1)
   def destroy
-    # create a referrer in the context of its parent applicant
-    @applicant = Applicant.find(session[:applicant_id])
+    # find the referrer to delete
+    @applicant = Applicant.find(params[:applicant_id])
     @referrer = @applicant.referrers.find(params[:id])
 
     # destroy the referrer, and indicate a message to the user upon success/failure

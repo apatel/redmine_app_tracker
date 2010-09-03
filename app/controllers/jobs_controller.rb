@@ -7,25 +7,24 @@ class JobsController < ApplicationController
   # GET jobs_url
   def index
     # secure the parent apptracker id and find its jobs
-    @apptracker = Apptracker.find(session[:apptracker_id])
+    @apptracker = Apptracker.find(params[:apptracker_id])
     @jobs = @apptracker.jobs
-  
-    # no job currently selected, session should reflect this
-    session[:job_id] = nil
   end
   
   # GET /jobs/1
   # GET job_url(:id => 1)
   def show
     # secure the parent apptracker id and find requested job
-    @apptracker = Apptracker.find(session[:apptracker_id])
+    @apptracker = Apptracker.find(params[:apptracker_id])
     @job = @apptracker.jobs.find(params[:id])
+    #@apptracker = Apptracker.find(session[:apptracker_id])
+    #@job = @apptracker.jobs.find(params[:id])
 
     # refresh the parent project and apptracker session settings; important if a link to the
     # current job are provided on other websites
-    session[:job_id] = @job.id
-    session[:apptracker_id] = @job.apptracker_id
-    session[:project_id] = Apptracker.find(session[:apptracker_id]).project_id
+    #session[:job_id] = @job.id
+    #session[:apptracker_id] = @job.apptracker_id
+    #session[:project_id] = Apptracker.find(session[:apptracker_id]).project_id
 
     respond_to do |format|
       format.html #show.html.erb

@@ -1,4 +1,7 @@
 <% flash[:notice] %>
+<div class="contextual">
+  <%= link_to 'Return to AppTracker List', apptrackers_url(:project_identifier => @apptracker.project.identifier), :class => 'icon icon-history' %>
+</div>
 <h2><%= @apptracker.title %></h2>
 
 <%= render :partial => "shared/tabs" %>

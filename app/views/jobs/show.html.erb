@@ -1,5 +1,9 @@
 <% flash[:notice] %>
-<h2><%=h session[:apptracker_title] %>: Jobs: <em><%=h @job.title %></em></h2>
+<div class="contextual">
+  <%= link_to 'Back', jobs_url(:apptracker_id => params[:apptracker_id]), :class => 'icon icon-history' %>
+</div>
+
+<h2><%=h @job.apptracker.title %>: Jobs: <em><%=h @job.title %></em></h2>
 
 <%= render :partial => "shared/tabs" %>
 
@@ -21,4 +25,3 @@ Description: <%=h @job.description %><br />
   <!-- remember location, then take user to registration page -->
 <% end %>
 <br /><br />
-<%= link_to 'Back', jobs_url %>

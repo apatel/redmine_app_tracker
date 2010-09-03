@@ -1,4 +1,8 @@
 <% flash[:notice] %>
+<div class="contextual">
+  <% #link_to 'Back', job_applications_url, :class => 'icon icon-history' 
+%>
+</div>
 <h2><%=h session[:apptracker_title] %>: Job Applications </h2> 
 
 <%= render :partial => "shared/tabs" %>

@@ -6,31 +6,24 @@ class ApplicantsController < ApplicationController
 
   # GET /applicants
   # GET applicants_url
-  # show listing of all applicants maintained by a single apptracker 
+  # show listing of all applicants associated with a single apptracker 
   def index
     # take advantage of model associations for finding applicants
-    @apptracker = Apptracker.find(session[:apptracker_id])
+    @apptracker = Apptracker.find(params[:apptracker_id])
     @applicants = @apptracker.applicants
-
-    # no applicant is selected, sesssion should reflect this
-    session[:applicant_id] = nil
   end
   
   # GET /applicants/1
   # GET applicant_url(:id => 1)
   # show an apptlicant's info
   def show 
-    @apptracker = Apptracker.find(session[:apptracker_id])
+    @apptracker = Apptracker.find(params[:apptracker_id])
     @applicant = @apptracker.applicants.find(params[:id])
     
-    @application_materials = @applicant.application_materials
     # TODO enable the following variables after referrer and job_applications are implemented
     @referrers = @applicant.referrers
     #@job_application = @applicant.job_applications
-     
-    # update session info
-    session[:applicant_id] = @applicant.id
-    session[:apptracker_id] = @applicant.apptracker_id
+    @application_materials = @applicant.application_materials
 
     respond_to do |format|
       format.html #show.html.erb
@@ -41,7 +34,7 @@ class ApplicantsController < ApplicationController
   # Get new_applicant_url
   def new
     # make a new applicant
-    @apptracker = Apptracker.find(session[:apptracker_id])
+    @apptracker = Apptracker.find(params[:apptracker_id])
     @applicant = @apptracker.applicants.new
 
     respond_to do |format|
@@ -53,7 +46,7 @@ class ApplicantsController < ApplicationController
   # GET edit_applicant_url(:id => 1)
   def edit
     # find the applicant for editing
-    @apptracker = Apptracker.find(session[:apptracker_id]) 
+    @apptracker = Apptracker.find(params[:apptracker_id]) 
     @applicant = @apptracker.applicants.find(params[:id])
   end
   
@@ -61,7 +54,7 @@ class ApplicantsController < ApplicationController
   # POST applicants_url
   def create
     # create an applicant and attach it to its parent apptracker
-    @apptracker = Apptracker.find(session[:apptracker_id])
+    @apptracker = Apptracker.find(params[:apptracker_id])
     @applicant = @apptracker.applicants.new(params[:applicant])
 
     # attempt to save, and flash the result to the user
@@ -80,7 +73,7 @@ class ApplicantsController < ApplicationController
   # PUT applicant_url(:id => 1)
   def update
     # find the applicant via its parent apptracker
-    @apptracker = Apptracker.find(session[:apptracker_id])
+    @apptracker = Apptracker.find(params[:apptracker_id])
     @applicant = @apptracker.applicants.find(params[:id])
 
     # attempt to update attributes, and flash the result to the user
@@ -99,7 +92,7 @@ class ApplicantsController < ApplicationController
   # DELETE applicant_url(:id => 1)
   def destroy
     # find the applicant via its parent apptracker
-    @apptracker = Apptracker.find(session[:apptracker_id])
+    @apptracker = Apptracker.find(params[:apptracker_id])
     @applicant = @apptracker.applicants.find(params[:id])
 
     # attempt to destroy the applicant (ouch), and flash the result to the user

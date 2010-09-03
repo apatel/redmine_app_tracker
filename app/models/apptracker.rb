@@ -3,6 +3,7 @@ class Apptracker < ActiveRecord::Base
   has_many :jobs, :dependent => :destroy
   has_many :applicants, :dependent => :destroy
   has_many :application_materials, :through => :applicants
+  belongs_to :project
 
   # validation
   validates_presence_of :title, :message => 'Please enter a title'
@@ -21,4 +22,5 @@ class Apptracker < ActiveRecord::Base
       raise 'No application tracker to delete.'
     end
   end
+
 end
