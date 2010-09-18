@@ -1,14 +1,14 @@
 <% flash[:notice] %>
 <div class="contextual">
   <% if (User.current.admin?) %>
-    <%= link_to('New Job', new_job_url, :class => 'icon icon-add') %> |
+    <%= link_to('New Job', new_job_url(:apptracker_id => params[:apptracker_id]), :class => 'icon icon-add') %> |
   <% end %>
   <%= link_to 'Return to AppTracker List', 
     apptrackers_url(:project_identifier => Apptracker.find(params[:apptracker_id]).project.identifier), 
     :class => 'icon icon-history' 
   %>
 </div>
-<h2><%=h @jobs.first.apptracker.title %>: Jobs</h2>
+<h2><%=h Apptracker.find(params[:apptracker_id]).title %>: Jobs</h2>
 
 <%= render :partial => "shared/tabs" %>
 

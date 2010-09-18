@@ -1,3 +1,4 @@
+# TODO phase out this controller
 class ReferrersController < ApplicationController
   unloadable
   #before_filter :authorize, :except => [:index, :show]

@@ -18,10 +18,14 @@ Description: <%=h @job.description %><br />
   <!-- render students applying to this job -->
   <!-- render Application materials associated with this job -->
 <% elsif User.current.logged? %>
-  <%= submit_tag "Apply to this job" %>
+  <%= link_to "Apply to this job", new_job_application_url(:apptracker_id => params[:apptracker_id], :job_id => @job.id, :user_id => User.current.id) %>
   <!-- go to job application -->
 <% else %>
-  <%= submit_tag "Log In/Register to Apply to This Job" %>
-  <!-- remember location, then take user to registration page -->
+  <!-- Take anonymous user to registration page -->
+  <%
+    #TODO Connect the anonymous user login to Redmine's login system
+  %>
+  NOT YET IMPLEMENTED <br /><br />
+  <%= link_to "Log In/Register to Apply to This Job" %>
 <% end %>
 <br /><br />

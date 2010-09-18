@@ -8,28 +8,29 @@ class JobApplicationsController < ApplicationController
   # GET job_applications_url
   def index
     # TODO establish calling page in order to return proper search results (from job scope or applicant scope)
-    @apptracker = Apptracker.find(session[:apptracker_id])
-    
-    # TODO REVISE THIS
-    @job_materials = @apptracker.applicants.job_applications
-
-    # @applicant = @apptracker.applicants.find(session[:applicant_id])
-    # @job_applications = @applicant.job_applications
-    
-    # no job_application currently selected, session should reflect this
-    session[:job_application_id] = nil
+    debugger 
+    if(User.current.admin?)
+      if(params[:view_scope] == 'job' || (params[:applicant_id].nil? && params[apptracker_id].nil?))
+        # if viewing all job applications for a particular job
+        @job_applications = Job.find(params[:job_id]).job_applications
+      elsif(params[:view_scope] == 'applicant' || (params[:job_id].nil? && params[apptracker_id].nil?))
+        # if viewing all job applications for a particular user/applicant
+        @job_applications = Applicant.find(params[:applicant_id]).job_applications
+      else
+        # if viewing all job applications for an apptracker
+        @job_applications = Apptracker.find(params[:apptracker_id]).jobs.job_applications
+      end
+    elsif(User.current.logged?)
+      @job_applications = Applicant.find(User.current.id).job_applications
+    end
   end
   
   # GET /job_applications/1
   # GET job_application_url(:id => 1)
   def show
     # secure the parent apptracker id and find requested job_application
-    @job_application = Referrer.find(params[:id])
+    @job_application = JobApplication.find(params[:id])
     @applicant = @job_application.applicant
-
-    # indicate current job_application id and applicant id in the session
-    session[:job_application_id] = @job_application.id
-    session[:applicant_id] = @job_application.applicant.id
 
     respond_to do |format|
       format.html #show.html.erb
@@ -40,7 +41,7 @@ class JobApplicationsController < ApplicationController
   # Get new_job_application_url
   def new
     # secure the parent applicant id and create a new job_application
-    @applicant = Applicant.find(session[:applicant_id])
+    @applicant = Applicant.find(params[:user_id])
     @job_application = @applicant.job_applications.new
 
     respond_to do |format|

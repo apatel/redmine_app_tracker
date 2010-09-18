@@ -1,8 +1,7 @@
 class Apptracker < ActiveRecord::Base
   # associations
   has_many :jobs, :dependent => :destroy
-  has_many :applicants, :dependent => :destroy
-  has_many :application_materials, :through => :applicants
+  has_and_belongs_to_many :applicants
   belongs_to :project
 
   # validation
@@ -10,8 +9,9 @@ class Apptracker < ActiveRecord::Base
   validates_uniqueness_of :title
 
   # constants
+  # TODO convert these values into variables that can be set from a settings page within Redmine
   APPTRACKER_PLUGIN_FOLDER = "redmine_apptracker"
-  STATUS_OPTIONS = ['active','inactive']
+  STATUS_OPTIONS = ['Active','Inactive']
 
   def self.find_all_apptrackers
     find(:all, :order => 'title')

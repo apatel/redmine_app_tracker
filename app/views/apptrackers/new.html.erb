@@ -1,6 +1,6 @@
-<h2><%=h session[:project_name] %>: <em>New Apptracker</em></h2>
+<h2><%=h Project.find_by_identifier(params[:project_identifier]).name %>: <em>New Apptracker</em></h2>
 
 <%= render :partial => "admin_form" %>
 
 <br />
-<%= link_to 'Back', apptrackers_url %>
+<%= link_to 'Back', apptrackers_url(:project_identifier => params[:project_identifier]) %>

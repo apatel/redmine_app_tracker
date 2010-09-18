@@ -3,6 +3,7 @@ class ApplicationMaterialsController < ApplicationController
   # before_filter :require_admin, :except => [:index, :show] 
   
   # GET /application_materials
+  # TODO Phase this controller out
   # GET application_materials_url
   # ADMIN VIEW: view all application materials for an apptracker
   # TODO USER VIEW: add a section that finds application materials for a particular user
@@ -41,7 +42,7 @@ class ApplicationMaterialsController < ApplicationController
       attempt_save = ApplicationMaterial.save_file(params[:application_file])
       if(attempt_save)
         @application_material = ApplicationMaterial.create(params[:application_material])
-        # TODO move the following values as hidden fields in the form
+        # TODO move some of the following values as hidden fields in the form
         @application_material.applicant_id = params[:applicant_id]
         @application_material.apptracker_id = params[:apptracker_id]
         @application_material.filename = params[:application_file][:data].original_filename

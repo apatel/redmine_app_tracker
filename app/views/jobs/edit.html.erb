@@ -1,6 +1,6 @@
-<h2><%=h session[:apptracker_title]%>: <em>Edit Job</em></h2>
+<h2><%=h @apptracker.title %>: <em>Edit Job</em></h2>
 
 <%= render :partial => "form" %>
 
 <br />
-<%= link_to 'Back', jobs_url %>
+<%= link_to 'Back', jobs_url(:apptracker_id => params[:apptracker_id]) %>

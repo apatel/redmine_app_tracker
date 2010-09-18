@@ -1,6 +1,5 @@
 class ApplicantsController < ApplicationController
   unloadable # don't keep reloading this
-  # TODO figure out a better way of accessing the parent apptracker via association
   #before_filter :require_admin, :except => ['index', 'show']
   before_filter :require_admin
 
@@ -8,22 +7,19 @@ class ApplicantsController < ApplicationController
   # GET applicants_url
   # show listing of all applicants associated with a single apptracker 
   def index
-    # take advantage of model associations for finding applicants
     @apptracker = Apptracker.find(params[:apptracker_id])
     @applicants = @apptracker.applicants
   end
   
   # GET /applicants/1
   # GET applicant_url(:id => 1)
-  # show an apptlicant's info
+  # show an applicant's info
   def show 
     @apptracker = Apptracker.find(params[:apptracker_id])
-    @applicant = @apptracker.applicants.find(params[:id])
-    
-    # TODO enable the following variables after referrer and job_applications are implemented
-    @referrers = @applicant.referrers
-    #@job_application = @applicant.job_applications
-    @application_materials = @applicant.application_materials
+    @applicant = Applicants.find(params[:id])
+
+    # TODO uncomment this after job applications are implemented
+    # @job_applications = @applicant.job_applications
 
     respond_to do |format|
       format.html #show.html.erb
@@ -54,14 +50,14 @@ class ApplicantsController < ApplicationController
   # POST applicants_url
   def create
     # create an applicant and attach it to its parent apptracker
-    @apptracker = Apptracker.find(params[:apptracker_id])
+    @apptracker = Apptracker.find(params[:applicant][:apptracker_id])
     @applicant = @apptracker.applicants.new(params[:applicant])
 
     # attempt to save, and flash the result to the user
     respond_to do |format|
       if(@applicant.save)
         # no errors, redirect with success message
-        format.html { redirect_to(@applicant, :notice => "#{@applicant.first_name} #{@applicant.last_name}\'s record has been created.") }
+        format.html { redirect_to(@applicant, :apptracker_id => @apptracker.id, :notice => "#{@applicant.first_name} #{@applicant.last_name}\'s record has been created.") }
       else
         # validation prevented save
         format.html { render :action => "new" }
@@ -73,14 +69,14 @@ class ApplicantsController < ApplicationController
   # PUT applicant_url(:id => 1)
   def update
     # find the applicant via its parent apptracker
-    @apptracker = Apptracker.find(params[:apptracker_id])
+    @apptracker = Apptracker.find(params[:applicant][:apptracker_id])
     @applicant = @apptracker.applicants.find(params[:id])
 
     # attempt to update attributes, and flash the result to the user
     respond_to do |format|
       if(@applicant.update_attributes(params[:applicant]))
         # successfully updated; redirect and indicate success to user
-        format.html{ redirect_to(applicants_url, :notice => "#{@applicant.first_name} #{@applicant.last_name}\'s record has been updated.")}
+        format.html{ redirect_to(applicants_url, :apptracker_id => @apptracker.id, :notice => "#{@applicant.first_name} #{@applicant.last_name}\'s record has been updated.")}
       else
         # update failed; go back to edit form
         format.html { render :action => "edit" }

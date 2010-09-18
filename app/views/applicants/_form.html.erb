@@ -1,5 +1,6 @@
 <% form_for(@applicant) do |f| %>
   <%= f.error_messages %>
+  <%= f.hidden_field(:apptracker_id, :value => @apptracker.id) %>
   <h3>General Information</h3>
   <p>
     <%= f.label(:first_name) %><br />

@@ -40,9 +40,8 @@ class ApptrackersController < ApplicationController
   # POST /apptrackers
   # POST apptrackers_url
   def create
-    debugger
     @apptracker = Apptracker.new(params[:apptracker])
-    @apptracker.project = @project
+    @apptracker.project = Project.find_by_identifier(params[:apptracker][:project_identifier])
 
     # attempt to save the apptracker; flash results to the user
     respond_to do |format|
@@ -87,7 +86,7 @@ class ApptrackersController < ApplicationController
     # attempt to destroy the apptracker; flash results to the user
     @apptracker.destroy ? flash[:notice] = "#{@apptracker.title} has been deleted." : flash[:error] = "Error: #{@apptracker.title} could not be deleted."
     respond_to do |format|
-      format.html { redirect_to(apptrackers_url) }
+      format.html { redirect_to apptrackers_url(:apptracker_id => params[:apptracker_id]) }
     end
   end
 end

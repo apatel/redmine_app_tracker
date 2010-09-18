@@ -1,4 +1,4 @@
-<table class="list" style="width:90%; margin-right:10%;">
+<table class="list">
 <thead>
   <tr>
     <% if(User.current.admin?)%>
@@ -32,8 +32,8 @@
         <td style="width:10%"><%=h job.category %></a></td>
         <td style="width:50%"><%=h job.description %></td>
         <td style="width:10%"><%=h job.status %></td>
-        <td style="width:5%"><%= link_to 'Edit', edit_job_url(job.id), :class => 'icon icon-edit' %></td>
-        <td style="width:5%"><%= link_to 'Delete', job_url(:id => job.id), 
+        <td style="width:5%"><%= link_to 'Edit', edit_job_url(job.id, :apptracker_id => params[:apptracker_id]), :class => 'icon icon-edit' %></td>
+        <td style="width:5%"><%= link_to 'Delete', job_url(:id => job.id, :apptracker_id => params[:apptracker_id]), 
           :confirm => "All links to applicants will be destroyed.  Are you sure you want to delete the \"#{job.title}\" job?", 
           :method => :delete,
           :class => 'icon icon-del' %>
