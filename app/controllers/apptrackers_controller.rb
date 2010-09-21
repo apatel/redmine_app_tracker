@@ -30,8 +30,9 @@ class ApptrackersController < ApplicationController
   # GET /apptrackers/new
   # Get new_apptracker_url
   def new
+    @project = Project.find_by_identifier(params[:project_identifier])
     @apptracker = Apptracker.new
-
+    @apptracker.project_id = @project.id
     respond_to do |format|
         format.html #new.html.erb
     end
@@ -41,7 +42,7 @@ class ApptrackersController < ApplicationController
   # POST apptrackers_url
   def create
     @apptracker = Apptracker.new(params[:apptracker])
-    @apptracker.project = Project.find_by_identifier(params[:apptracker][:project_identifier])
+    @apptracker.project = Project.find(params[:apptracker][:project_id])
 
     # attempt to save the apptracker; flash results to the user
     respond_to do |format|
@@ -59,18 +60,20 @@ class ApptrackersController < ApplicationController
   # GET edit_apptracker_url(:id => 1)
   def edit
     @apptracker = Apptracker.find(params[:id])
+    @project = @apptracker.project
   end
 
   # PUT /apptrackers/1
   # PUT apptracker_url(:id => 1)
   def update
     @apptracker = Apptracker.find(params[:id])
-    
+    @project = @apptracker.project
+
     # attempt to update apptracker attributes; flash results to the user
     respond_to do |format|
       if @apptracker.update_attributes(params[:apptracker])
         # no errors, redirect with success message
-        format.html { redirect_to(apptrackers_url, :notice => "#{@apptracker.title} has been updated.") }
+        format.html { redirect_to(apptrackers_url(:project_identifier => @project.identifier), :notice => "#{@apptracker.title} has been updated.") }
      else
         # validation prevented update; redirect to edit form with error messages
         format.html { render :action => "edit" }
@@ -82,11 +85,12 @@ class ApptrackersController < ApplicationController
   # DELETE apptracker_url(:id => 1)
   def destroy
     @apptracker = Apptracker.find(params[:id])
+    @project = @apptracker.project
 
     # attempt to destroy the apptracker; flash results to the user
     @apptracker.destroy ? flash[:notice] = "#{@apptracker.title} has been deleted." : flash[:error] = "Error: #{@apptracker.title} could not be deleted."
     respond_to do |format|
-      format.html { redirect_to apptrackers_url(:apptracker_id => params[:apptracker_id]) }
+      format.html { redirect_to apptrackers_url(:project_identifier => @project.identifier) }
     end
   end
 end

@@ -1,6 +1,6 @@
 <% form_for(@apptracker) do |f| %>
   <%= f.error_messages %>
-  <%= f.hidden_field(:project_id, :value => params[:project_identifier].id) %>
+  <%= f.hidden_field(:project_id, :value => @project.id) %>
   
   <p>
     <%= f.label(:title) %><br />
