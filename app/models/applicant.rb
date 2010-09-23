@@ -1,10 +1,15 @@
 class Applicant < ActiveRecord::Base
+  
   # associations
   has_and_belongs_to_many :apptrackers
 
   has_many :job_application_materials, :through => :job_applications
   has_many :job_application_referrals, :through => :job_applications
   has_many :job_applications, :dependent => :destroy
+
+  # FIXME uncomment this when starting to implement Redmine login functionality
+  # belongs_to :user
+
 
   # validation
   # FIXME Validations that fail are coming up with a 'translation missing: en' error

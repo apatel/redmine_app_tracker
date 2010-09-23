@@ -78,7 +78,7 @@ class ApplicationMaterialsController < ApplicationController
   def download
     application_file = ApplicationMaterial.find(params[:id])
     storage_directory = "#{RAILS_ROOT}/vendor/plugins/#{Apptracker::APPTRACKER_PLUGIN_FOLDER}/assets/applicant_files"
-    #TODO Check if the Berkman Apache server can make use of the :x_sendfile option
+    # TODO Check if the Berkman Apache server can make use of the :x_sendfile option
     if(application_file.filename)
       send_file("#{storage_directory}/#{application_file.filename}")
     end

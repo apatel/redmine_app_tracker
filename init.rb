@@ -1,5 +1,5 @@
 require 'redmine'
-#TODO find out if all RESTful actions need a matching permission
+# TODO find out if all RESTful actions need a matching permission
 Redmine::Plugin.register :redmine_apptracker do
   name 'Redmine Apptracker plugin'
   author 'Robert A. Schuman'
@@ -26,7 +26,7 @@ Redmine::Plugin.register :redmine_apptracker do
     permission :edit_a_referrer, :referrers => :edit
   end
 
-  # set menu options; :if used for setting menu to visible if logged in
+  # set menu options; commented :if used for setting menu to visible if logged in
   menu(:project_menu, :apptrackers, {:controller => 'apptrackers', :action => 'index'}, :caption => "AppTracker", :after => :overview, :param => :project_identifier) #, :if => Proc.new{User.current.logged?})
 
   if RAILS_ENV == 'development'
