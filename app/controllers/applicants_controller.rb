@@ -5,7 +5,8 @@ class ApplicantsController < ApplicationController
 
   # GET /applicants
   # GET applicants_url
-  # show listing of all applicants associated with a single apptracker 
+  # show listing of all applicants associated with a single apptracker
+  # FIXME Update this to reflect join condition with the Apptracker Model
   def index
     @apptracker = Apptracker.find(params[:apptracker_id])
     @applicants = @apptracker.applicants
@@ -56,8 +57,9 @@ class ApplicantsController < ApplicationController
     # attempt to save, and flash the result to the user
     respond_to do |format|
       if(@applicant.save)
+        debugger
         # no errors, redirect with success message
-        format.html { redirect_to(@applicant, :apptracker_id => @apptracker.id, :notice => "#{@applicant.first_name} #{@applicant.last_name}\'s record has been created.") }
+        format.html { redirect_to(applicants_url(:apptracker_id => @apptracker.id), :notice => "#{@applicant.first_name} #{@applicant.last_name}\'s record has been created.") }
       else
         # validation prevented save
         format.html { render :action => "new" }

@@ -5,7 +5,7 @@ class Apptracker < ActiveRecord::Base
   belongs_to :project
 
   # validation
-  validates_presence_of :title, :message => 'Please enter a title'
+  validates_presence_of :title, :status
   validates_uniqueness_of :title
 
   # constants

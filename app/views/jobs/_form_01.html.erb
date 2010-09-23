@@ -4,22 +4,22 @@
   <%= hidden_field(:form, :form_id, :value => 1) %>
   Part 1 of 2
   <p>
-    <%= f.label(:category) %><br />
+    <%= f.label(:category) %><span class="required">*</span><br />
     <%= f.select(:category, Job::JOB_CATEGORIES, {:include_blank => true}) %>
   </p>
 
   <p>
-    <%= f.label(:status) %><br />
+    <%= f.label(:status) %><span class="required">*</span><br />
     <%= f.select(:status, Job::JOB_STATUS, {:include_blank => true}) %>
   </p>
 
   <p>
-    <%= f.label(:title) %><br />
+    <%= f.label(:title) %><span class="required">*</span><br />
     <%= f.text_field(:title) %>
   </p>
 
   <p>
-    <%= f.label(:description) %><br />
+    <%= f.label(:description) %><span class="required">*</span><br />
     <%= f.text_area(:description, :size => "60x12") %>
   </p>
 
@@ -34,39 +34,17 @@
   </p>
 
   <p>
-    <%= f.label(:attachment_count) %><br />
+    <%= f.label(:attachment_count) %><span class="required">*</span><br />
     <%= f.text_field(:attachment_count, :size => 3) %>
   </p>
 
-
-  <!--
   <p>
-    <%= # f.label(:attachment_ids) 
-    %><br />
-    <%= # f.text_field(:attachment_ids) 
-    %>
-    </p>
-  -->
-
-  <p>
-    <%= f.label(:application_material_count) %><br />
+    <%= f.label(:application_material_count) %><span class="required">*</span><br />
     <%= f.text_field(:application_material_count, :size => 3) %>
   </p>
 
-  <%
-    #TODO Provide setting of application material types
-  %>
-  <!--
   <p>
-    <%= #f.label(:application_material_types) 
-    %><br />
-    <%= #f.text_field(:application_material_types) 
-    %>
-  </p>
-  -->
-
-  <p>
-    <%= f.label(:referrer_count) %><br />
+    <%= f.label(:referrer_count) %><span class="required">*</span><br />
     <%= f.text_field(:referrer_count, :size => 3) %>
   </p>
 

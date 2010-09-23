@@ -3,10 +3,11 @@
   <tr>
     <!-- Admin Scope -->
     <% if(User.current.admin?)%>
-      <th style="width:35%; text-align:left">Title</th>
+      <th style="width:30%; text-align:left">Title</th>
       <th style="width:50%; text-align:left">Description</th>
+      <th style="width:10%; text-align:left">Status</th>
       <th style="width:5%; text-align:left"></th>
-      <th style="width:5%; text-align:left"></th>
+      <th style="width:5%; text-alighn:left"></th>
     <% else %>
       <!-- Anonymous and Applicant Scope -->
       <th style="width:35%; text-align:left">Title</th>
@@ -20,15 +21,16 @@
       <tr>
         <% if(User.current.admin?)%>
           <!-- Admin Scope -->
-          <td style="width:35%"><%= link_to "#{apptracker.title}", apptracker_url(apptracker.id) %></a></td>
+          <td style="width:30%"><%= link_to "#{apptracker.title}", apptracker_url(apptracker.id) %></a></td>
           <td style="width:50%"><%=h apptracker.description %></td>
+          <td style="width:10%"><%=h apptracker.status %></td>
           <td style="width:5%"><%= link_to 'Edit', edit_apptracker_url(apptracker.id), :class => 'icon icon-edit' %></td>
           <td style="width:5%"><%= link_to 'Delete', apptracker_url(:id => apptracker.id), 
             :class => 'icon icon-del', 
             :confirm => "All records will be destroyed.  Are you sure you want to delete the 
             \"#{apptracker.title}\" application tracker?", 
             :method => :delete %></td>
-        <% else %>
+        <% elsif apptracker.status.downcase == "active" %>
           <!-- Anonymous and Applicant Scope -->
           <td style="width:35%"><%= link_to "#{apptracker.title}", apptracker_url(apptracker.id) %></a></td>
           <td style="width:65%"><%=h apptracker.description %></td>

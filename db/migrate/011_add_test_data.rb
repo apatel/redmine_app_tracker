@@ -185,7 +185,6 @@ class AddTestData < ActiveRecord::Migration
     )
 
     Applicant.create(
-      :apptracker_id => 1,
       :first_name => 'James',
       :last_name => 'Kirk',
       :user_name => 'tiberius',
@@ -222,7 +221,6 @@ class AddTestData < ActiveRecord::Migration
     )
 
     Applicant.create(
-      :apptracker_id => 1,
       :first_name => 'Jean-Luc',
       :last_name => 'Picard',
       :user_name => 'locutus',
@@ -259,7 +257,6 @@ class AddTestData < ActiveRecord::Migration
    )
 
    Applicant.create(
-      :apptracker_id => 2,
       :first_name => 'Edward',
       :last_name => 'Norton',
       :user_name => 'robertpaulson',
@@ -296,7 +293,6 @@ class AddTestData < ActiveRecord::Migration
    )
 
    Applicant.create(
-      :apptracker_id => 1,
       :first_name => 'Kathryn',
       :last_name => 'Janeway',
       :user_name => 'katiej',

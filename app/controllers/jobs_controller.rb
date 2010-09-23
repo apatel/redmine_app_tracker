@@ -1,5 +1,5 @@
 class JobsController < ApplicationController
-  unloadable # don't keep reloading this
+  unloadable
   before_filter :require_admin, :except => [:index, :show] 
 
   # GET /jobs
@@ -55,7 +55,7 @@ class JobsController < ApplicationController
     respond_to do |format|
       if(params[:form][:form_id].to_i == 1)
         if(@job.save)
-          # no errors, redirect with success message
+          # no errors, redirect to second part of form
           format.html { redirect_to(new_job_url(:apptracker_id => @apptracker.id, :job_id => @job.id)) }
         else
           # validation prevented save; redirect back to new.html.erb with error messages

@@ -1,6 +1,5 @@
 class Applicant < ActiveRecord::Base
   # associations
-  # belongs_to :apptracker
   has_and_belongs_to_many :apptrackers
 
   has_many :job_application_materials, :through => :job_applications
@@ -8,10 +7,11 @@ class Applicant < ActiveRecord::Base
   has_many :job_applications, :dependent => :destroy
 
   # validation
+  # FIXME Validations that fail are coming up with a 'translation missing: en' error
   validates_presence_of :first_name, :last_name, :user_name, :email, :mobile_phone, :dob, :gender,
-                        :grad_month, :grad_year, :highest_degree_level, :school_name, :school_town_city,
-                        :school_state_province, :school_country, :home_street_1, :home_town_city,
-                        :home_state_province, :home_postal_code, :home_country, :home_phone
+                        :grad_month, :grad_year, :highest_degree_level, :gpa, :gpa_scale, :school_name, 
+                        :school_town_city, :school_state_province, :school_country, :home_street_1, 
+                        :home_town_city, :home_state_province, :home_postal_code, :home_country, :home_phone
   
   # TODO fix regex validation fields
   # validates_format_of :dob, 

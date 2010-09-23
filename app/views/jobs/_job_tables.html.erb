@@ -38,17 +38,19 @@
           :method => :delete,
           :class => 'icon icon-del' %>
         </td>
-      <% elsif (User.current.logged?)%>
-        <!-- Applicant scope -->
-        <td style="width:25%"><%= link_to "#{job.title}", job_url(job.id, :apptracker_id => params[:apptracker_id]) %></td>
-        <td style="width:15%"><%=h job.category %></td>
-        <td style="width:50%"><%=h job.description %></td>
-        <td style="width:10%"></td>
-      <% else %>
-        <!-- Anonymous scope -->
-        <td style="width:30%"><%= link_to "#{job.title}", job_url(job.id, :apptracker_id => params[:apptracker_id]) %></a></td>
-        <td style="width:15%"><%=h job.category %></a></td>
+      <% elsif job.status.lower != 'inactive' %> 
+        <% if User.current.logged? %>
+          <!-- Applicant scope -->
+          <td style="width:25%"><%= link_to "#{job.title}", job_url(job.id, :apptracker_id => params[:apptracker_id]) %></td>
+          <td style="width:15%"><%=h job.category %></td>
+          <td style="width:50%"><%=h job.description %></td>
+          <td style="width:10%"></td>
+        <% else %>
+          <!-- Anonymous scope -->
+          <td style="width:30%"><%= link_to "#{job.title}", job_url(job.id, :apptracker_id => params[:apptracker_id]) %></a></td>
+          <td style="width:15%"><%=h job.category %></a></td>
         <td style="width:55%"><%=h job.description %></td>
+        <% end %>
       <% end %>
     </tr>
   <% end %>

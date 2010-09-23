@@ -1,5 +1,6 @@
 # Redmine's current syntax for linking to RESTful resources
-ActionController::Routing::Routes.draw do |map| 
+ActionController::Routing::Routes.draw do |map|
+  # FIXME Add routes for catching bad links when 1) a link is misspelled, and 2) when a page cannot be built due to a lack of needed params[]
   map.resources :apptrackers
   # following connect needed for controller's "render :action => 'new'" method
   # map.connect 'apptrackers/:action.:format', :controller => 'apptrackers'

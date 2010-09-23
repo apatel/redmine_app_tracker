@@ -42,7 +42,8 @@ class ApptrackersController < ApplicationController
   # POST apptrackers_url
   def create
     @apptracker = Apptracker.new(params[:apptracker])
-    @apptracker.project = Project.find(params[:apptracker][:project_id])
+    @project = @apptracker.project = Project.find(params[:apptracker][:project_id])
+    
 
     # attempt to save the apptracker; flash results to the user
     respond_to do |format|
@@ -61,6 +62,10 @@ class ApptrackersController < ApplicationController
   def edit
     @apptracker = Apptracker.find(params[:id])
     @project = @apptracker.project
+    
+    respond_to do |format|
+      format.html
+    end
   end
 
   # PUT /apptrackers/1

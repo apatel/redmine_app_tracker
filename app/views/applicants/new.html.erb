@@ -1,7 +1,7 @@
 <% flash[:notice] %>
-<h2><%=h session[:apptracker_title] %>: <em>New Applicant</em></h2>
+<h2><%=h @apptracker.title %>: <em>New Applicant</em></h2>
 
 <%= render :partial => "form" %>
 
 <br />
-<%= link_to 'Back', applicants_url %>
+<%= link_to 'Back', applicants_url(:apptracker_id => @apptracker.id) %>

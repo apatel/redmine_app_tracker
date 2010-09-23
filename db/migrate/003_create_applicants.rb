@@ -2,7 +2,6 @@ class CreateApplicants < ActiveRecord::Migration
   # TODO look to see if some fields are better set as integer types (phone number, area codes, etc.)
   def self.up
     create_table :applicants do |t|
-      t.integer :apptracker_id
       t.string :first_name
       t.string :last_name
       t.string :user_name
