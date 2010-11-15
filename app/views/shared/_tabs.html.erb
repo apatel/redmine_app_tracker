@@ -19,14 +19,14 @@
      
       <li><a href="/job_applications" id="tab-JobApplications" onclick="showTab('JobApplications'); this.blur(); return false;">My Job Applications</a></li>
 
-      <li><%= link_to 'My Application Materials', application_materials_url(
+      <li><%= link_to 'My Application Materials', job_application_materials_url(
         :apptracker_id => params[:apptracker_id], 
         :project_identifier => params[:project_identifier], 
         :applicant_id => User.current.id), 
         {:id => 'tab-ApplicationMaterials', :onclick => "showTab('ApplicationMaterials'); this.blur(); return false;"} %>
       </li>
 
-      <li><%= link_to 'My Referrers', referrers_url(
+      <li><%= link_to 'My Referrers', job_application_referrals_url(
         :apptracker_id => params[:apptracker_id], 
         :project_identifier => params[:project_identifier], 
         :applicant_id => User.current.id), 

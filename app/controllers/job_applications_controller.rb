@@ -41,7 +41,9 @@ class JobApplicationsController < ApplicationController
   # Get new_job_application_url
   def new
     # secure the parent applicant id and create a new job_application
+    
     @applicant = Applicant.find(params[:user_id])
+    
     @job_application = @applicant.job_applications.new
 
     respond_to do |format|

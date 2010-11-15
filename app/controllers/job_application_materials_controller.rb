@@ -2,7 +2,6 @@
 class JobApplicationMaterialsController < ApplicationController
   unloadable
 
-
   def index
   end
 
@@ -13,6 +12,7 @@ class JobApplicationMaterialsController < ApplicationController
   end
 
   def create
+    
   end
 
   def edit

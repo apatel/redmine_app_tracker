@@ -1,7 +1,7 @@
 class ApplicantsController < ApplicationController
   unloadable # don't keep reloading this
   #before_filter :require_admin, :except => ['index', 'show']
-  before_filter :require_admin
+  #before_filter :require_admin
 
   # GET /applicants
   # GET applicants_url
