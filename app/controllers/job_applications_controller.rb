@@ -41,6 +41,7 @@ class JobApplicationsController < ApplicationController
   # Get new_job_application_url
   def new
     # secure the parent applicant id and create a new job_application
+<<<<<<< HEAD
     @applicant = Applicant.find_by_email(User.current.mail)
     if @applicant.nil?
       redirect_to(new_applicant_url(:apptracker_id => params[:apptracker_id]))
@@ -52,6 +53,16 @@ class JobApplicationsController < ApplicationController
       end
     end  
     
+=======
+    
+    @applicant = Applicant.find(params[:user_id])
+    
+    @job_application = @applicant.job_applications.new
+
+    respond_to do |format|
+      format.html # new.html.erb
+    end
+>>>>>>> 380a80a1599605ba027e16c896df3d58b74972a4
   end
 
   # GET /job_applications/1/edit

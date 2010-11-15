@@ -19,8 +19,17 @@ Status: <%=h @job.status %><br />
   <!-- render Job Applications partial -->
   <!-- render students applying to this job -->
   <!-- render Application materials associated with this job -->
+<<<<<<< HEAD
+=======
+  <h3>Job Attachments</h3>
+  <%= link_to_attachments @job_attachment %>
+  
+>>>>>>> 380a80a1599605ba027e16c896df3d58b74972a4
   
 <% elsif User.current.logged? %>
+  <h3>Job Attachments</h3>
+  <%= link_to_attachments @job_attachment %>
+  
   <%= link_to "Apply to this job", new_job_application_url(:apptracker_id => params[:apptracker_id], :job_id => @job.id, :user_id => User.current.id) %>
   <!-- go to job application -->
 <% else %>
@@ -29,6 +38,10 @@ Status: <%=h @job.status %><br />
     # TODO Connect the anonymous user login to Redmine's login system
   %>
   
+<<<<<<< HEAD
   <%= link_to "Log In", signin_url %> or <%= link_to "Register", :controller => "account", :action => "register", :apptracker_id => @apptracker.id %> to Apply to This Job
+=======
+  <%= link_to "Log In", signin_url %> or <%= link_to "Register", :controller => "applicants", :action => "new", :apptracker_id => @apptracker.id %> to Apply to This Job
+>>>>>>> 380a80a1599605ba027e16c896df3d58b74972a4
 <% end %>
 <br /><br />
