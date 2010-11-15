@@ -1,6 +1,10 @@
 class JobsController < ApplicationController
   unloadable
-  before_filter :require_admin, :except => [:index, :show] 
+  before_filter :require_admin, :except => [:index, :show]
+  #before_filter :authorize
+  
+  helper :attachments
+  include AttachmentsHelper
 
   # GET /jobs
   # GET jobs_url
@@ -20,7 +24,10 @@ class JobsController < ApplicationController
     # secure the parent apptracker id and find requested job
     @apptracker = Apptracker.find(params[:apptracker_id])
     @job = @apptracker.jobs.find(params[:id])
-
+    @job_attachments = @job.job_attachments.build
+    job_attachments = @job.job_attachments.find :first, :include => [:attachments]
+    @job_attachment = job_attachments
+    
     respond_to do |format|
       format.html #show.html.erb
     end
@@ -51,17 +58,34 @@ class JobsController < ApplicationController
       @job = @apptracker.jobs.new(params[:job])
     else
       @job = @apptracker.jobs.find(params[:job_id])
-    end
+    end    
+    
     respond_to do |format|
       if(params[:form][:form_id].to_i == 1)
         if(@job.save)
+          
+          #if job saved then create the job attachments
+          #@job_attachments = params[:job][:job_attachments_attributes]["0"]
+          job_file = Hash.new
+          job_file["job_id"] = @job.id
+          job_file["name"] = @job.title
+          job_file["filename"] = @job.title
+          job_file["notes"] = @job.title
+          @job_attachment = @job.job_attachments.build(job_file)
+          @job_attachment.save
+          attachments = Attachment.attach_files(@job_attachment, params[:attachments])
+          render_attachment_warning_if_needed(@job_attachment)
+          
+          flash[:notice] = l(:notice_successful_create)
+          
           # no errors, redirect to second part of form
-          format.html { redirect_to(new_job_url(:apptracker_id => @apptracker.id, :job_id => @job.id)) }
+          format.html { redirect_to(jobs_url(:apptracker_id => @apptracker.id)) }
         else
           # validation prevented save; redirect back to new.html.erb with error messages
           format.html { render :action => "new" }
         end
       else
+        p "in the second form"
         if(@job.update_attributes(params[:job]))
           format.html { redirect_to(jobs_url(:apptracker_id => @apptracker.id), :notice => "\'#{@job.title}\' has been updated.") }
         else
@@ -77,6 +101,7 @@ class JobsController < ApplicationController
     # secure the parent apptracker id and find the job to edit
     @apptracker = Apptracker.find(params[:apptracker_id])
     @job = @apptracker.jobs.find(params[:id])
+    @job_attachment = @job.job_attachments.find :first, :include => [:attachments]
   end
 
   # PUT /jobs/1
@@ -85,11 +110,20 @@ class JobsController < ApplicationController
     # find the job within its parent apptracker
     @apptracker = Apptracker.find(params[:job][:apptracker_id])
     @job = @apptracker.jobs.find(params[:id])
-
     # update the job's attributes, and indicate a message to the user opon success/failure
     respond_to do |format|
       if(@job.update_attributes(params[:job]))
         # no errors, redirect with success message
+        @job_attachment = JobAttachment.find(:first, :conditions => {:job_id => @job.id})
+        job_file = Hash.new
+        job_file["job_id"] = @job.id
+        job_file["name"] = @job.title
+        job_file["filename"] = @job.title
+        job_file["notes"] = @job.title
+        @job_attachment.update_attributes(job_file)
+        attachments = Attachment.attach_files(@job_attachment, params[:attachments])
+        render_attachment_warning_if_needed(@job_attachment)
+        
         format.html { redirect_to(jobs_url(:apptracker_id => @apptracker.id), :notice => "\'#{@job.title}\' has been updated.") }
       else
         # validation prevented update; redirect to edit form with error messages

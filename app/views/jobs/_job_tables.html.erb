@@ -8,7 +8,7 @@
       <th style="width:50%; text-align:left;">Description</th>
       <th style="width:10%; text-align:left;">Status</th>
       <th style="width:5%; text-align:left;"></th>
-      <th style="width:5%; text-align:left;"></th>
+	  <th style="width:5%; text-align:left;"></th>
     <% elsif (User.current.logged?)%>
       <!-- Applicant scope -->
       <th style="width:25%; text-align:left;">Title</th>
@@ -38,7 +38,7 @@
           :method => :delete,
           :class => 'icon icon-del' %>
         </td>
-      <% elsif job.status.lower != 'inactive' %> 
+      <% elsif job.status != 'inactive' %> 
         <% if User.current.logged? %>
           <!-- Applicant scope -->
           <td style="width:25%"><%= link_to "#{job.title}", job_url(job.id, :apptracker_id => params[:apptracker_id]) %></td>
