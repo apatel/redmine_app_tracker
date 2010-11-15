@@ -20,6 +20,7 @@ Redmine::Plugin.register :redmine_apptracker do
     # job privileges
     permission :view_jobs, :jobs => :index
     permission :create_a_job, :jobs => :new
+    permission :manage_job_attachments, :job_attachments => [:create, :update, :destroy]
 
     # referrer privileges
     permission :create_a_referrer, :referrers => :new

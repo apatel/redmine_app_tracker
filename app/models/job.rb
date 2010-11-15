@@ -7,10 +7,12 @@ class Job < ActiveRecord::Base
   has_many :applicants, :through => :job_applications
   has_many :job_custom_fields, :dependent => :destroy
   has_many :job_attachments, :dependent => :destroy
+  
+  acts_as_attachable :delete_permission => :manage_documents
  
   # TODO if necessary, modify :reject_if code for more advanaced error checking
-  accepts_nested_attributes_for :job_custom_fields, :reject_if => :all_blank, :allow_destroy => true
-  accepts_nested_attributes_for :job_attachments, :reject_if => :all_blank, :allow_destroy => true
+  accepts_nested_attributes_for :job_custom_fields, :allow_destroy => true
+  accepts_nested_attributes_for :job_attachments, :reject_if => proc { |attributes| attributes['document'].blank? }, :allow_destroy => true
 
   # validation
   validates_presence_of :category, :status, :title, :description, :attachment_count, :application_material_count, :referrer_count

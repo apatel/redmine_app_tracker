@@ -1,7 +1,7 @@
 class ApplicantsController < ApplicationController
   unloadable # don't keep reloading this
   #before_filter :require_admin, :except => ['index', 'show']
-  before_filter :require_admin
+  #before_filter :require_admin
 
   # GET /applicants
   # GET applicants_url
@@ -52,6 +52,8 @@ class ApplicantsController < ApplicationController
   def create
     # create an applicant and attach it to its parent apptracker
     @apptracker = Apptracker.find(params[:applicant][:apptracker_id])
+    params[:applicant].delete(:apptracker_id)
+    p params[:applicant]
     @applicant = @apptracker.applicants.new(params[:applicant])
 
     # attempt to save, and flash the result to the user

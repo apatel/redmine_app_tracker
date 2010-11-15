@@ -6,6 +6,8 @@ class JobApplicationMaterial < ActiveRecord::Base
   belongs_to :job_application
   acts_as_attachable
 
+  validates_presence_of :job_application_id
+
   # TODO implement validation 
 
   # constants
@@ -23,4 +25,5 @@ class JobApplicationMaterial < ActiveRecord::Base
     path = File.join(storage_directory, applicant_filename)
     File.open(path, "wb") { |f| f.write(application_file[:data].read) }
   end
+  
 end

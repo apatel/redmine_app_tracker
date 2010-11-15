@@ -12,7 +12,6 @@ class JobApplication < ActiveRecord::Base
   # TODO incorporate reject_if code
   accepts_nested_attributes_for :job_application_referrals, :allow_destroy => true
   accepts_nested_attributes_for :job_application_custom_fields, :allow_destroy => true
-  accepts_nested_attributes_for :job_application_materials, :allow_destroy => true
  
   # validation
   # TODO implement validations
