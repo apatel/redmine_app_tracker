@@ -5,8 +5,13 @@ class Job < ActiveRecord::Base
   # has_many :job_applications, :dependent => :destroy
   has_many :job_applications
   has_many :applicants, :through => :job_applications
-  has_many :job_custom_fields, :dependent => :destroy
+  #has_many :job_custom_fields, :dependent => :destroy
   has_many :job_attachments, :dependent => :destroy
+  has_and_belongs_to_many :job_custom_fields,
+                          :class_name => 'JobCustomField',
+                          :order => "#{CustomField.table_name}.position",
+                          #:join_table => "#{table_name_prefix}custom_fields_assets#{table_name_suffix}",
+                          :association_foreign_key => 'custom_field_id'
   
   acts_as_attachable :delete_permission => :manage_documents
  
