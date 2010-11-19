@@ -13,6 +13,7 @@ class Job < ActiveRecord::Base
                           #:join_table => "#{table_name_prefix}custom_fields_assets#{table_name_suffix}",
                           :association_foreign_key => 'custom_field_id'
   
+  acts_as_customizable
   acts_as_attachable :delete_permission => :manage_documents
  
   # TODO if necessary, modify :reject_if code for more advanaced error checking

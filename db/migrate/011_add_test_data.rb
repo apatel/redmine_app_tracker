@@ -57,7 +57,7 @@ class AddTestData < ActiveRecord::Migration
       :application_material_count => 4,
       :application_material_types => ['resume','cv','writing_sample','academic_transcript'],
       :attachment_count => 2,
-      :attachment_ids => [3,12],
+      #:attachment_ids => [3,12],
       :referrer_count => 2,
       :status => 'Active'
     )
@@ -72,7 +72,7 @@ class AddTestData < ActiveRecord::Migration
       :application_material_count => 3,
       :application_material_types => ['resume','code_sample','code_sample'],
       :attachment_count => 1,
-      :attachment_ids => [15],
+      #:attachment_ids => [15],
       :referrer_count => 1,
       :status => 'Filled'
     )
@@ -87,7 +87,7 @@ class AddTestData < ActiveRecord::Migration
       :application_material_count => 3,
       :application_material_types => ['resume','cv','academic_transcript'],
       :attachment_count => 2,
-      :attachment_ids => [10,11],
+      #:attachment_ids => [10,11],
       :referrer_count => 2,
       :status => 'Inactive'
     )
@@ -102,55 +102,55 @@ class AddTestData < ActiveRecord::Migration
       :application_material_count => 2,
       :application_material_types => ['resume','writing_sample'],
       :attachment_count => 1,
-      :attachment_ids => [4],
+      #:attachment_ids => [4],
       :referrer_count => 2,
       :status => 'Active'
     )
 
-    JobAttachment.create(
-      :job_id => 1,
-      :filename => '',
-      :name => 'Job Description',
-      :notes => 'These are job notes'
-    )
+#    JobAttachment.create(
+#      :job_id => 1,
+#      :filename => '',
+#      :name => 'Job Description',
+#      :notes => 'These are job notes'
+#    )
 
-    JobAttachment.create(
-      :job_id => 1,
-      :filename => '',
-      :name => 'Sample Questionnaire',
-      :notes => 'Sample Questions ...'
-    )
-
-    JobAttachment.create(
-      :job_id => 2,
-      :filename => '',
-      :name => 'Job Description',
-      :notes => 'These are job notes'
-    )
-
-    JobCustomField.create(
-      :job_id => 1,
-      :name => 'Years of Work Experience',
-      :field_type => 'integer',
-      :field_value => '4',
-      :validation_text => ''
-    )
-
-    JobCustomField.create(
-      :job_id => 1,
-      :name => 'Mother\'s Maiden Name',
-      :field_type => 'string',
-      :field_value => 'Johannson',
-      :validation_text => ''
-    )
-
-    JobCustomField.create(
-      :job_id => 2,
-      :name => 'Years of Work Experience',
-      :field_type => 'integer',
-      :field_value => '6',
-      :validation_text => ''
-    )   
+#    JobAttachment.create(
+#      :job_id => 1,
+#      :filename => '',
+#      :name => 'Sample Questionnaire',
+#      :notes => 'Sample Questions ...'
+#    )
+#
+#    JobAttachment.create(
+#      :job_id => 2,
+#      :filename => '',
+#      :name => 'Job Description',
+#      :notes => 'These are job notes'
+#    )
+#
+#    JobCustomField.create(
+#      :job_id => 1,
+#      :name => 'Years of Work Experience',
+#      :field_type => 'integer',
+#      :field_value => '4',
+#      :validation_text => ''
+#    )
+#
+#    JobCustomField.create(
+#      :job_id => 1,
+#      :name => 'Mother\'s Maiden Name',
+#      :field_type => 'string',
+#      :field_value => 'Johannson',
+#      :validation_text => ''
+#    )
+#
+#    JobCustomField.create(
+#      :job_id => 2,
+#      :name => 'Years of Work Experience',
+#      :field_type => 'integer',
+#      :field_value => '6',
+#      :validation_text => ''
+#    )   
     
     JobApplicationMaterial.create(
       :job_application_id => 1,

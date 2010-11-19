@@ -5,6 +5,8 @@ class JobsController < ApplicationController
   
   helper :attachments
   include AttachmentsHelper
+  helper :custom_fields
+  include CustomFieldsHelper
 
   # GET /jobs
   # GET jobs_url
@@ -102,6 +104,15 @@ class JobsController < ApplicationController
     @apptracker = Apptracker.find(params[:apptracker_id])
     @job = @apptracker.jobs.find(params[:id])
     @job_attachment = @job.job_attachments.find :first, :include => [:attachments]
+    
+    @custom_field = JobCustomField.new
+    @custom_field.type = "JobCustomField"
+    @available_custom_fields = Array.new
+    @job.custom_field_values.each do |v|
+      if !@job.job_custom_fields.include? v.custom_field
+        @available_custom_fields << v.custom_field
+      end
+    end
   end
 
   # PUT /jobs/1
@@ -145,5 +156,31 @@ class JobsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to(jobs_url(:apptracker_id => @apptracker.id)) }
     end
+  end
+  
+  def create_custom_field
+    job = Job.find_by_id params[:id]
+    if params[:existing_custom_field] != nil
+      params[:existing_custom_field].each do |f|
+        custom_field = JobCustomField.find_by_id f
+        job.job_custom_fields << custom_field
+      end
+    else
+      custom_field = JobCustomField.create!(params[:custom_field])
+      job.job_custom_fields << custom_field
+    end
+    job.save
+    redirect_to :action => "edit", :id => job
+  end
+
+  # Removes a CustomField from an Asset.
+  #
+  # @return Nothing.
+  def remove_custom_field
+    job = Job.find_by_id params[:id]
+    custom_field = JobCustomField.find_by_id params[:existing_custom_field]
+    job.job_custom_fields.delete custom_field
+    job.save
+    redirect_to :action => "edit", :id => job
   end
 end

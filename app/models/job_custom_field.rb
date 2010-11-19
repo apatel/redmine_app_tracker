@@ -1,12 +1,12 @@
-class JobCustomField < ActiveRecord::Base
+class JobCustomField < CustomField
   unloadable
 
   # associations
-  belongs_to :job
+  has_and_belongs_to_many :jobs, :foreign_key => "custom_field_id"
 
   # validations
-  validates_presence_of :name, :field_type, :validation_text
-  validates_uniqueness_of :name
+#  validates_presence_of :name, :field_type, :validation_text
+#  validates_uniqueness_of :name
 
   # constants
 
