@@ -170,7 +170,7 @@ class JobsController < ApplicationController
       job.job_custom_fields << custom_field
     end
     job.save
-    redirect_to :action => "edit", :id => job
+    redirect_to :action => "edit", :id => job, :apptracker_id => job.apptracker_id
   end
 
   # Removes a CustomField from an Asset.
