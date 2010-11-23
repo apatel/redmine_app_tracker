@@ -181,6 +181,6 @@ class JobsController < ApplicationController
     custom_field = JobCustomField.find_by_id params[:existing_custom_field]
     job.job_custom_fields.delete custom_field
     job.save
-    redirect_to :action => "edit", :id => job
+    redirect_to :action => "edit", :id => job, :apptracker_id => job.apptracker_id
   end
 end
