@@ -81,12 +81,10 @@
 
       <br /><br />
 
-    
-    
-    <p>
-
+<%= render :partial => 'add_job_custom_fields', :locals => { :job => @job, :custom_field => @custom_field, :available_custom_fields => @available_custom_fields } %>
+<br /><br />
   <p>
-  <%= f.submit('Save') %>
+  <%= f.submit('Save Job') %>
   </p>
 <% end %>
 

@@ -21,7 +21,8 @@ class JobApplicationsController < ApplicationController
         @job_applications = Apptracker.find(params[:apptracker_id]).jobs.job_applications
       end
     elsif(User.current.logged?)
-      @job_applications = Applicant.find(User.current.id).job_applications
+      @applicant = Applicant.find_by_email(User.current.mail)
+      @job_applications = Applicant.find(@applicant.id).job_applications
     end
   end
   
@@ -43,10 +44,12 @@ class JobApplicationsController < ApplicationController
     # secure the parent applicant id and create a new job_application
 
     @applicant = Applicant.find_by_email(User.current.mail)
+    @apptracker = Apptracker.find(params[:apptracker_id])
+    @job = Job.find params[:job_id]
+    
     if @applicant.nil?
-      redirect_to(new_applicant_url(:apptracker_id => params[:apptracker_id]))
+      redirect_to(new_applicant_url(:apptracker_id => @apptracker.id))
     else
-      @apptracker = Apptracker.find(params[:apptracker_id])
       @job_application = @applicant.job_applications.new
       respond_to do |format|
         format.html # new.html.erb

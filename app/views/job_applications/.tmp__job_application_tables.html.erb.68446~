@@ -10,6 +10,7 @@
 
     <% elsif (User.current.logged?)%>
       <!-- Applicant Role -->
+
     <% else %>
       <!-- Anonymous Role -->
       <!-- No view for Anonymous -->
@@ -18,9 +19,6 @@
   </tr>
 </thead>
 <tbody>
-	<% if @job_applications.empty? %>
-	  no applications yet!
-	<% else %>  
   <% @job_applications.each do |applicant| %>
     <tr>
       <% if(User.current.admin?)%>
@@ -37,15 +35,13 @@
       <% elsif (User.current.logged?)%>
         <!-- Applicant Role -->
         <!-- No view for Applicants -->
-		Need to add applicant view of all of their applications.
 
       <% else %>
         <!-- Anonymous Role -->
         <!-- No view for Anonymous -->
-		If you are anonymous you can't view any applications you have previously submitted.
+
       <% end %> 
     </tr>
-  <% end %>
   <% end %>
 </tbody>
 </table>
