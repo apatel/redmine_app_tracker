@@ -1,0 +1,55 @@
+<% flash[:notice] %>
+<div class="contextual">
+  <%= link_to 'Back', jobs_url(:apptracker_id => params[:apptracker_id]), :class => 'icon icon-history' %>
+</div>
+
+<h2><%=h @job.apptracker.title %>: Jobs: <em><%=h @job.title %></em></h2>
+
+<%= render :partial => "shared/tabs" %>
+
+<%= render :partial => 'applicant_info', :locals => { :applicant => @applicant } %>
+
+<% form_for(@job_application, :html => {:multipart => true}) do |f| %>
+  <%= f.error_messages %>
+  <%= f.hidden_field(:apptracker_id, :value => @apptracker.id ) %>
+  <%= f.hidden_field(:applicant_id, :value => @applicant.id ) %>
+  <%= f.hidden_field(:job_id, :value => @job.id ) %>
+
+  <%
+    # FIXME Implement an Ajax interface that allows the user to input an :application_material_count, generating a data input table with a row count matching the value found in :application_material_count 
+  %>
+
+
+
+
+  <p>
+  TODO: Add AJAX for selecting number and type of application materials needed
+  </p>
+
+
+  <p>
+  TODO: Add AJAX for 1) uploading 0+ files or 2) selecting from an existing list of uploaded files
+  </p>
+  
+  <br />
+  <h3>Job Application Attachments</h3>
+
+    <% @job_application.job_application_materials.build() %>
+    
+      <% f.fields_for :job_application_materials do |jam| %>
+		
+		<%= jam.hidden_field(:job_application_id, :value => @job_application ) %>
+        <% #NOTE This is the code that attaches to Redmine's built-in Attachment model %>
+		<div class="box">
+			<p><label><%=l(:label_attachment_plural)%></label><%= render :partial => 'attachments/form' %></p>
+		</div>
+      <% end %>
+
+      <br /><br />
+
+
+  <p>
+    <%= f.submit('Save') %>
+  </p>
+<% end %>
+

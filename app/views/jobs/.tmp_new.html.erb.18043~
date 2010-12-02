@@ -1,0 +1,7 @@
+<h2><%=h @apptracker.title %>: <em>New Job</em></h2>
+
+  <%= render :partial => "form_new" %>
+  <%= link_to 'Back', jobs_url(:apptracker_id => @apptracker.id) %>
+
+
+<br />
