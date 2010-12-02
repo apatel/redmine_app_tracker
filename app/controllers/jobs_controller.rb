@@ -135,7 +135,7 @@ class JobsController < ApplicationController
         attachments = Attachment.attach_files(@job_attachment, params[:attachments])
         render_attachment_warning_if_needed(@job_attachment)
         
-        format.html { redirect_to(jobs_url(:apptracker_id => @apptracker.id), :notice => "\'#{@job.title}\' has been updated.") }
+        format.html { redirect_to(edit_job_url(job, :apptracker_id => @apptracker.id), :notice => "\'#{@job.title}\' has been updated.") }
       else
         # validation prevented update; redirect to edit form with error messages
         format.html { render :action => "edit"}

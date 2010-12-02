@@ -55,12 +55,11 @@
   
   
   <h3>Job Attachments</h3>
-  <%= link_to_attachments @job_attachment %> 
-
-    
-    
-    
-
+  
+  <h4>Existing</h4>
+    <%= link_to_attachments @job_attachment %>
+  
+  <h4>Add New</h4>
       <% f.fields_for :job_attachments do |ja| %>
 		
 		<%= ja.hidden_field(:job_id, :value => @job.id ) %>
@@ -78,13 +77,13 @@
 		-->
 
       <% end %>
-
-      <br /><br />
-
-<%= render :partial => 'add_job_custom_fields', :locals => { :job => @job, :custom_field => @custom_field, :available_custom_fields => @available_custom_fields } %>
 <br /><br />
   <p>
-  <%= f.submit('Save Job') %>
+  <%= f.submit('Save Job Edits') %>
   </p>
 <% end %>
+
+<br /><br />
+
+<%= render :partial => 'add_job_custom_fields', :locals => { :job => @job, :custom_field => @custom_field, :available_custom_fields => @available_custom_fields } %>
 

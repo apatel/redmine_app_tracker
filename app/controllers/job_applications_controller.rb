@@ -2,18 +2,23 @@ class JobApplicationsController < ApplicationController
   unloadable
   # TODO make sure an applicant cannot add a new job application to a job they have already applied to
   # TODO find out how to use authentication for allowing access to :new and :edit actions
-  before_filter :require_admin, :except => [:index, :show, :new, :edit] 
+  before_filter :require_admin, :except => [:index, :show, :new, :edit, :create, :update] 
 
+  helper :attachments
+  include AttachmentsHelper
+  helper :custom_fields
+  include CustomFieldsHelper
+  
   # GET /job_applications
   # GET job_applications_url
   def index
     # TODO establish calling page in order to return proper search results (from job scope or applicant scope)
     debugger 
     if(User.current.admin?)
-      if(params[:view_scope] == 'job' || (params[:applicant_id].nil? && params[apptracker_id].nil?))
+      if(params[:view_scope] == 'job' || (params[:applicant_id].nil? && params[:apptracker_id].nil?))
         # if viewing all job applications for a particular job
         @job_applications = Job.find(params[:job_id]).job_applications
-      elsif(params[:view_scope] == 'applicant' || (params[:job_id].nil? && params[apptracker_id].nil?))
+      elsif(params[:view_scope] == 'applicant' || (params[:job_id].nil? && params[:apptracker_id].nil?))
         # if viewing all job applications for a particular user/applicant
         @job_applications = Applicant.find(params[:applicant_id]).job_applications
       else
@@ -68,13 +73,26 @@ class JobApplicationsController < ApplicationController
   # POST job_applications_url
   def create
     # create a job_application connected to its parent applicant
-    @applicant = Applicant.find(session[:applicant_id])
+    @applicant = Applicant.find_by_email(User.current.mail)
+    p @applicant.job_applications.class
     @job_application = @applicant.job_applications.new(params[:job_application])
- 
+    p "in here"
     respond_to do |format|
       if(@job_application.save)
+        #if job application saved then create the job application material
+        job_app_file = Hash.new
+        job_app_file["job_application_id"] = @job_application.id
+        #job_app_file["title"] = @job.title
+        #job_app_file["filename"] = @job.title
+        #job_app_file["notes"] = @job.title
+        @job_application_material = @job_application.job_application_materials.build(job_app_file)
+        @job_application_material.save
+        attachments = Attachment.attach_files(@job_application_material, params[:attachments])
+        render_attachment_warning_if_needed(@job_application_material)
+          
+        flash[:notice] = l(:notice_successful_create)
         # no errors, redirect with success message
-        format.html { redirect_to(@job_application, :notice => "#{@job_application.first_name} #{@job_application.last_name} has been added as a job_application.") }
+        format.html { redirect_to(@job_applications, :notice => "Application has been submitted.") }
       else
         # validation prevented save; redirect back to new.html.erb with error messages
         format.html { render :action => "new" }
