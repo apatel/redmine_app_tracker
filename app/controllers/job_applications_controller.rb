@@ -23,8 +23,14 @@ class JobApplicationsController < ApplicationController
         @job_applications = Applicant.find(params[:applicant_id]).job_applications
       else
         # if viewing all job applications for an apptracker
-        @job_applications = Apptracker.find(params[:apptracker_id]).jobs.job_applications
+        @jobs = Apptracker.find(params[:apptracker_id]).jobs
+        @job_applications = Array.new
+        @jobs.each do |job|
+          @job_applications << job.job_applications
+        end
       end
+      @job_applications.flatten!
+
     elsif(User.current.logged?)
       @applicant = Applicant.find_by_email(User.current.mail)
       @job_applications = Applicant.find(@applicant.id).job_applications
@@ -76,7 +82,6 @@ class JobApplicationsController < ApplicationController
     @applicant = Applicant.find_by_email(User.current.mail)
     p @applicant.job_applications.class
     @job_application = @applicant.job_applications.new(params[:job_application])
-    p "in here"
     respond_to do |format|
       if(@job_application.save)
         #if job application saved then create the job application material

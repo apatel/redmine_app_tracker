@@ -4,12 +4,16 @@
       <!-- Admin Role -->
       
       <li><%= link_to 'Jobs', jobs_url(:apptracker_id => params[:apptracker_id], :project_identifier => params[:project_identifier]), 
-        {:id => 'tab-Jobs', :onclick => "showTab('Jobs'); this.blur(); return false;"} %>
+          {:id => 'tab-Jobs', :onclick => "showTab('Jobs'); this.blur(); return false;"} %>
       </li>
-      <li><%= link_to 'Applicants', applicants_url(:apptracker_id => params[:apptracker_id], :project_identifier => params[:project_identifier]),          {:id => 'tab-Applicants', :onclick => "showTab('Applicants'); this.blur(); return false;"} %>
+      <li><%= link_to 'Applicants', applicants_url(:apptracker_id => params[:apptracker_id], :project_identifier => params[:project_identifier]),
+          {:id => 'tab-Applicants', :onclick => "showTab('Applicants'); this.blur(); return false;"} %>
       </li>
-      <!--<li><a href="/application_materials" id="tab-ApplicationMaterials" onclick="showTab('ApplicationMaterials'); this.blur(); return false;">Application Materials</a></li>-->
-      <li><a href="/job_applications" id="tab-JobApplications" onclick="showTab('JobApplications'); this.blur(); return false;">Job Applications</a></li>
+      <li><%= link_to 'Job Applications', job_applications_url(:apptracker_id => params[:apptracker_id], :project_identifier => params[:project_identifier]), 
+          {:id => 'tab-JobApplications', :onclick => "showTab('JobApplications'); this.blur(); return false;"} %>
+      </li>
+	  <!--<li><a href="/application_materials" id="tab-ApplicationMaterials" onclick="showTab('ApplicationMaterials'); this.blur(); return false;">Application Materials</a></li>
+      <li><a href="/job_applications" id="tab-JobApplications" onclick="showTab('JobApplications'); this.blur(); return false;">Job Applications</a></li>-->
     
     <% elsif (User.current.logged?)%>
       <!-- Applicant Role -->

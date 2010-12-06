@@ -3,7 +3,7 @@
   <%= link_to 'Back', applicants_url, :class => 'icon icon-history' %>
 </div>
 
-<h2><%=h Apptracker.find(params[:apptracker_id]).title %>: Jobs: <em><%=h "#{@applicant.last_name}, #{@applicant.first_name} "%></em></h2>
+<h2><%=h Apptracker.find(params[:apptracker_id]).title %>: <em><%=h "#{@applicant.last_name}, #{@applicant.first_name} "%></em></h2>
 
 <%= render :partial => "shared/tabs" %>
 
@@ -63,13 +63,4 @@ Dorm phone: <%=h @applicant.dorm_phone %><br />
 </tr>
 </table>
 <br /><br />
-
-<h2>Job Applications</h2>
-
-
-<h2>Application Materials</h2>
-<%= render :partial => "application_materials/application_material_tables" %>
-
-<h2>Referrers</h2>
-<%= render :partial => "referrers/referrer_tables" %>
 

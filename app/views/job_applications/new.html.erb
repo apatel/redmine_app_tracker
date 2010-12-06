@@ -26,19 +26,13 @@
   <h3>Job Application Attachments</h3>
 
     <% @job_application.job_application_materials.build() %>
-    
       <% f.fields_for :job_application_materials do |jam| %>
-		
 		<%= jam.hidden_field(:job_application_id, :value => @job_application ) %>
-        <% #NOTE This is the code that attaches to Redmine's built-in Attachment model %>
 		<div class="box">
 			<p><label><%=l(:label_attachment_plural)%></label><%= render :partial => 'attachments/form' %></p>
 		</div>
-      <% end %>
-
-      <br /><br />
-
-
+    <% end %>
+    <br /><br />
   <p>
     <%= f.submit('Save') %>
   </p>

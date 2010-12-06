@@ -17,7 +17,7 @@ class ApplicantsController < ApplicationController
   # show an applicant's info
   def show 
     @apptracker = Apptracker.find(params[:apptracker_id])
-    @applicant = Applicants.find(params[:id])
+    @applicant = Applicant.find(params[:id])
 
     # TODO uncomment this after job applications are implemented
     # @job_applications = @applicant.job_applications
