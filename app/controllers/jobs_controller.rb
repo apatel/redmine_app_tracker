@@ -26,6 +26,7 @@ class JobsController < ApplicationController
     # secure the parent apptracker id and find requested job
     @apptracker = Apptracker.find(params[:apptracker_id])
     @job = @apptracker.jobs.find(params[:id])
+    
     @job_attachments = @job.job_attachments.build
     job_attachments = @job.job_attachments.find :first, :include => [:attachments]
     @job_attachment = job_attachments
@@ -113,6 +114,7 @@ class JobsController < ApplicationController
         @available_custom_fields << v.custom_field
       end
     end
+    
   end
 
   # PUT /jobs/1
@@ -157,6 +159,7 @@ class JobsController < ApplicationController
       format.html { redirect_to(jobs_url(:apptracker_id => @apptracker.id)) }
     end
   end
+ 
   
   def create_custom_field
     job = Job.find_by_id params[:id]
@@ -168,7 +171,7 @@ class JobsController < ApplicationController
     else
       custom_field = JobCustomField.create!(params[:custom_field])
       job.job_custom_fields << custom_field
-    end
+   end
     job.save
     redirect_to :action => "edit", :id => job, :apptracker_id => job.apptracker_id
   end

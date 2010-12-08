@@ -11,6 +11,10 @@
 
     <% elsif (User.current.logged?)%>
       <!-- Applicant Role -->
+	  <th style="width:10%; text-align:left;">Application ID</th>
+	  <th style="width:10%; text-align:left;">Job</th>
+      <th style="width:10%; text-align:left;">Date Submitted</th>
+      <th style="width:5%; text-align:left;">Status</th>
     <% else %>
       <!-- Anonymous Role -->
       <!-- No view for Anonymous -->
@@ -39,7 +43,10 @@
         <% elsif (User.current.logged?)%>
           <!-- Applicant Role -->
           <!-- No view for Applicants -->
-		  Need to add applicant view of all of their applications.
+		  <td style="width:10%"><%= link_to "#{ja.id}", job_application_url(ja.id, :apptracker_id => params[:apptracker_id]) %></td>
+		  <td style="width:10%"><%= link_to "#{ja.job.title}", job_url(ja.job.id, :apptracker_id => params[:apptracker_id]) %></td>
+		  <td style="width:10%"><%= ja.created_at %></td>
+		  <td style="width:10%"><%= ja.submission_status %></td>
 
         <% else %>
           <!-- Anonymous Role -->

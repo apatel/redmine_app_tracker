@@ -14,6 +14,26 @@ class JobApplicationMaterial < ActiveRecord::Base
   # TODO convert these values into variables that can be set from a settings page within Redmine
   MATERIAL_TYPE = ['Resume', 'Cover Letter', 'School Transcript', 'Recommendation Letter', 'License Photocopy', 'Passport Photocopy', 'Other']
 
+
+  def attachments_deletable?(usr=User.current)
+    #editable_by?(usr) && super(usr)
+    true
+  end
+  
+  def project
+    self.job_application.job.apptracker.project
+  end
+  
+  def visible?(user=User.current)
+    #!user.nil? && user.allowed_to?(:view_documents, project)
+    true
+  end
+  
+  def attachments_visible?(user=User.current)
+    #user.allowed_to?(self.class.attachable_options[:view_permission], self.project)
+    true
+  end
+  
   # save an application file 
   # TODO correct storage path
   # TODO serialize filename

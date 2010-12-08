@@ -13,6 +13,8 @@ class JobApplicationsController < ApplicationController
   # GET job_applications_url
   def index
     # TODO establish calling page in order to return proper search results (from job scope or applicant scope)
+    p "params"
+    p params
     debugger 
     if(User.current.admin?)
       if(params[:view_scope] == 'job' || (params[:applicant_id].nil? && params[:apptracker_id].nil?))
@@ -33,7 +35,8 @@ class JobApplicationsController < ApplicationController
 
     elsif(User.current.logged?)
       @applicant = Applicant.find_by_email(User.current.mail)
-      @job_applications = Applicant.find(@applicant.id).job_applications
+      @job_applications = @applicant.job_applications
+      @apptracker = Apptracker.find(params[:apptracker_id])
     end
   end
   
@@ -43,6 +46,10 @@ class JobApplicationsController < ApplicationController
     # secure the parent apptracker id and find requested job_application
     @job_application = JobApplication.find(params[:id])
     @applicant = @job_application.applicant
+    
+    @job_application_materials = @job_application.job_application_materials.build
+    job_application_materials = @job_application.job_application_materials.find :first, :include => [:attachments]
+    @job_application_material = job_application_materials
 
     respond_to do |format|
       format.html #show.html.erb
@@ -72,7 +79,11 @@ class JobApplicationsController < ApplicationController
   # GET /job_applications/1/edit
   # GET edit_job_application_url(:id => 1)
   def edit
-    @job_application = Referrer.find(params[:id]) 
+    @job_application = JobApplication.find(params[:id])
+    @job = Job.find @job_application.job_id
+    @applicant = Applicant.find_by_email(User.current.mail)
+    @apptracker = Apptracker.find(params[:apptracker_id])
+    @job_application_material = @job_application.job_application_materials.find :first, :include => [:attachments]
   end
 
   # POST /job_applications
@@ -80,7 +91,6 @@ class JobApplicationsController < ApplicationController
   def create
     # create a job_application connected to its parent applicant
     @applicant = Applicant.find_by_email(User.current.mail)
-    p @applicant.job_applications.class
     @job_application = @applicant.job_applications.new(params[:job_application])
     respond_to do |format|
       if(@job_application.save)
@@ -97,7 +107,7 @@ class JobApplicationsController < ApplicationController
           
         flash[:notice] = l(:notice_successful_create)
         # no errors, redirect with success message
-        format.html { redirect_to(@job_applications, :notice => "Application has been submitted.") }
+        format.html { redirect_to(job_applications_url(:apptracker_id => @job_application.apptracker_id, :applicant_id => @job_application.applicant_id), :notice => "Application has been submitted.") }
       else
         # validation prevented save; redirect back to new.html.erb with error messages
         format.html { render :action => "new" }
@@ -109,14 +119,14 @@ class JobApplicationsController < ApplicationController
   # PUT job_application_url(:id => 1)
   def update
     # find the job_application within its parent applicant
-    @applicant = Applicant.find(session[:applicant_id])
+    @applicant = Applicant.find(params[:job_application][:applicant_id])
     @job_application = @applicant.job_applications.find(params[:id])
 
     # update the job_application's attributes, and indicate a message to the user opon success/failure
     respond_to do |format|
       if(@job_application.update_attributes(params[:job_application]))
         # no errors, redirect with success message
-        format.html { redirect_to(job_applications_url, :notice => "#{@job_application.first_name} #{@job_application.last_name}\'s information has been updated.") }
+        format.html { redirect_to(job_applications_url(:apptracker_id => @job_application.apptracker_id, :applicant_id => @job_application.applicant_id), :notice => "#{@job_application.applicant.first_name} #{@job_application.applicant.last_name}\'s information has been updated.") }
       else
         # validation prevented update; redirect to edit form with error messages
 
@@ -128,14 +138,15 @@ class JobApplicationsController < ApplicationController
   # DELETE job_application_url(:id => 1)
   def destroy
     # create a job_application in the context of its parent applicant
-    @applicant = Applicant.find(session[:applicant_id])
+    @applicant = Applicant.find(@job_application.applicant_id)
+    @apptracker = Apptracker.find(@job_application.apptracker_id)
     @job_application = @applicant.job_applications.find(params[:id])
 
     # destroy the job_application, and indicate a message to the user upon success/failure
     @job_application.destroy ? flash[:notice] = "#{@job_application.first_name} #{@job_application.last_name}\'s record has been deleted." : flash[:error] = "Error: #{@job_application.first_name} #{@job_application.last_name}\'s record could not be deleted."
     
     respond_to do |format|
-      format.html { redirect_to(job_applications_url) }
+      format.html { redirect_to(job_applications_url(:apptracker_id => @apptracker.id, :applicant_id => @applicant.id)) }
     end
   end
 end

@@ -44,7 +44,7 @@ class ApplicantsController < ApplicationController
   def edit
     # find the applicant for editing
     @apptracker = Apptracker.find(params[:apptracker_id]) 
-    @applicant = @apptracker.applicants.find(params[:id])
+    @applicant = Applicant.find(params[:id])
   end
   
   # POST /applicants

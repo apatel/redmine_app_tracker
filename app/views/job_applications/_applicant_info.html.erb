@@ -53,5 +53,6 @@ Dorm phone: <%=h @applicant.dorm_phone %><br />
 </td>
 </tr>
 </table>
-
+<br />
+<%= link_to 'Edit', edit_applicant_url(@applicant.id, :apptracker_id => params[:apptracker_id]), :class => 'icon icon-edit' %>
 
