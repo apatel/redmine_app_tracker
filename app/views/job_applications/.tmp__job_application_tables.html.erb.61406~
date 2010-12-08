@@ -1,0 +1,54 @@
+<table class="list">
+<thead>
+  <tr>
+    <% if(User.current.admin?)%>
+      <!-- Admin Role -->
+	  <th style="width:10%; text-align:left;">Application ID</th>
+	  <th style="width:10%; text-align:left;">Job</th>
+      <th style="width:10%; text-align:left;">Applicant</th>
+      <th style="width:5%; text-align:left;"></th>
+      <th style="width:5%; text-align:left;"></th>
+
+    <% elsif (User.current.logged?)%>
+      <!-- Applicant Role -->
+    <% else %>
+      <!-- Anonymous Role -->
+      <!-- No view for Anonymous -->
+
+    <% end %> 
+  </tr>
+</thead>
+<tbody>
+	<% if @job_applications.empty? %>
+	  no applications yet!
+	<% else %>  
+  	  <% @job_applications.each do |ja| %>
+        <tr>
+        <% if(User.current.admin?)%>
+          <!-- Admin Role -->
+		  <td style="width:10%"><%= link_to "#{ja.id}", job_application_url(ja.id, :apptracker_id => params[:apptracker_id]) %></td>
+		  <td style="width:10%"><%= link_to "#{ja.job.title}", job_url(ja.job.id, :apptracker_id => params[:apptracker_id]) %></td>
+          <td style="width:10%"><%= link_to "#{ja.applicant.first_name} #{ja.applicant.last_name}", applicant_url(ja.applicant.id, :apptracker_id => params[:apptracker_id]) %></td>
+          <td style="width:5%"><%= link_to 'Edit', edit_applicant_url(ja.applicant.id), :class => 'icon icon-edit' %></td>
+          <td style="width:5%"><%= link_to 'Delete', job_application_url(:id => ja.id), 
+            :confirm => "Are you sure you want to delete #{ja.applicant.first_name} #{ja.applicant.last_name}\'s record?", 
+            :method => :delete,
+            :class => 'icon icon-del' %>
+          </td>
+
+        <% elsif (User.current.logged?)%>
+          <!-- Applicant Role -->
+          <!-- No view for Applicants -->
+		  Need to add applicant view of all of their applications.
+
+        <% else %>
+          <!-- Anonymous Role -->
+          <!-- No view for Anonymous -->
+		  If you are not logged in, you can not view any applications you have previously submitted.
+        <% end %> 
+        </tr>
+      <% end %>
+    <% end %>
+</tbody>
+</table>
+

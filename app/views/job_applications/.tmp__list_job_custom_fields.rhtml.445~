@@ -1,0 +1,17 @@
+<table>
+<% if !job.job_custom_fields.empty? %>
+        <% job.custom_field_values.each do |value| %>
+            <% if job.job_custom_fields.include? value.custom_field %>
+                <p>
+                    <% @html = (custom_field_tag_with_label :job, value).split '><' %>
+                    <tr>
+                          <td>
+                            <%= @html[0] + '>' %>
+                          </td>
+                          <td><%= '<' + @html[1] %></td>
+                    </tr>
+                </p>
+            <% end %>
+        <% end %>
+    <% end %>
+</table>	
