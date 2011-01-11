@@ -6,17 +6,25 @@ class Job < ActiveRecord::Base
   has_many :applicants, :through => :job_applications
   #has_many :job_custom_fields, :dependent => :destroy
   has_many :job_attachments, :dependent => :destroy
-  has_and_belongs_to_many :job_custom_fields,
-                          :class_name => 'JobCustomField',
+#  has_and_belongs_to_many :job_custom_fields,
+#                          :class_name => 'JobCustomField',
+#                          :order => "#{CustomField.table_name}.position",
+#                          :join_table => "#{table_name_prefix}custom_fields_jobs#{table_name_suffix}",
+#                          :association_foreign_key => 'custom_field_id'
+
+  has_and_belongs_to_many :job_application_custom_fields,
+                          :class_name => 'JobApplicationCustomField',
                           :order => "#{CustomField.table_name}.position",
-                          :join_table => "#{table_name_prefix}custom_fields_jobs#{table_name_suffix}",
+                          :join_table => "#{table_name_prefix}custom_fields_job_applications#{table_name_suffix}",
                           :association_foreign_key => 'custom_field_id'
   
   acts_as_customizable
   acts_as_attachable :delete_permission => :manage_documents
  
   # TODO if necessary, modify :reject_if code for more advanaced error checking
-  accepts_nested_attributes_for :job_custom_fields, :allow_destroy => true
+  #accepts_nested_attributes_for :job_custom_fields, :allow_destroy => true
+  
+  accepts_nested_attributes_for :job_application_custom_fields, :allow_destroy => true
   accepts_nested_attributes_for :job_attachments, :reject_if => proc { |attributes| attributes['document'].blank? }, :allow_destroy => true
 
   # validation

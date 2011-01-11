@@ -16,7 +16,11 @@ class JobAttachment < ActiveRecord::Base
   
   def attachments_deletable?(usr=User.current)
     #editable_by?(usr) && super(usr)
-    true
+    if User.current.admin?
+      true
+    else
+      false
+    end  
   end
   
   def project

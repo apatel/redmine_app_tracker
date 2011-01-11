@@ -1,8 +1,0 @@
-<h2><%=h @apptracker.title %>: <em>Edit Job</em></h2>
-
-<%= render :partial => "form_edit" %>
-<br />
-<%= render :partial => 'add_job_custom_fields', :locals => { :job => @job, :custom_field => @custom_field, :available_custom_fields => @available_custom_fields } %>
-<br />
-
-<%= link_to 'Back', jobs_url(:apptracker_id => params[:apptracker_id]) %>

@@ -66,7 +66,7 @@ function toggle_custom_field_format() {
 <br /><em><%= l(:text_custom_field_possible_values_info) %></em></p>
 <p><%= @custom_field.field_format == 'bool' ? f.check_box(:default_value) : f.text_field(:default_value) %></p>
 <%= call_hook(:view_custom_fields_form_upper_box, :custom_field => @custom_field, :form => f) %>
-  <%= hidden_field_tag "custom_field[type]", 'AssetTypeCustomField' %>
+  <%= hidden_field_tag "custom_field[type]", 'JobApplicationCustomField' %>
 </div>
 
 <div class="box">
@@ -94,6 +94,16 @@ when "IssueCustomField" %>
 
 <% when "TimeEntryCustomField" %>
     <p><%= f.check_box :is_required %></p>
+
+<% when "JobApplicationCustomField" %>
+	<fieldset><legend>Jobs</legend>
+    <% for job in @jobs %>
+        <%= check_box_tag "custom_field[job_ids][]", job.id, (@custom_field.jobs.include? job) %> <%= job.title %><br />
+    <% end %>
+		<%= hidden_field_tag "custom_field[job_ids][]", '' %>
+    </fieldset>
+    &nbsp;
+    <p><%= f.check_box :is_required %></p>	
 
 <% else %>
     <p><%= f.check_box :is_required %></p>

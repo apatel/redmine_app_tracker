@@ -41,6 +41,8 @@ class JobsController < ApplicationController
   def new
     # secure the parent apptracker id and create a new job
     @apptracker = Apptracker.find(params[:apptracker_id])
+    @jobs = @apptracker.jobs
+    
     if(params[:job_id].nil?)
     #if(params[:form_sect].to_i == 1)
       @job = @apptracker.jobs.new
@@ -105,12 +107,14 @@ class JobsController < ApplicationController
     @apptracker = Apptracker.find(params[:apptracker_id])
     @job = @apptracker.jobs.find(params[:id])
     @job_attachment = @job.job_attachments.find :first, :include => [:attachments]
+    @jobs = @apptracker.jobs
     
     @custom_field = JobCustomField.new
-    @custom_field.type = "JobCustomField"
+    #@custom_field.type = "JobCustomField"
+    @custom_field.type = "JobApplicationCustomField"
     @available_custom_fields = Array.new
     @job.custom_field_values.each do |v|
-      if !@job.job_custom_fields.include? v.custom_field
+      if !@job.job_application_custom_fields.include? v.custom_field
         @available_custom_fields << v.custom_field
       end
     end
@@ -137,7 +141,7 @@ class JobsController < ApplicationController
         attachments = Attachment.attach_files(@job_attachment, params[:attachments])
         render_attachment_warning_if_needed(@job_attachment)
         
-        format.html { redirect_to(edit_job_url(job, :apptracker_id => @apptracker.id), :notice => "\'#{@job.title}\' has been updated.") }
+        format.html { redirect_to(edit_job_url(@job, :apptracker_id => @apptracker.id), :notice => "\'#{@job.title}\' has been updated.") }
       else
         # validation prevented update; redirect to edit form with error messages
         format.html { render :action => "edit"}
@@ -161,16 +165,42 @@ class JobsController < ApplicationController
   end
  
   
+#  def create_custom_field
+#    job = Job.find_by_id params[:id]
+#    if params[:existing_custom_field] != nil
+#      params[:existing_custom_field].each do |f|
+#        custom_field = JobCustomField.find_by_id f
+#        job.job_custom_fields << custom_field
+#      end
+#    else
+#      custom_field = JobCustomField.create!(params[:custom_field])
+#      job.job_custom_fields << custom_field
+#   end
+#    job.save
+#    redirect_to :action => "edit", :id => job, :apptracker_id => job.apptracker_id
+#  end
+#
+#  # Removes a CustomField from an Asset.
+#  #
+#  # @return Nothing.
+#  def remove_custom_field
+#    job = Job.find_by_id params[:id]
+#    custom_field = JobCustomField.find_by_id params[:existing_custom_field]
+#    job.job_custom_fields.delete custom_field
+#    job.save
+#    redirect_to :action => "edit", :id => job, :apptracker_id => job.apptracker_id
+#  end
+  
   def create_custom_field
     job = Job.find_by_id params[:id]
     if params[:existing_custom_field] != nil
       params[:existing_custom_field].each do |f|
-        custom_field = JobCustomField.find_by_id f
-        job.job_custom_fields << custom_field
+        custom_field = JobApplicationCustomField.find_by_id f
+        job.job_application_custom_fields << custom_field
       end
     else
-      custom_field = JobCustomField.create!(params[:custom_field])
-      job.job_custom_fields << custom_field
+      custom_field = JobApplicationCustomField.create!(params[:custom_field])
+      job.job_application_custom_fields << custom_field
    end
     job.save
     redirect_to :action => "edit", :id => job, :apptracker_id => job.apptracker_id
@@ -181,9 +211,10 @@ class JobsController < ApplicationController
   # @return Nothing.
   def remove_custom_field
     job = Job.find_by_id params[:id]
-    custom_field = JobCustomField.find_by_id params[:existing_custom_field]
-    job.job_custom_fields.delete custom_field
+    custom_field = JobApplicationCustomField.find_by_id params[:existing_custom_field]
+    job.job_application_custom_fields.delete custom_field
     job.save
     redirect_to :action => "edit", :id => job, :apptracker_id => job.apptracker_id
   end
+  
 end
