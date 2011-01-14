@@ -1,8 +1,36 @@
 # TODO implemente this controller
 class JobApplicationMaterialsController < ApplicationController
   unloadable
+  
+  helper :attachments
+  include AttachmentsHelper
 
   def index
+    
+    if(User.current.admin?)
+      if(params[:view_scope] == 'job' || (params[:applicant_id].nil? && params[:apptracker_id].nil?))
+        # if viewing all job applications for a particular job
+        @job_application_materials = Job.find(params[:job_id]).job_application.job_application_materials
+      elsif(params[:view_scope] == 'applicant' || (params[:job_id].nil? && params[:apptracker_id].nil?))
+        # if viewing all job applications for a particular user/applicant
+        @job_application_materials = Applicant.find(params[:applicant_id]).job_application.job_application_materials
+      else
+        # if viewing all job applications for an apptracker
+        @jobs = Apptracker.find(params[:apptracker_id]).jobs
+        @job_application_materials = Array.new
+        @jobs.each do |job|
+          job.job_applications.each do |ja|
+            @job_application_materials << ja.job_application_materials
+          end
+        end
+      end
+      @job_application_materials.flatten!
+
+    elsif(User.current.logged?)
+      @applicant = Applicant.find_by_email(User.current.mail)
+      @job_applications = @applicant.job_applications
+      @apptracker = Apptracker.find(params[:apptracker_id])
+    end
   end
 
   def show
