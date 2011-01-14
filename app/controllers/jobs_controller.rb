@@ -180,7 +180,7 @@ class JobsController < ApplicationController
 #    redirect_to :action => "edit", :id => job, :apptracker_id => job.apptracker_id
 #  end
 #
-#  # Removes a CustomField from an Asset.
+#  # Removes a CustomField from a Job.
 #  #
 #  # @return Nothing.
 #  def remove_custom_field
@@ -199,14 +199,19 @@ class JobsController < ApplicationController
         job.job_application_custom_fields << custom_field
       end
     else
-      custom_field = JobApplicationCustomField.create!(params[:custom_field])
-      job.job_application_custom_fields << custom_field
+      #this is a hack since i get a 'cannot assign mass attributes error' on type
+      params[:custom_field].delete(:type)
+      custom_field = CustomField.create!(params[:custom_field])
+      custom_field.type = "JobApplicationCustomField"
+      custom_field.save
+      job_application_custom_field = JobApplicationCustomField.create!([:custom_field_id => custom_field.id, :job_application_id => params[:custom_field][:id]])
+      job.job_application_custom_fields << job_application_custom_field
    end
     job.save
     redirect_to :action => "edit", :id => job, :apptracker_id => job.apptracker_id
   end
 
-  # Removes a CustomField from an Asset.
+  # Removes a CustomField from an Job.
   #
   # @return Nothing.
   def remove_custom_field

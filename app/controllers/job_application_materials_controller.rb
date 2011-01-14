@@ -29,6 +29,15 @@ class JobApplicationMaterialsController < ApplicationController
     elsif(User.current.logged?)
       @applicant = Applicant.find_by_email(User.current.mail)
       @job_applications = @applicant.job_applications
+      @job_applications.each do |ja|
+        
+      end
+      @job_application_materials = @job_application.job_application_materials.build
+      job_application_materials = @job_application.job_application_materials.find :first, :include => [:attachments]
+      @job_application_material = job_application_materials
+    
+      
+      
       @apptracker = Apptracker.find(params[:apptracker_id])
     end
   end

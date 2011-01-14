@@ -1,5 +1,8 @@
 <h3>Custom Fields</h3>
-
+  <h4>Existing Fields</h4>
+  <% @job.job_application_custom_fields.each do |ecf| %>
+    <%= CustomField.find_by_id(ecf.custom_field_id).name %> <br />
+  <% end %>
 
     <% labelled_tabular_form_for :custom_field, custom_field, :url => { :action => "create_custom_field", :id => job } do |f| %>
 	  <div class="new-custom-property">
