@@ -13,10 +13,9 @@ class JobApplicationsController < ApplicationController
   # GET job_applications_url
   def index
     # TODO establish calling page in order to return proper search results (from job scope or applicant scope)
-    p "params"
-    p params
-    debugger 
+
     if(User.current.admin?)
+      @apptracker = Apptracker.find(params[:apptracker_id])
       if(params[:view_scope] == 'job' || (params[:applicant_id].nil? && params[:apptracker_id].nil?))
         # if viewing all job applications for a particular job
         @job_applications = Job.find(params[:job_id]).job_applications
@@ -81,7 +80,8 @@ class JobApplicationsController < ApplicationController
   def edit
     @job_application = JobApplication.find(params[:id])
     @job = Job.find @job_application.job_id
-    @applicant = Applicant.find_by_email(User.current.mail)
+    #@applicant = Applicant.find_by_email(User.current.mail)
+    @applicant = @job_application.applicant
     @apptracker = Apptracker.find(params[:apptracker_id])
     @job_application_material = @job_application.job_application_materials.find :first, :include => [:attachments]
   end
@@ -92,6 +92,7 @@ class JobApplicationsController < ApplicationController
     # create a job_application connected to its parent applicant
     @applicant = Applicant.find_by_email(User.current.mail)
     @job_application = @applicant.job_applications.new(params[:job_application])
+    @job_application[:submission_status] = "Submitted"
     respond_to do |format|
       if(@job_application.save)
         #if job application saved then create the job application material

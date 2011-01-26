@@ -1,8 +1,9 @@
 <% if !job.job_application_custom_fields.empty? %>
-in here
-<% job.job_application_custom_fields.custom_field_values.each do |value| %>
+<% job.custom_field_values.each do |value| %>
 value:
 <%= value.custom_field.class %>
+<br />
+<%= job.job_application_custom_fields.display %>
   <% if job.job_application_custom_fields.include? value.custom_field %>
   in there
 	<p><%= custom_field_tag_with_label :job, value %></p>

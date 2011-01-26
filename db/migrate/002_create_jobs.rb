@@ -13,6 +13,7 @@ class CreateJobs < ActiveRecord::Migration
       t.string :attachment_ids
       t.string :referrer_count
       t.string :status
+      t.datetime :submission_date
 
       t.timestamps
     end

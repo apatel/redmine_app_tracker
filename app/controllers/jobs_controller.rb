@@ -16,7 +16,7 @@ class JobsController < ApplicationController
     if(User.current.admin?)
       @jobs = @apptracker.jobs
     else
-      @jobs = @apptracker.jobs.find(:all, :conditions => ["status = ?", Job::JOB_STATUS[0]])
+      @jobs = @apptracker.jobs.find(:all, :conditions => ["status = ? and submission_date > ?", Job::JOB_STATUS[0], DateTime.now])
     end
   end
   
@@ -203,8 +203,8 @@ class JobsController < ApplicationController
       params[:custom_field].delete(:type)
       custom_field = CustomField.create!(params[:custom_field])
       custom_field.type = "JobApplicationCustomField"
-      custom_field.save
-      job_application_custom_field = JobApplicationCustomField.create!([:custom_field_id => custom_field.id, :job_application_id => params[:custom_field][:id]])
+      custom_field.save!
+      job_application_custom_field = JobApplicationCustomField.create!([:custom_field_id => custom_field.id])
       job.job_application_custom_fields << job_application_custom_field
    end
     job.save

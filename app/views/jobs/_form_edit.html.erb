@@ -34,11 +34,6 @@
   </p>
 
   <p>
-    <%= f.label(:attachment_count) %><span class="required">*</span><br />
-    <%= f.text_field(:attachment_count, :size => 3) %>
-  </p>
-
-  <p>
     <%= f.label(:application_material_count) %><span class="required">*</span><br />
     <%= f.text_field(:application_material_count, :size => 3) %>
   </p>
@@ -46,6 +41,11 @@
   <p>
     <%= f.label(:referrer_count) %><span class="required">*</span><br />
     <%= f.text_field(:referrer_count, :size => 3) %>
+  </p>
+  
+  <p>
+  	<%= f.label :submission_date %><br />
+  	<%= f.datetime_select :submission_date %><br />
   </p>
   
   <br />

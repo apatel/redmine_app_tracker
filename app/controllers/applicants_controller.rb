@@ -9,7 +9,7 @@ class ApplicantsController < ApplicationController
   # FIXME Update this to reflect join condition with the Apptracker Model
   def index
     @apptracker = Apptracker.find(params[:apptracker_id])
-    @applicants = @apptracker.applicants
+    @applicants = Applicant.all
   end
   
   # GET /applicants/1

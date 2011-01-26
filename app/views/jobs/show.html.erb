@@ -21,15 +21,18 @@ Status: <%=h @job.status %><br />
   <!-- render Application materials associated with this job -->
   
 <% elsif User.current.logged? %>
+  <% @applicant = Applicant.find_by_email(User.current.mail) %>
+  <% @jobs = @applicant.job_applications.collect {|x| x.job_id } %>
   
-  <%= link_to "Apply to this job", new_job_application_url(:apptracker_id => params[:apptracker_id], :job_id => @job.id, :user_id => User.current.id) %>
-  <!-- go to job application -->
+  <!-- if the applicant has already applied to this job, do not show the "Apply" link -->
+  <% unless @jobs.include?(@job.id) %>
+    <!-- go to job application -->
+	<%= link_to "Apply to this job", new_job_application_url(:apptracker_id => params[:apptracker_id], :job_id => @job.id, :user_id => User.current.id) %>
+  <% else %>
+    You have already created an application for this job. To view it, please go to the "My Job Applications" tab.  
+  <% end %>
 <% else %>
   <!-- Take anonymous user to registration page -->
-  <%
-    # TODO Connect the anonymous user login to Redmine's login system
-  %>
-  
   <%= link_to "Log In", signin_url %> or <%= link_to "Register", :controller => "account", :action => "register", :apptracker_id => @apptracker.id %> to Apply to This Job
 
 <% end %>

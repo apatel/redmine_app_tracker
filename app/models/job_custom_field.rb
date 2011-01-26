@@ -9,5 +9,7 @@ class JobCustomField < CustomField
 #  validates_uniqueness_of :name
 
   # constants
+  
+  acts_as_customizable
 
 end
