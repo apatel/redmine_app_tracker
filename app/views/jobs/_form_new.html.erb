@@ -49,11 +49,9 @@
   </p>
   
   <p>
-  	<%= f.label :submission_date %><br />
-  	<%= f.check_box(:submission_date, "yes", "no") %><br />
-	
 	<% Job::JOB_MATERIALS.each do |jm| %>
-      <%= check_box_tag 'job_materials[]', jm, @job.include?(jm) %>
+      <%= check_box_tag 'job_materials[]', jm %>
+	  <%= f.label jm %>
 	<% end %>
   </p>
   
