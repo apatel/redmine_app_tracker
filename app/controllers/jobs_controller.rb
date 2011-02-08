@@ -108,6 +108,8 @@ class JobsController < ApplicationController
     @job = @apptracker.jobs.find(params[:id])
     @job_attachment = @job.job_attachments.find :first, :include => [:attachments]
     @jobs = @apptracker.jobs
+    p "Job custom fields"
+    p @job.job_application_custom_fields
     
     @custom_field = JobCustomField.new
     #@custom_field.type = "JobCustomField"

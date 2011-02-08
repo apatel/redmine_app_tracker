@@ -49,10 +49,8 @@
   </p>
   
   <p>
-	<% Job::JOB_MATERIALS.each do |jm| %>
-      <%= check_box_tag 'job_materials[]', jm %>
-	  <%= f.label jm %>
-	<% end %>
+  	<%= f.label :job_materials %><br />
+  	<%= select_tag :job_materials, options_for_select(Job::JOB_MATERIALS), :size => 18, :multiple => true, :class => "available-fields" %>
   </p>
   
   <br />
