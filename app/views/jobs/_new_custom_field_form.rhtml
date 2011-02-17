@@ -96,13 +96,6 @@ when "IssueCustomField" %>
     <p><%= f.check_box :is_required %></p>
 
 <% when "JobApplicationCustomField" %>
-	<fieldset><legend>Jobs</legend>
-    <% for job in @jobs %>
-        <%= check_box_tag "custom_field[job_ids][]", job.id, (@custom_field.jobs.include? job) %> <%= job.title %><br />
-    <% end %>
-		<%= hidden_field_tag "custom_field[job_ids][]", '' %>
-    </fieldset>
-    &nbsp;
     <p><%= f.check_box :is_required %></p>	
 
 <% else %>

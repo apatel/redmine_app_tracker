@@ -2,7 +2,7 @@ class JobApplicationsController < ApplicationController
   unloadable
   # TODO make sure an applicant cannot add a new job application to a job they have already applied to
   # TODO find out how to use authentication for allowing access to :new and :edit actions
-  before_filter :require_admin, :except => [:index, :show, :new, :edit, :create, :update] 
+  before_filter :require_admin, :except => [:index, :show, :new, :edit, :create, :update, :destroy] 
 
   helper :attachments
   include AttachmentsHelper
@@ -65,7 +65,7 @@ class JobApplicationsController < ApplicationController
     @job = Job.find params[:job_id]
     
     if @applicant.nil?
-      redirect_to(new_applicant_url(:apptracker_id => @apptracker.id))
+      redirect_to(new_applicant_url(:apptracker_id => @apptracker.id, :job_id => @job.id))
     else
       @job_application = @applicant.job_applications.new
       respond_to do |format|
@@ -80,6 +80,8 @@ class JobApplicationsController < ApplicationController
   def edit
     @job_application = JobApplication.find(params[:id])
     @job = Job.find @job_application.job_id
+    #p "Job Application Custom Fields"
+    #p @job.job_application_custom_fields
     #@applicant = Applicant.find_by_email(User.current.mail)
     @applicant = @job_application.applicant
     @apptracker = Apptracker.find(params[:apptracker_id])
@@ -122,7 +124,20 @@ class JobApplicationsController < ApplicationController
     # find the job_application within its parent applicant
     @applicant = Applicant.find(params[:job_application][:applicant_id])
     @job_application = @applicant.job_applications.find(params[:id])
-
+    p "params"
+    p params[:job_application]
+    p "attributes"
+    p @job_application.attributes
+    
+    job_app_file = Hash.new
+    job_app_file["job_application_id"] = @job_application.id
+    #job_app_file["title"] = @job.title
+    #job_app_file["filename"] = @job.title
+    #job_app_file["notes"] = @job.title
+    @job_application_material = @job_application.job_application_materials.find :first
+    attachments = Attachment.attach_files(@job_application_material, params[:attachments])
+    render_attachment_warning_if_needed(@job_application_material)
+    
     # update the job_application's attributes, and indicate a message to the user opon success/failure
     respond_to do |format|
       if(@job_application.update_attributes(params[:job_application]))

@@ -19,21 +19,18 @@
     # FIXME Implement an Ajax interface that allows the user to input an :application_material_count, generating a data input table with a row count matching the value found in :application_material_count 
   %>
   
-  <h3>Additional Information</h3>
-  <p><%= render :partial => 'list_job_custom_fields', :locals => { :job => @job } %></p>
+  <p><%= render :partial => 'list_job_custom_fields', :locals => { :job => @job, :job_application => @job_application } %></p>
   
   <br />
   <h3>Job Application Attachments</h3>
   
-	<% unless @job_application_material.nil? %>
+	<% unless @job_application_material.nil? || @job_application_material[0].nil? %>
 	  <h4>Existing</h4>
 	  <%= link_to_attachments @job_application_material %>
 	<% end %>
   
   <h4>Add New</h4>
-
       <% f.fields_for :job_application_materials do |jam| %>
-		<%= jam.hidden_field(:job_application_id, :value => @job_application ) %>
 		<div class="box">
 			<p><label><%=l(:label_attachment_plural)%></label><%= render :partial => 'attachments/form' %></p>
 		</div>

@@ -80,6 +80,20 @@
 
       <% end %>
 <br /><br />
+<h3>Custom Fields</h3>
+  <h4>Existing Fields</h4>
+	<% unless @job_application_custom_fields.empty? %>
+		<fieldset class="box"><legend>Custom Fields</legend>
+		<% @job_application_custom_fields.each do |custom_field| %>
+		    <label class="floating">
+			<%= check_box_tag 'job[job_application_custom_field_ids][]', custom_field.id, (@job.all_job_app_custom_fields.include? custom_field), (custom_field.is_for_all? ? {:disabled => "disabled"} : {}) %>
+			<%= custom_field.name %>
+			</label>
+		<% end %>
+		<%= hidden_field_tag 'job[job_application_custom_field_ids][]', '' %>
+		</fieldset>
+	<% end %>
+<br /><br />	
   <p>
   <%= f.submit('Save Job Edits') %>
   </p>
@@ -87,5 +101,5 @@
 
 <br /><br />
 
-<%= render :partial => 'add_job_custom_fields', :locals => { :job => @job, :jobs => @jobs, :custom_field => @custom_field, :available_custom_fields => @available_custom_fields } %>
+<%= render :partial => 'add_job_custom_fields', :locals => { :job => @job, :custom_field => @custom_field } %>
 

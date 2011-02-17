@@ -18,9 +18,8 @@
   <%
     # FIXME Implement an Ajax interface that allows the user to input an :application_material_count, generating a data input table with a row count matching the value found in :application_material_count 
   %>
-  
-  <h3>Additional Information</h3>
-  <p><%= render :partial => 'list_job_custom_fields', :locals => { :job => @job } %></p>
+
+  <p><%= render :partial => 'list_job_custom_fields', :locals => { :job => @job, :job_application => @job_application } %></p>
   
   <br />
   <h3>Job Application Attachments</h3>

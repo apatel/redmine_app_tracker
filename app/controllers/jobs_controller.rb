@@ -108,18 +108,18 @@ class JobsController < ApplicationController
     @job = @apptracker.jobs.find(params[:id])
     @job_attachment = @job.job_attachments.find :first, :include => [:attachments]
     @jobs = @apptracker.jobs
-    p "Job custom fields"
-    p @job.job_application_custom_fields
     
-    @custom_field = JobCustomField.new
-    #@custom_field.type = "JobCustomField"
-    @custom_field.type = "JobApplicationCustomField"
-    @available_custom_fields = Array.new
-    @job.custom_field_values.each do |v|
-      if !@job.job_application_custom_fields.include? v.custom_field
-        @available_custom_fields << v.custom_field
-      end
+    p "params"
+    
+    @custom_field = begin
+      "JobApplicationCustomField".to_s.constantize.new(params[:custom_field])
+    rescue
     end
+    p "custom fields"
+    p @job.all_job_app_custom_fields
+    
+    @job_application_custom_fields = JobApplicationCustomField.find(:all, :order => "#{CustomField.table_name}.position")
+    @available_custom_fields = CustomField.find(:all, :conditions => {:type => "JobApplicationCustomField"})
     
   end
 
@@ -165,51 +165,21 @@ class JobsController < ApplicationController
       format.html { redirect_to(jobs_url(:apptracker_id => @apptracker.id)) }
     end
   end
- 
-  
-#  def create_custom_field
-#    job = Job.find_by_id params[:id]
-#    if params[:existing_custom_field] != nil
-#      params[:existing_custom_field].each do |f|
-#        custom_field = JobCustomField.find_by_id f
-#        job.job_custom_fields << custom_field
-#      end
-#    else
-#      custom_field = JobCustomField.create!(params[:custom_field])
-#      job.job_custom_fields << custom_field
-#   end
-#    job.save
-#    redirect_to :action => "edit", :id => job, :apptracker_id => job.apptracker_id
-#  end
-#
-#  # Removes a CustomField from a Job.
-#  #
-#  # @return Nothing.
-#  def remove_custom_field
-#    job = Job.find_by_id params[:id]
-#    custom_field = JobCustomField.find_by_id params[:existing_custom_field]
-#    job.job_custom_fields.delete custom_field
-#    job.save
-#    redirect_to :action => "edit", :id => job, :apptracker_id => job.apptracker_id
-#  end
   
   def create_custom_field
     job = Job.find_by_id params[:id]
-    if params[:existing_custom_field] != nil
-      params[:existing_custom_field].each do |f|
-        custom_field = JobApplicationCustomField.find_by_id f
-        job.job_application_custom_fields << custom_field
-      end
-    else
-      #this is a hack since i get a 'cannot assign mass attributes error' on type
-      params[:custom_field].delete(:type)
-      custom_field = CustomField.create!(params[:custom_field])
-      custom_field.type = "JobApplicationCustomField"
-      custom_field.save!
-      job_application_custom_field = JobApplicationCustomField.create!([:custom_field_id => custom_field.id])
-      job.job_application_custom_fields << job_application_custom_field
-   end
-    job.save
+    p "attributes"
+    p job.attributes
+    custom_field = CustomField.create!(params[:custom_field])
+    custom_field.type = "JobApplicationCustomField"
+    if custom_field.save
+      flash[:notice] = l(:notice_successful_create)
+      call_hook(:controller_custom_fields_new_after_save, :params => params, :custom_field => custom_field)
+      cf = {"job_application_custom_field_ids" => [custom_field.id]}
+      job.attributes = cf
+      job.save
+    end
+    
     redirect_to :action => "edit", :id => job, :apptracker_id => job.apptracker_id
   end
 

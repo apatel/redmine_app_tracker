@@ -1,12 +1,11 @@
-<% if !job.job_application_custom_fields.empty? %>
-<% job.custom_field_values.each do |value| %>
-value:
-<%= value.custom_field.class %>
-<br />
-<%= job.job_application_custom_fields.display %>
-  <% if job.job_application_custom_fields.include? value.custom_field %>
-  in there
-	<p><%= custom_field_tag_with_label :job, value %></p>
-  <% end %>	
-<% end -%>
+<% job_fields = job.all_job_app_custom_fields.collect {|x| x.id} %>
+
+<% unless job_fields.nil? || job_fields.empty? %>
+  <h3>Additional Information</h3>
+  <% job_application.custom_field_values.each do |value| %>
+	<% if job_fields.include? value.custom_field_id %>
+	  <p><%= custom_field_tag_with_label :job_application, value %></p>
+	<% end %>
+  <% end -%>
 <% end %>
+

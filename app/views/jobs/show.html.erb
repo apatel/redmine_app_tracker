@@ -22,14 +22,20 @@ Status: <%=h @job.status %><br />
   
 <% elsif User.current.logged? %>
   <% @applicant = Applicant.find_by_email(User.current.mail) %>
-  <% @jobs = @applicant.job_applications.collect {|x| x.job_id } %>
+  <% unless @applicant.nil? %>
   
-  <!-- if the applicant has already applied to this job, do not show the "Apply" link -->
-  <% unless @jobs.include?(@job.id) %>
-    <!-- go to job application -->
-	<%= link_to "Apply to this job", new_job_application_url(:apptracker_id => params[:apptracker_id], :job_id => @job.id, :user_id => User.current.id) %>
+  	  <% @jobs = @applicant.job_applications.collect {|x| x.job_id } %>
+  
+  	  <!-- if the applicant has already applied to this job, do not show the "Apply" link -->
+	  <% unless @jobs.include?(@job.id) %>
+	    <!-- go to job application -->
+		<%= link_to "Apply to this job", new_job_application_url(:apptracker_id => params[:apptracker_id], :job_id => @job.id, :user_id => User.current.id) %>
+	  <% else %>
+	    You have already created an application for this job. To view it, please go to the "My Job Applications" tab.  
+	  <% end %>	
   <% else %>
-    You have already created an application for this job. To view it, please go to the "My Job Applications" tab.  
+    <%= link_to "Apply to this job", new_job_application_url(:apptracker_id => params[:apptracker_id], :job_id => @job.id, :user_id => User.current.id) %>
+  
   <% end %>
 <% else %>
   <!-- Take anonymous user to registration page -->

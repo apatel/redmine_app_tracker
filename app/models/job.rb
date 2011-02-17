@@ -4,17 +4,11 @@ class Job < ActiveRecord::Base
   # FIXME Should job_applications to a job be destroyed if a job is deleted?
   has_many :job_applications
   has_many :applicants, :through => :job_applications
-  #has_many :job_custom_fields, :dependent => :destroy
   has_many :job_attachments, :dependent => :destroy
-#  has_and_belongs_to_many :job_custom_fields,
-#                          :class_name => 'JobCustomField',
-#                          :order => "#{CustomField.table_name}.position",
-#                          :join_table => "#{table_name_prefix}custom_fields_jobs#{table_name_suffix}",
-#                          :association_foreign_key => 'custom_field_id'
 
   has_and_belongs_to_many :job_application_custom_fields,
                           :class_name => 'JobApplicationCustomField',
-                          #:order => "#{CustomField.table_name}.position",
+                          :order => "#{CustomField.table_name}.position",
                           :join_table => "#{table_name_prefix}custom_fields_jobs#{table_name_suffix}",
                           :association_foreign_key => 'custom_field_id'
   
@@ -24,7 +18,7 @@ class Job < ActiveRecord::Base
   # TODO if necessary, modify :reject_if code for more advanaced error checking
   #accepts_nested_attributes_for :job_custom_fields, :allow_destroy => true
   
-  accepts_nested_attributes_for :job_application_custom_fields, :allow_destroy => true
+  #accepts_nested_attributes_for :job_application_custom_fields, :allow_destroy => true
   accepts_nested_attributes_for :job_attachments, :reject_if => proc { |attributes| attributes['document'].blank? }, :allow_destroy => true
 
   # validation
@@ -37,5 +31,9 @@ class Job < ActiveRecord::Base
   JOB_STATUS = ["Active", "Inactive", "Filled"]
   JOB_CATEGORIES = ["Internship", "Fellowship", "Program", "Staff"]
   JOB_MATERIALS = ["Resume or CV", "Personal Statement", "Proposed Work", "Recent Publication", "Letters of Reference","Academic Transcripts"]
+  
+  def all_job_app_custom_fields
+    @all_job_app_custom_fields ||= (JobApplicationCustomField.for_all + job_application_custom_fields).uniq.sort
+  end
 
 end

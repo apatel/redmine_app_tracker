@@ -32,6 +32,7 @@ class ApplicantsController < ApplicationController
   def new
     # make a new applicant
     @apptracker = Apptracker.find(params[:apptracker_id])
+    @job_id = params[:job_id]
     @applicant = @apptracker.applicants.new
 
     respond_to do |format|
@@ -61,7 +62,8 @@ class ApplicantsController < ApplicationController
       if(@applicant.save)
         debugger
         # no errors, redirect with success message
-        format.html { redirect_to(applicants_url(:apptracker_id => @apptracker.id), :notice => "#{@applicant.first_name} #{@applicant.last_name}\'s record has been created.") }
+        format.html { redirect_to(applicants_url(:apptracker_id => @apptracker.id, :job_id => params[:applicant][:job_id])) }
+        #format.html { redirect_to(applicants_url(:apptracker_id => @apptracker.id), :notice => "#{@applicant.first_name} #{@applicant.last_name}\'s record has been created.") }
       else
         # validation prevented save
         format.html { render :action => "new" }
