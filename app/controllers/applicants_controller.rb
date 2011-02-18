@@ -8,6 +8,8 @@ class ApplicantsController < ApplicationController
   # show listing of all applicants associated with a single apptracker
   # FIXME Update this to reflect join condition with the Apptracker Model
   def index
+    p "apptracker id"
+    p params[:apptracker_id]
     @apptracker = Apptracker.find(params[:apptracker_id])
     @applicants = Applicant.all
   end
@@ -95,13 +97,13 @@ class ApplicantsController < ApplicationController
   def destroy
     # find the applicant via its parent apptracker
     @apptracker = Apptracker.find(params[:apptracker_id])
-    @applicant = @apptracker.applicants.find(params[:id])
+    @applicant = Applicant.find(params[:id])
 
     # attempt to destroy the applicant (ouch), and flash the result to the user
     @applicant.destroy ? flash[:notice] = "#{@applicant.first_name} #{@applicant.last_name}\'s record has been deleted." : flash[:error] = "Error: #{@applicant.first_name} #{@applicant.last_name}\'s record could not be deleted."
     
     respond_to do |format|
-      format.html { redirect_to(applicants_url) }
+      format.html { redirect_to(applicants_url(:apptracker_id => @apptracker.id)) }
     end
   end
 end

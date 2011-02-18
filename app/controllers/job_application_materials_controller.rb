@@ -6,7 +6,7 @@ class JobApplicationMaterialsController < ApplicationController
   include AttachmentsHelper
 
   def index
-    
+    @apptracker = Apptracker.find(params[:apptracker_id])
     if(User.current.admin?)
       if(params[:view_scope] == 'job' || (params[:applicant_id].nil? && params[:apptracker_id].nil?))
         # if viewing all job applications for a particular job
@@ -17,28 +17,25 @@ class JobApplicationMaterialsController < ApplicationController
       else
         # if viewing all job applications for an apptracker
         @jobs = Apptracker.find(params[:apptracker_id]).jobs
-        @job_application_materials = Array.new
+        @job_application_material = Array.new
         @jobs.each do |job|
           job.job_applications.each do |ja|
-            @job_application_materials << ja.job_application_materials
+            @job_application_material << ja.job_application_materials
           end
         end
       end
-      @job_application_materials.flatten!
+      @job_application_material.flatten!
 
     elsif(User.current.logged?)
       @applicant = Applicant.find_by_email(User.current.mail)
       @job_applications = @applicant.job_applications
+      @job_application_material = Array.new
+      
       @job_applications.each do |ja|
-        
+        @job_application_material << ja.job_application_materials.find(:first, :include => [:attachments])
       end
-      @job_application_materials = @job_application.job_application_materials.build
-      job_application_materials = @job_application.job_application_materials.find :first, :include => [:attachments]
-      @job_application_material = job_application_materials
-    
-      
-      
-      @apptracker = Apptracker.find(params[:apptracker_id])
+
+      #@apptracker = Apptracker.find(params[:apptracker_id])
     end
   end
 
