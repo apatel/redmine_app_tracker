@@ -1,0 +1,13 @@
+<% flash[:notice] %>
+<div class="contextual">
+  <% #link_to 'Back', job_applications_url, :class => 'icon icon-history' 
+%>
+</div>
+<h2><%=h @apptracker.title %>: Job Applications </h2> 
+
+<%= render :partial => "shared/tabs" %>
+
+<%= render :partial => "job_application_tables" %>
+
+<br /><br />
+

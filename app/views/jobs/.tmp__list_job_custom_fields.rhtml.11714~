@@ -1,0 +1,7 @@
+
+<% job.custom_field_values.each do |value| %>
+  <% if job.job_application_custom_fields.include? value.custom_field %>
+	<p><%= link_to image_tag("/images/delete.png", :border=>0), :controller => "jobs", :action => "remove_custom_field", :id => job, :existing_custom_field => value.custom_field.id %> 
+	<%= custom_field_tag_with_label :job, value %></p>
+  <% end %>	
+<% end -%>

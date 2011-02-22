@@ -1,0 +1,59 @@
+<% flash[:notice] %>
+<div class="contextual">
+  <%= link_to 'Back', jobs_url(:apptracker_id => params[:apptracker_id]), :class => 'icon icon-history' %>
+</div>
+
+<h2><%=h Apptracker.find(@job_application.apptracker_id).title %>: <%=h Job.find(@job_application.job_id).title %> </h2>
+
+<%= render :partial => "shared/tabs" %>
+
+<%= render :partial => 'applicant_info', :locals => { :applicant => @applicant, :apptracker_id => params[:apptracker_id] } %>
+<br /><br />
+<% form_for(@job_application, :html => {:multipart => true}) do |f| %>
+  <%= f.error_messages %>
+  <%= f.hidden_field(:apptracker_id, :value => @apptracker.id ) %>
+  <%= f.hidden_field(:applicant_id, :value => @applicant.id ) %>
+  <%= f.hidden_field(:job_id, :value => @job.id ) %>
+
+  <%
+    # FIXME Implement an Ajax interface that allows the user to input an :application_material_count, generating a data input table with a row count matching the value found in :application_material_count 
+  %>
+  
+  <h3>Additional Information</h3>
+  <p><%= render :partial => 'list_job_custom_fields', :locals => { :job => @job } %></p>
+  
+  <br />
+  <h3>Job Application Attachments</h3>
+  
+	<% unless @job_application_material.nil? %>
+	  <h4>Existing</h4>
+	  <%= link_to_attachments @job_application_material %>
+	<% end %>
+  
+  <h4>Add New</h4>
+
+      <% f.fields_for :job_application_materials do |jam| %>
+		<%= jam.hidden_field(:job_application_id, :value => @job_application ) %>
+		<div class="box">
+			<p><label><%=l(:label_attachment_plural)%></label><%= render :partial => 'attachments/form' %></p>
+		</div>
+    <% end %>
+	
+  <% if(User.current.admin?)%>
+    <h3>Job Application Status</h3>
+	<p>
+      <%= f.label(:submission_status) %><span class="required">*</span><br />
+      <%= f.select(:submission_status, JobApplication::SUBMISSION_STATUS, {:include_blank => false}) %>
+    </p>
+	<p>
+      <%= f.label(:acceptance_status) %><span class="required">*</span><br />
+      <%= f.select(:acceptance_status, JobApplication::ACCEPTANCE_STATUS, {:include_blank => false}) %>
+    </p>
+  <% end %>	
+  
+  <br /><br />
+  <p>
+    <%= f.submit('Save') %>
+  </p>
+<% end %>
+

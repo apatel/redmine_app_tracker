@@ -1,0 +1,53 @@
+<table class="list">
+<thead>
+  <tr>
+    <% if(User.current.admin?)%>
+      <!-- Admin Role -->
+	  <th style="width:10%; text-align:left;">Application ID</th>
+      <th style="width:10%; text-align:left;">Applicant</th>
+	  <th style="width:70%; text-align:left;">File</th>
+
+    <% elsif (User.current.logged?)%>
+      <!-- Applicant Role -->
+	  <th style="width:10%; text-align:left;">Application ID</th>
+	  <th style="width:70%; text-align:left;">File</th>
+      <th style="width:20%; text-align:left;">Date Submitted</th>
+    <% else %>
+      <!-- Anonymous Role -->
+      <!-- No view for Anonymous -->
+
+    <% end %> 
+  </tr>
+</thead>
+<tbody>
+	<% if @job_application_material.nil? %>
+	  no application materials yet!
+	<% else %>  
+  	  <% @job_application_material.each do |jam| %>
+        <tr>
+        <% if(User.current.admin?)%>
+          <!-- Admin Role -->
+		  <td style="width:10%"><%= link_to "#{jam.job_application_id}", job_application_url(jam.job_application_id, :apptracker_id => params[:apptracker_id]) %></td>
+		  <td style="width:10%"><%= link_to "#{JobApplication.find(jam.job_application_id).applicant.first_name} #{JobApplication.find(jam.job_application_id).applicant.last_name}", applicant_url(JobApplication.find(jam.job_application_id).applicant.id, :apptracker_id => params[:apptracker_id]) %></td>
+		  <td style="width:70%"><%= link_to_attachments jam %></td>
+          
+
+        <% elsif (User.current.logged?)%>
+          <!-- Applicant Role -->
+          <!-- No view for Applicants -->
+		  
+		  <td style="width:10%"><%= link_to "#{jam.job_application_id}", job_application_url(jam.job_application_id, :apptracker_id => params[:apptracker_id]) %></td>
+		  <td style="width:70%"><%= link_to_attachments jam %></td>
+		  <td style="width:20%"><%= jam.created_at %></td>
+
+        <% else %>
+          <!-- Anonymous Role -->
+          <!-- No view for Anonymous -->
+		  If you are not logged in, you can not view any applications you have previously submitted.
+        <% end %> 
+        </tr>
+      <% end %>
+    <% end %>
+</tbody>
+</table>
+

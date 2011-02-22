@@ -1,0 +1,28 @@
+<% if !job.job_application_custom_fields.empty? %>
+  <% field = Array.new %>
+  <% job.job_application_custom_fields.each do |ecf| %>
+	<% field << CustomField.find_by_id(JobApplicationCustomField.find_by_id(ecf.custom_field_id).custom_field_id) %> <br />
+  <% end %>
+	  <br /><br />
+	  <%= job_application.class %>
+	  <%= job.class %>
+	  <%= job_application.custom_field_values.class %>
+	  
+	  <br /><br />
+	  <% job.custom_field_values.each do |value| %>
+	    value class:
+	    <%= value.custom_field.class %>
+	    <br /><br />
+	    job application custom fields class:
+		<%= job.job_application_custom_fields[0].class %>
+		<br /><br />
+		
+		<% if job.job_application_custom_fields.include? value.custom_field %>
+	      in there
+		  <p><%= custom_field_tag_with_label :job, value %></p>
+	    <% end %>	
+	  <% end -%>
+  
+  
+  
+<% end %>
