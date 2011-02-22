@@ -1,1 +1,9 @@
-<h2>JobApplicationReferrals#index</h2>
+<% flash[:notice] %>
+
+<h2><%=h @apptracker.title %>: Job Application Referrals </h2> 
+
+<%= render :partial => "shared/tabs" %>
+
+<%= render :partial => "job_application_referral_tables" %>
+
+<br /><br />

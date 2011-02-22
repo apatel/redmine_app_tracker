@@ -39,7 +39,7 @@
         {:id => 'tab-ApplicationMaterials', :onclick => "showTab('ApplicationMaterials'); this.blur(); return false;"} %>
       </li>
 
-      <li><%= link_to 'My Referrers', job_application_referrals_url(
+      <li><%= link_to 'My Referrals', job_application_referrals_url(
         :apptracker_id => params[:apptracker_id], 
         :project_identifier => params[:project_identifier], 
         :applicant_id => User.current.id), 

@@ -122,10 +122,6 @@ class JobApplicationsController < ApplicationController
     # find the job_application within its parent applicant
     @applicant = Applicant.find(params[:job_application][:applicant_id])
     @job_application = @applicant.job_applications.find(params[:id])
-    p "params"
-    p params[:job_application]
-    p "attributes"
-    p @job_application.attributes
     
     job_app_file = Hash.new
     job_app_file["job_application_id"] = @job_application.id
