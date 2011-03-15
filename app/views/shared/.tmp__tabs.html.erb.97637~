@@ -23,10 +23,7 @@
       <li><%= link_to 'Jobs', jobs_url(:apptracker_id => params[:apptracker_id], :project_identifier => params[:project_identifier]), 
         {:id => 'tab-Jobs', :onclick => "showTab('Jobs'); this.blur(); return false;"} %>
       </li>
-      
-	  <li><%= link_to 'My Info', applicant_url(Applicant.find_by_email(User.current.mail), :apptracker_id => params[:apptracker_id], :project_identifier => params[:project_identifier]), 
-        {:id => 'tab-MyInfo', :onclick => "showTab('MyInfo'); this.blur(); return false;"} %>
-      </li>
+     
       
 	  <li><%= link_to 'My Job Applications', job_applications_url(
         :apptracker_id => params[:apptracker_id], 

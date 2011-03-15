@@ -39,15 +39,14 @@
 		  <% @job_application_referral = Array.new %>
           <% @job_application_referral << JobApplication.find(jam.job_application_id).job_application_referrals %>
           <% @job_application_referral.flatten! %>
-		  <td style="width:40%">
 		  <% @job_application_referral.each do |jar| %>
 		    <% unless (link_to_attachments jar).blank? %>
-		      <%= link_to_attachments jar %>
+		      <td style="width:40%"><%= link_to_attachments jar %></td>
 		    <% else %>
-		      No Files
+		      <td style="width:40%">No Files</td>
 		    <% end %>
           <% end %>
-		  </td>
+		  
         <% elsif (User.current.logged?)%>
           <!-- Applicant Role -->
 		  <td style="width:30%"><%= link_to "#{Job.find(JobApplication.find(jam.job_application_id).job_id).title}", job_application_url(jam.job_application_id, :apptracker_id => params[:apptracker_id]) %></td>

@@ -58,14 +58,7 @@
 		  <td style="width:10%"><%= ja.created_at %></td>
 		  <td style="width:10%"><%= ja.submission_status %></td>
 		  <% if ja.job.submission_date > DateTime.now %>
-		    <td style="width:5%">
-		    <% form_tag(:controller => 'job_application_referrals', :action => 'request_referral') do %>
-			  <%= hidden_field_tag :id, ja.id %>
-			  <%= label_tag :email, "Please enter referrer's email:" %><br />
-			  <%= text_field_tag :email %><br />
-  			  <%= submit_tag 'Request Referral' %>
-		    <% end %>
-		    </td>
+		    <td style="width:5%"><%= link_to 'Submit Referral', new_job_application_referral_url(:id => ja.id, :apptracker_id => params[:apptracker_id]) %></td>
 		    <td style="width:5%"><%= link_to 'Edit', edit_job_application_url(ja.id, :apptracker_id => params[:apptracker_id]), :class => 'icon icon-edit' %></td>
             <td style="width:5%"><%= link_to 'Delete', job_application_url(:id => ja.id), 
               :confirm => "Are you sure you want to delete #{ja.applicant.first_name} #{ja.applicant.last_name}\'s record?", 

@@ -49,8 +49,8 @@
   </p>
   
   <p>
-  	<%= f.label :job_materials %><br />
-  	<%= select_tag :job_materials, options_for_select(Job::JOB_MATERIALS), :size => 18, :multiple => true, :class => "available-fields" %>
+  	<%= f.label :application_material_types %><br />
+  	<%= f.select (:application_material_types, options_for_select(Job::JOB_MATERIALS)) %>
   </p>
   
   <br />

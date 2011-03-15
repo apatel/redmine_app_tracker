@@ -10,7 +10,7 @@
     <% elsif (User.current.logged?)%>
       <!-- Applicant Role -->
 	  <th style="width:30%; text-align:left;">Application For</th>
-	  <th style="width:50%; text-align:left;">File Description</th>
+	  <th style="width:50%; text-align:left;">File</th>
       <th style="width:20%; text-align:left;">Date Submitted</th>
     <% else %>
       <!-- Anonymous Role -->

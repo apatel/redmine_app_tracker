@@ -98,14 +98,14 @@ class JobApplicationsController < ApplicationController
         #if job application saved then create the job application material
         job_app_file = Hash.new
         job_app_file["job_application_id"] = @job_application.id
-        #job_app_file["title"] = @job.title
-        #job_app_file["filename"] = @job.title
-        #job_app_file["notes"] = @job.title
         @job_application_material = @job_application.job_application_materials.build(job_app_file)
         @job_application_material.save
         attachments = Attachment.attach_files(@job_application_material, params[:attachments])
         render_attachment_warning_if_needed(@job_application_material)
-          
+        
+        #Send Notification
+        Notification.deliver_application_submitted(@job_application) 
+        
         flash[:notice] = l(:notice_successful_create)
         # no errors, redirect with success message
         format.html { redirect_to(job_applications_url(:apptracker_id => @job_application.apptracker_id, :applicant_id => @job_application.applicant_id), :notice => "Application has been submitted.") }
@@ -130,11 +130,13 @@ class JobApplicationsController < ApplicationController
     #job_app_file["notes"] = @job.title
     @job_application_material = @job_application.job_application_materials.find :first
     attachments = Attachment.attach_files(@job_application_material, params[:attachments])
-    render_attachment_warning_if_needed(@job_application_material)
-    
+    render_attachment_warning_if_needed(@job_application_material) 
+        
     # update the job_application's attributes, and indicate a message to the user opon success/failure
     respond_to do |format|
       if(@job_application.update_attributes(params[:job_application]))
+        #Send Notification
+        Notification.deliver_application_updated(@job_application)
         # no errors, redirect with success message
         format.html { redirect_to(job_applications_url(:apptracker_id => @job_application.apptracker_id, :applicant_id => @job_application.applicant_id), :notice => "#{@job_application.applicant.first_name} #{@job_application.applicant.last_name}\'s information has been updated.") }
       else

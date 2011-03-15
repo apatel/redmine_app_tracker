@@ -1,13 +1,4 @@
-<% flash[:notice] %>
-<div class="contextual">
-  <%= link_to 'Back', applicants_url, :class => 'icon icon-history' %>
-</div>
-
-<h2><%=h Apptracker.find(params[:apptracker_id]).title %>: <em><%=h "#{@applicant.last_name}, #{@applicant.first_name} "%></em></h2>
-
-<%= render :partial => "shared/tabs" %>
-
-<h2>Applicant Information</h2>
+<h3>Applicant Information</h3>
 <table>
   <tr>
     <td>
@@ -64,5 +55,4 @@ Dorm phone: <%=h @applicant.dorm_phone %><br />
 </table>
 <br />
 <%= link_to 'Edit', edit_applicant_url(@applicant.id, :apptracker_id => params[:apptracker_id]), :class => 'icon icon-edit' %>
-<br />
 

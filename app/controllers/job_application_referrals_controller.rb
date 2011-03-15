@@ -33,8 +33,9 @@ class JobApplicationReferralsController < ApplicationController
       @job_application_referral = Array.new
       
       @job_applications.each do |ja|
-        @job_application_referral << ja.job_application_referrals.find(:first, :include => [:attachments])
+        @job_application_referral << ja.job_application_referrals.find(:all, :include => [:attachments])
       end
+      @job_application_referral.flatten!
     end
   end
 
@@ -58,6 +59,8 @@ class JobApplicationReferralsController < ApplicationController
     attachments = Attachment.attach_files(@job_application_referral, params[:attachments])
     render_attachment_warning_if_needed(@job_application_referral)
     
+    Notification.deliver_referral_complete(@job_application, @job_application_referral.email)
+    
     redirect_to :controller => 'jobs', :action => 'index', :apptracker_id => @job_application.apptracker_id
   end
 
@@ -68,5 +71,14 @@ class JobApplicationReferralsController < ApplicationController
   end
 
   def destroy
+  end
+
+  def request_referral
+    @job_application = JobApplication.find(params[:id])
+    @email = params[:email]
+    #Send Notification to Referrer
+    Notification.deliver_request_referral(@job_application, @email)
+    
+    redirect_to(job_applications_url(:apptracker_id => @job_application.apptracker_id, :applicant_id => @job_application.applicant_id), :notice => "Referral request has been sent.")
   end
 end

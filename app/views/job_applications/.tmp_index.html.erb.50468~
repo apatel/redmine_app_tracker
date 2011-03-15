@@ -1,4 +1,4 @@
-<%= flash[:notice] %>
+<% flash[:notice] %>
 <div class="contextual">
   <% #link_to 'Back', job_applications_url, :class => 'icon icon-history' 
 %>

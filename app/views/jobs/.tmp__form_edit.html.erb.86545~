@@ -49,18 +49,22 @@
   </p>
   
   <p>
-  	<%= f.label :application_material_types %><br />
-  	<%= f.select_tag :application_material_types, options_for_select(Job::JOB_MATERIALS), :size => 18 %>
+  	<%= f.label :job_materials %><br />
+  	<%= select_tag :job_materials, options_for_select(Job::JOB_MATERIALS), :size => 18, :multiple => true, :class => "available-fields" %>
   </p>
   
   <br />
+  
+  
   <h3>Job Attachments</h3>
-
-    <% @job.job_attachments.build() %>
-    
+  
+  <h4>Existing</h4>
+    <%= link_to_attachments @job_attachment %>
+  
+  <h4>Add New</h4>
       <% f.fields_for :job_attachments do |ja| %>
 		
-		<%= ja.hidden_field(:job_id, :value => @job ) %>
+		<%= ja.hidden_field(:job_id, :value => @job.id ) %>
         <% #NOTE This is the code that attaches to Redmine's built-in Attachment model %>
 		<div class="box">
 			<p><label><%=l(:label_attachment_plural)%></label><%= render :partial => 'attachments/form' %></p>
@@ -73,13 +77,29 @@
           <%= l(:label_max_size) %>: <%= number_to_human_size(Setting.attachment_max_size.to_i.kilobytes) %>
         </small>
 		-->
+
       <% end %>
-
-      <br /><br />
-
-
+<br /><br />
+<h3>Custom Fields</h3>
+  <h4>Existing Fields</h4>
+	<% unless @job_application_custom_fields.empty? %>
+		<fieldset class="box"><legend>Custom Fields</legend>
+		<% @job_application_custom_fields.each do |custom_field| %>
+		    <label class="floating">
+			<%= check_box_tag 'job[job_application_custom_field_ids][]', custom_field.id, (@job.all_job_app_custom_fields.include? custom_field), (custom_field.is_for_all? ? {:disabled => "disabled"} : {}) %>
+			<%= custom_field.name %>
+			</label>
+		<% end %>
+		<%= hidden_field_tag 'job[job_application_custom_field_ids][]', '' %>
+		</fieldset>
+	<% end %>
+<br /><br />	
   <p>
-  <%= f.submit('Save') %>
+  <%= f.submit('Save Job Edits') %>
   </p>
 <% end %>
+
+<br /><br />
+
+<%= render :partial => 'add_job_custom_fields', :locals => { :job => @job, :custom_field => @custom_field } %>
 
