@@ -4,22 +4,22 @@
   <h3>General Information</h3>
   <p>
     <%= f.label(:first_name) %><span class="required">*</span><br />
-    <%= f.text_field(:first_name) %>
+    <%= f.text_field(:first_name, :value => @user.firstname) %>
   </p>
 
   <p>
     <%= f.label(:last_name) %><span class="required">*</span><br />
-    <%= f.text_field(:last_name) %>
+    <%= f.text_field(:last_name, :value => @user.lastname) %>
   </p>
 
   <p>
     <%= f.label(:user_name) %><span class="required">*</span><br />
-    <%= f.text_field(:user_name) %>
+    <%= f.text_field(:user_name, :value => @user.login) %>
   </p>
 
   <p>
     <%= f.label(:email) %><span class="required">*</span><br />
-    <%= f.text_field(:email) %>
+    <%= f.text_field(:email, :value => @user.mail) %>
   </p>
 
   <p>

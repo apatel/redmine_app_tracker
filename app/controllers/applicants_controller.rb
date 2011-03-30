@@ -35,6 +35,7 @@ class ApplicantsController < ApplicationController
     # make a new applicant
     @apptracker = Apptracker.find(params[:apptracker_id])
     @job_id = params[:job_id]
+    @user = User.current
     @applicant = @apptracker.applicants.new
 
     respond_to do |format|
@@ -48,6 +49,7 @@ class ApplicantsController < ApplicationController
     # find the applicant for editing
     @apptracker = Apptracker.find(params[:apptracker_id]) 
     @applicant = Applicant.find(params[:id])
+    @user = User.current
   end
   
   # POST /applicants
@@ -56,7 +58,6 @@ class ApplicantsController < ApplicationController
     # create an applicant and attach it to its parent apptracker
     @apptracker = Apptracker.find(params[:applicant][:apptracker_id])
     params[:applicant].delete(:apptracker_id)
-    p params[:applicant]
     @applicant = @apptracker.applicants.new(params[:applicant])
 
     # attempt to save, and flash the result to the user
@@ -64,7 +65,7 @@ class ApplicantsController < ApplicationController
       if(@applicant.save)
         debugger
         # no errors, redirect with success message
-        format.html { redirect_to(applicants_url(:apptracker_id => @apptracker.id, :job_id => params[:applicant][:job_id])) }
+        format.html { redirect_to(applicant_url(@applicant, :apptracker_id => @apptracker.id, :job_id => params[:applicant][:job_id])) }
         #format.html { redirect_to(applicants_url(:apptracker_id => @apptracker.id), :notice => "#{@applicant.first_name} #{@applicant.last_name}\'s record has been created.") }
       else
         # validation prevented save
@@ -78,13 +79,14 @@ class ApplicantsController < ApplicationController
   def update
     # find the applicant via its parent apptracker
     @apptracker = Apptracker.find(params[:applicant][:apptracker_id])
-    @applicant = @apptracker.applicants.find(params[:id])
+    params[:applicant].delete(:apptracker_id)
+    @applicant = Applicant.find(params[:id])
 
     # attempt to update attributes, and flash the result to the user
     respond_to do |format|
       if(@applicant.update_attributes(params[:applicant]))
         # successfully updated; redirect and indicate success to user
-        format.html{ redirect_to(applicants_url, :apptracker_id => @apptracker.id, :notice => "#{@applicant.first_name} #{@applicant.last_name}\'s record has been updated.")}
+        format.html{ redirect_to(applicant_url(@applicant,:apptracker_id => @apptracker.id, :notice => "#{@applicant.first_name} #{@applicant.last_name}\'s record has been updated."))}
       else
         # update failed; go back to edit form
         format.html { render :action => "edit" }

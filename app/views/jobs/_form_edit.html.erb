@@ -50,7 +50,7 @@
   
   <p>
   	<%= f.label :application_material_types %><br />
-  	<%= f.select (:application_material_types, options_for_select(Job::JOB_MATERIALS)) %>
+  	<%= select_tag :application_material_types, options_for_select(Job::JOB_MATERIALS), :size => 18 %>
   </p>
   
   <br />
@@ -79,6 +79,12 @@
 		-->
 
       <% end %>
+  <p>
+  <%= f.submit('Save Job Edits') %>
+  </p>
+<% end %>
+
+	  
 <br /><br />
 <h3>Custom Fields</h3>
   <h4>Existing Fields</h4>
@@ -94,12 +100,12 @@
 		</fieldset>
 	<% end %>
 <br /><br />	
-  <p>
-  <%= f.submit('Save Job Edits') %>
-  </p>
-<% end %>
+  <%= render :partial => 'add_job_custom_fields', :locals => { :job => @job, :custom_field => @custom_field } %>
+  
+  
+
 
 <br /><br />
 
-<%= render :partial => 'add_job_custom_fields', :locals => { :job => @job, :custom_field => @custom_field } %>
+
 
