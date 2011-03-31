@@ -3,6 +3,8 @@ class ApplicantsController < ApplicationController
   #before_filter :require_admin, :except => ['index', 'show']
   #before_filter :require_admin
 
+  default_search_scope :applicants
+
   # GET /applicants
   # GET applicants_url
   # show listing of all applicants associated with a single apptracker
