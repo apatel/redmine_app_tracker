@@ -11,7 +11,9 @@ class Job < ActiveRecord::Base
                           :order => "#{CustomField.table_name}.position",
                           :join_table => "#{table_name_prefix}custom_fields_jobs#{table_name_suffix}",
                           :association_foreign_key => 'custom_field_id'
-  
+       
+  acts_as_searchable :columns => ["#{table_name}.title", "#{table_name}.description"], :project_key => "#{table_name}.apptracker.project_id"
+                        
   acts_as_customizable
   acts_as_attachable :delete_permission => :manage_documents
  

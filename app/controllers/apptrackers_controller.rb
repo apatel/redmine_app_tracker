@@ -1,6 +1,8 @@
 class ApptrackersController < ApplicationController
   #unloadable # don't keep reloading this
   before_filter :require_admin, :except => [:index, :show] 
+  
+  default_search_scope :apptrackers
 
   # The landing page; displays all apptrackers owned by the project
   # GET /apptrackers

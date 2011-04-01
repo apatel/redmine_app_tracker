@@ -33,4 +33,10 @@ Redmine::Plugin.register :redmine_apptracker do
   if RAILS_ENV == 'development'
     ActiveSupport::Dependencies.load_once_paths.reject!{|x| x =~ /^#{Regexp.escape(File.dirname(__FILE__))}/}
   end  
+  
+  Redmine::Search.map do |search|
+    search.register :applicants
+    search.register :jobs
+    search.register :apptrackers
+  end
 end

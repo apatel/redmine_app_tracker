@@ -17,7 +17,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :job_custom_fields
   map.resources :job_application_referrals, :collection => {:request_referral => [:get,:post]}
   #map.resources :job_application_custom_fields
-  map.resources :job_application_materials
+  map.resources :job_application_materials, :collection => {:zip_files => [:get,:post]}
 
   # default routes
   #map.connect ':controller/:action/:id'

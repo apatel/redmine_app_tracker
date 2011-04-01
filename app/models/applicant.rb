@@ -6,6 +6,8 @@ class Applicant < ActiveRecord::Base
   has_many :job_application_materials, :through => :job_applications
   has_many :job_application_referrals, :through => :job_applications
   has_many :job_applications, :dependent => :destroy
+  
+  acts_as_searchable :columns => ["#{table_name}.first_name", "#{table_name}.last_name"], :order_column => "created_at", :project_key => 2
 
   # FIXME uncomment this when starting to implement Redmine login functionality
   # belongs_to :user

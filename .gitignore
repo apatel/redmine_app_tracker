@@ -1,1 +1,2 @@
 /db/migrate/007_add_test_data.rb
+*.tmp__*

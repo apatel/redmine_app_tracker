@@ -4,6 +4,8 @@ class Apptracker < ActiveRecord::Base
   has_many :applicants
   has_and_belongs_to_many :applicants
   belongs_to :project
+  
+  acts_as_searchable :columns => ["#{table_name}.title", "#{table_name}.description"], :order_column => "created_at", :include => [:project]
 
   # validation
   validates_presence_of :title, :status

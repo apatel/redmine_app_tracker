@@ -26,7 +26,7 @@
 	<% else %>  
   	  <% @job_application_material.each do |jam| %>
         <tr>
-        <% if(User.current.admin?)%>
+		<% if(User.current.admin?)%>
           <!-- Admin Role -->
 		  <td style="width:10%"><%= link_to "#{Job.find(JobApplication.find(jam.job_application_id).job_id).title}", job_application_url(jam.job_application_id, :apptracker_id => params[:apptracker_id]) %></td>
 		  <td style="width:10%"><%= link_to "#{JobApplication.find(jam.job_application_id).applicant.first_name} #{JobApplication.find(jam.job_application_id).applicant.last_name}", applicant_url(JobApplication.find(jam.job_application_id).applicant.id, :apptracker_id => params[:apptracker_id]) %></td>
@@ -60,11 +60,22 @@
         <% else %>
           <!-- Anonymous Role -->
           <!-- No view for Anonymous -->
-		  If you are not logged in, you can not view any applications you have previously submitted.
+		  If you are not logged in, you can not view any application materials you have previously submitted.
         <% end %> 
         </tr>
       <% end %>
     <% end %>
+	
+	<% unless @job_application_material.nil? %>
+	  <p>
+	    <%= link_to "Create Zip File of Applicant Materials", zip_files_job_application_materials_url(:files => @job_application_material, :apptracker_id => @apptracker.id) %>
+	  </p>
+	  <% unless @zipped_file.nil? %>
+	    <p>
+	  	  <%= link_to "Download Zip", @zipped_file %>
+	    </p>
+	  <% end %>	
+	<% end %>
 </tbody>
 </table>
 

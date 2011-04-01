@@ -1,6 +1,8 @@
+require 'rubygems'
+require 'zip/zipfilesystem'
+
 class JobApplicationMaterial < ActiveRecord::Base
   unloadable
-  # TODO implement saving of files using Redmine's Attachment model 
   
   # associations
   belongs_to :job_application

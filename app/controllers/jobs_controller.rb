@@ -7,6 +7,8 @@ class JobsController < ApplicationController
   include AttachmentsHelper
   helper :custom_fields
   include CustomFieldsHelper
+  
+  default_search_scope :jobs
 
   # GET /jobs
   # GET jobs_url
