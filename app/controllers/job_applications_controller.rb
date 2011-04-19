@@ -150,12 +150,13 @@ class JobApplicationsController < ApplicationController
   # DELETE job_application_url(:id => 1)
   def destroy
     # create a job_application in the context of its parent applicant
+    @job_application = JobApplication.find(params[:id])
     @applicant = Applicant.find(@job_application.applicant_id)
     @apptracker = Apptracker.find(@job_application.apptracker_id)
-    @job_application = @applicant.job_applications.find(params[:id])
+    
 
     # destroy the job_application, and indicate a message to the user upon success/failure
-    @job_application.destroy ? flash[:notice] = "#{@job_application.first_name} #{@job_application.last_name}\'s record has been deleted." : flash[:error] = "Error: #{@job_application.first_name} #{@job_application.last_name}\'s record could not be deleted."
+    @job_application.destroy ? flash[:notice] = "#{@applicant.first_name} #{@applicant.last_name}\'s record has been deleted." : flash[:error] = "Error: #{@applicant.first_name} #{@applicant.last_name}\'s record could not be deleted."
     
     respond_to do |format|
       format.html { redirect_to(job_applications_url(:apptracker_id => @apptracker.id, :applicant_id => @applicant.id)) }
