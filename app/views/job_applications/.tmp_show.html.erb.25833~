@@ -7,7 +7,7 @@
 
 <p>
 Job Title: <%=h Job.find(@job_application.job_id).title %><br />
-Submission Status: <%=h @job_application.submission_status %><br />
+Status: <%=h @job_application.submission_status %><br />
 
 <% unless @job_application_material.nil? %>
 <h3>Job Application Attachments</h3>

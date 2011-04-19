@@ -6,8 +6,8 @@
       <th style="width:20%; text-align:left;">Title</th>
       <th style="width:10%; text-align:left;">Category</th>
       <th style="width:30%; text-align:left;">Description</th>
-      <th style="width:10%; text-align:left;">Status</th>
-	  <th style="width:20%; text-align:left;">Submit By</th>
+      <th style="width:10%; text-align:left;">Job Status</th>
+	  <th style="width:20%; text-align:left;">Application Deadline</th>
       <th style="width:5%; text-align:left;"></th>
 	  <th style="width:5%; text-align:left;"></th>
     <% elsif (User.current.logged?)%>
@@ -15,14 +15,14 @@
       <th style="width:25%; text-align:left;">Title</th>
       <th style="width:15%; text-align:left;">Category</th>
       <th style="width:40%; text-align:left;">Description</th>
-	  <th style="width:20%; text-align:left;">Submit By</th>
+	  <th style="width:20%; text-align:left;">Application Deadline</th>
       <th style="width:10%; text-align:left;"></th>
     <% else %>
       <!-- Anonymous scope -->
       <th style="width:30%; text-align:left;">Title</th>
       <th style="width:15%; text-align:left;">Category</th>
       <th style="width:45%; text-align:left;">Description</th>
-	  <th style="width:20%; text-align:left;">Submit By</th>
+	  <th style="width:20%; text-align:left;">Application Deadline</th>
     <% end %>
   </tr>
 </thead>

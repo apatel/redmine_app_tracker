@@ -3,10 +3,10 @@
     <% if(User.current.admin?)%>
       <!-- Admin Role -->
       
-      <li><%= link_to 'Jobs', jobs_url(:apptracker_id => params[:apptracker_id], :project_identifier => params[:project_identifier]), 
+      <li><%= link_to 'All Jobs', jobs_url(:apptracker_id => params[:apptracker_id], :project_identifier => params[:project_identifier]), 
           {:id => 'tab-Jobs', :onclick => "showTab('Jobs'); this.blur(); return false;"} %>
       </li>
-      <li><%= link_to 'Applicants', applicants_url(:apptracker_id => params[:apptracker_id], :project_identifier => params[:project_identifier]),
+      <li><%= link_to 'Accounts', applicants_url(:apptracker_id => params[:apptracker_id], :project_identifier => params[:project_identifier]),
           {:id => 'tab-Applicants', :onclick => "showTab('Applicants'); this.blur(); return false;"} %>
       </li>
       <li><%= link_to 'Job Applications', job_applications_url(:apptracker_id => params[:apptracker_id], :project_identifier => params[:project_identifier]), 
@@ -20,12 +20,12 @@
     
     <% elsif (User.current.logged?)%>
       <!-- Applicant Role -->
-      <li><%= link_to 'Jobs', jobs_url(:apptracker_id => params[:apptracker_id], :project_identifier => params[:project_identifier]), 
+      <li><%= link_to 'Open Jobs', jobs_url(:apptracker_id => params[:apptracker_id], :project_identifier => params[:project_identifier]), 
         {:id => 'tab-Jobs', :onclick => "showTab('Jobs'); this.blur(); return false;"} %>
       </li>
       
 	  <% unless Applicant.find_by_email(User.current.mail).nil? %>
-	  <li><%= link_to 'My Info', applicant_url(Applicant.find_by_email(User.current.mail), :apptracker_id => params[:apptracker_id], :project_identifier => params[:project_identifier]), 
+	  <li><%= link_to 'My Profile', applicant_url(Applicant.find_by_email(User.current.mail), :apptracker_id => params[:apptracker_id], :project_identifier => params[:project_identifier]), 
         {:id => 'tab-MyInfo', :onclick => "showTab('MyInfo'); this.blur(); return false;"} %>
       </li>
       <% end %>
@@ -53,7 +53,7 @@
    
     <% else %>
       <!-- Anonymous Role -->
-      <li><%= link_to 'Jobs', jobs_url(:apptracker_id => params[:apptracker_id], :project_identifier => params[:project_identifier]), 
+      <li><%= link_to 'Open Jobs', jobs_url(:apptracker_id => params[:apptracker_id], :project_identifier => params[:project_identifier]), 
         {:id => 'tab-Jobs', :onclick => "showTab('Jobs'); this.blur(); return false;"} %>
       </li>
     <% end %>

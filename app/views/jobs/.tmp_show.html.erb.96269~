@@ -7,7 +7,14 @@
 
 <%= render :partial => "shared/tabs" %>
 
-<strong>
+<p>
+Category: <%=h @job.category %><br />
+Status: <%=h @job.status %><br />
+<p>Description: <%=h @job.description %></p>
+<h3>Job Attachments</h3>
+  <%= link_to_attachments @job_attachment %>
+</p>
+<br />
 <% if User.current.admin? %>
   <!-- render Job Applications partial -->
   <!-- render students applying to this job -->
@@ -33,17 +40,6 @@
 <% else %>
   <!-- Take anonymous user to registration page -->
   <%= link_to "Log In", signin_url %> or <%= link_to "Register", :controller => "account", :action => "register", :apptracker_id => @apptracker.id %> to Apply to This Job
+
 <% end %>
-</strong>
-
-<p>
-Category: <%=h @job.category %><br />
-Application Deadline: <%=h @job.submission_date %><br />
-<br />
-<%=h @job.referrer_count %> reference(s) are required for this position.<br />
-<p>Description: <%=h @job.description %></p>
-<h3>Job Attachments</h3>
-  <%= link_to_attachments @job_attachment %>
-</p>
-<br />
-
+<br /><br />
