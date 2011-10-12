@@ -40,6 +40,13 @@
 Category: <%=h @job.category %><br />
 Application Deadline: <%=h @job.submission_date %><br />
 <br />
+Required Application Materials:
+<ul>
+<% @job.application_material_types.split(',').each do |amt| %>
+  <li><%=h amt %></li>
+<% end %>
+</ul>
+<br />
 <%=h @job.referrer_count %> reference(s) are required for this position.<br />
 <p>Description: <%=h @job.description %></p>
 <h3>Job Attachments</h3>

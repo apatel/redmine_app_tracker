@@ -25,9 +25,13 @@
       </li>
       
 	  <% unless Applicant.find_by_email(User.current.mail).nil? %>
-	  <li><%= link_to 'My Profile', applicant_url(Applicant.find_by_email(User.current.mail), :apptracker_id => params[:apptracker_id], :project_identifier => params[:project_identifier]), 
+	    <li><%= link_to 'My Profile', applicant_url(Applicant.find_by_email(User.current.mail), :apptracker_id => params[:apptracker_id], :project_identifier => params[:project_identifier]), 
         {:id => 'tab-MyInfo', :onclick => "showTab('MyInfo'); this.blur(); return false;"} %>
-      </li>
+        </li>
+	  <% else %>
+	    <li><%= link_to 'My Profile', new_applicant_url(:apptracker_id => @apptracker.id), 
+        {:id => 'tab-MyInfo', :onclick => "showTab('MyInfo'); this.blur(); return false;"} %>
+        </li>
       <% end %>
 	  
 	  <li><%= link_to 'My Job Applications', job_applications_url(
@@ -35,13 +39,6 @@
         :project_identifier => params[:project_identifier], 
         :applicant_id => User.current.id), 
         {:id => 'tab-JobApplications', :onclick => "showTab('JobApplications'); this.blur(); return false;"} %>
-      </li>
-	  
-      <li><%= link_to 'My Application Materials', job_application_materials_url(
-        :apptracker_id => params[:apptracker_id], 
-        :project_identifier => params[:project_identifier], 
-        :applicant_id => User.current.id), 
-        {:id => 'tab-ApplicationMaterials', :onclick => "showTab('ApplicationMaterials'); this.blur(); return false;"} %>
       </li>
 
       <li><%= link_to 'My Referrals', job_application_referrals_url(

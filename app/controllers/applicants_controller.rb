@@ -36,7 +36,7 @@ class ApplicantsController < ApplicationController
   def new
     # make a new applicant
     @apptracker = Apptracker.find(params[:apptracker_id])
-    @job_id = params[:job_id]
+    #@job_id = params[:job_id]
     @user = User.current
     @applicant = @apptracker.applicants.new
 
@@ -67,7 +67,7 @@ class ApplicantsController < ApplicationController
       if(@applicant.save)
         debugger
         # no errors, redirect with success message
-        format.html { redirect_to(applicant_url(@applicant, :apptracker_id => @apptracker.id, :job_id => params[:applicant][:job_id])) }
+        format.html { redirect_to(applicant_url(@applicant, :apptracker_id => @apptracker.id)) }
         #format.html { redirect_to(applicants_url(:apptracker_id => @apptracker.id), :notice => "#{@applicant.first_name} #{@applicant.last_name}\'s record has been created.") }
       else
         # validation prevented save

@@ -66,7 +66,7 @@ class JobsController < ApplicationController
     else
       @job = @apptracker.jobs.find(params[:job_id])
     end    
-    
+    @job.application_material_types = params[:application_material_types].join(",")
     respond_to do |format|
       if(params[:form][:form_id].to_i == 1)
         if(@job.save)
@@ -134,6 +134,8 @@ class JobsController < ApplicationController
     # update the job's attributes, and indicate a message to the user opon success/failure
     respond_to do |format|
       if(@job.update_attributes(params[:job]))
+        @job.application_material_types = params[:application_material_types].join(",")
+        @job.save
         # no errors, redirect with success message
         @job_attachment = JobAttachment.find(:first, :conditions => {:job_id => @job.id})
         job_file = Hash.new

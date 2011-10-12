@@ -44,8 +44,11 @@
   </p>
   
   <p>
-  	<%= f.label :application_material_types %><br />
-  	<%= select_tag :application_material_types, options_for_select(Job::JOB_MATERIALS), :size => 18 %>
+	<% for material in Job::JOB_MATERIALS %>
+	  <%= check_box_tag "application_material_types[]", material, @job.application_material_types.nil? ? false : @job.application_material_types.split(',').include?(material) %>
+	  <%= material %>
+	  <br />
+	<% end %>
   </p>
   
   <br />
