@@ -6,6 +6,7 @@ class CreateJobApplications < ActiveRecord::Migration
       t.integer :job_id
       t.string :submission_status
       t.string :acceptance_status
+      t.text :notes
 
       t.timestamps
     end

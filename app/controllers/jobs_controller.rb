@@ -28,6 +28,7 @@ class JobsController < ApplicationController
     # secure the parent apptracker id and find requested job
     @apptracker = Apptracker.find(params[:apptracker_id])
     @job = @apptracker.jobs.find(params[:id])
+    @job_applications = @job.job_applications
     
     @job_attachments = @job.job_attachments.build
     job_attachments = @job.job_attachments.find :first, :include => [:attachments]
@@ -110,9 +111,7 @@ class JobsController < ApplicationController
     @job = @apptracker.jobs.find(params[:id])
     @job_attachment = @job.job_attachments.find :first, :include => [:attachments]
     @jobs = @apptracker.jobs
-    
-    p "params"
-    
+
     @custom_field = begin
       "JobApplicationCustomField".to_s.constantize.new(params[:custom_field])
     rescue

@@ -3,16 +3,16 @@ class JobApplicationReferral < ActiveRecord::Base
 
   # associations
   belongs_to :job_application
-  acts_as_attachable
+  acts_as_attachable :delete_permission => :manage_documents
 
   # validations
   validates_presence_of :first_name, :last_name, :email
 
   # constants
   
-  def attachments_deletable?(usr=User.current)
+  def attachments_deletable?(user=User.current)
     #editable_by?(usr) && super(usr)
-    true
+    user.admin? ? true : false
   end
   
   def project

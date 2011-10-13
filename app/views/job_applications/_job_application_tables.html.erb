@@ -1,37 +1,39 @@
-<table class="list">
-<thead>
-  <tr>
-    <% if(User.current.admin?)%>
-      <!-- Admin Role -->
-	  <th style="width:10%; text-align:left;">Application ID</th>
-	  <th style="width:10%; text-align:left;">Job</th>
-      <th style="width:10%; text-align:left;">Applicant</th>
-      <th style="width:10%; text-align:left;">Date Submitted</th>
-      <th style="width:5%; text-align:left;">Submission Status</th>
-	  <th style="width:5%; text-align:left;">Acceptance Status</th>
-	  <th style="width:5%; text-align:left;"></th>
-	  <th style="width:5%; text-align:left;"></th>
+<% if @job_applications.empty? %>
+  no applications yet!
+<% else %>
+	<table class="list">
+	<thead>
+	  <tr>
+	    <% if(User.current.admin?)%>
+	      <!-- Admin Role -->
+		  <th style="width:10%; text-align:left;">Application ID</th>
+		  <th style="width:10%; text-align:left;">Job</th>
+	      <th style="width:10%; text-align:left;">Applicant</th>
+	      <th style="width:10%; text-align:left;">Date Submitted</th>
+	      <th style="width:5%; text-align:left;">Submission Status</th>
+		  <th style="width:5%; text-align:left;">Acceptance Status</th>
+		  <th style="width:5%; text-align:left;"></th>
+		  <th style="width:5%; text-align:left;"></th>
 
-    <% elsif (User.current.logged?)%>
-      <!-- Applicant Role -->
-	  <th style="width:10%; text-align:left;">Application ID</th>
-	  <th style="width:10%; text-align:left;">Job</th>
-      <th style="width:10%; text-align:left;">Date Submitted</th>
-      <th style="width:5%; text-align:left;">Submission Status</th>
-	  <th style="width:5%; text-align:left;"></th>
-	  <th style="width:5%; text-align:left;"></th>
-	  <th style="width:5%; text-align:left;"></th>
-    <% else %>
-      <!-- Anonymous Role -->
-      <!-- No view for Anonymous -->
+	    <% elsif (User.current.logged?)%>
+	      <!-- Applicant Role -->
+		  <th style="width:10%; text-align:left;">Application ID</th>
+		  <th style="width:10%; text-align:left;">Job</th>
+	      <th style="width:10%; text-align:left;">Date Submitted</th>
+	      <th style="width:5%; text-align:left;">Submission Status</th>
+		  <th style="width:5%; text-align:left;"></th>
+		  <th style="width:5%; text-align:left;"></th>
+		  <th style="width:5%; text-align:left;"></th>
+	    <% else %>
+	      <!-- Anonymous Role -->
+	      <!-- No view for Anonymous -->
 
-    <% end %> 
-  </tr>
-</thead>
-<tbody>
-	<% if @job_applications.empty? %>
-	  no applications yet!
-	<% else %>  
+	    <% end %> 
+	  </tr>
+	</thead>
+	<tbody>
+	
+	  
   	  <% @job_applications.each do |ja| %>
         <tr>
         <% if(User.current.admin?)%>

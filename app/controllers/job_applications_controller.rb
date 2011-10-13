@@ -46,7 +46,8 @@ class JobApplicationsController < ApplicationController
     @job_application = JobApplication.find(params[:id])
     @applicant = @job_application.applicant
     
-    @job_application_material = @job_application.job_application_materials.find :first, :include => [:attachments]
+    @job_application_materials = @job_application.job_application_materials.find :all, :include => [:attachments]
+    @job_application_referrals = @job_application.job_application_referrals.find :all, :include => [:attachments]
     
     respond_to do |format|
       format.html #show.html.erb

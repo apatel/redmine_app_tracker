@@ -46,6 +46,12 @@
       <%= f.label(:acceptance_status) %><span class="required">*</span><br />
       <%= f.select(:acceptance_status, JobApplication::ACCEPTANCE_STATUS, {:include_blank => false}) %>
     </p>
+
+	<h3>Admin Notes</h3>
+	<p>
+      <%= f.label(:notes) %><br />
+      <%= f.text_area(:notes) %>
+    </p>
   <% end %>	
   
   <br /><br />

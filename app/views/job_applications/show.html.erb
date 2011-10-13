@@ -5,25 +5,41 @@
 
 <%= render :partial => "shared/tabs" %>
 
-<p>
+<p>	
+Applicant: <%= @applicant.first_name %> <%= @applicant.last_name %><br />
 Job Title: <%=h Job.find(@job_application.job_id).title %><br />
 Submission Status: <%=h @job_application.submission_status %><br />
 
-<% unless @job_application_material.nil? %>
 <h3>Job Application Attachments</h3>
-  <%= link_to_attachments @job_application_material %>
+<% unless @job_application_materials.nil? || @job_application_materials.blank? %>
+  <% @job_application_materials.each do |jam| %>
+    <%= link_to_attachments jam %><br />
+  <% end %>  
+<% else %>
+  No attachments.
 <% end %>
-</p>
 <br />
 <% if User.current.admin? %>
+	<h3>Job Application Referrals</h3>
+	<% unless @job_application_referrals.nil? || @job_application_referrals.blank? %>
+	  <% @job_application_referrals.each do |jar| %>
+	    <p>
+	      Name: <%= jar.first_name %> <%= jar.last_name %><br />
+	      Email: <%= jar.email %><br />
+	      Title: <%= jar.title %><br />
+	      Notes: <%= jar.notes %><br />
+	      <%= link_to_attachments jar %>
+	    </p>
+	  <% end %>
+	<% else %>
+	  No referrals.
+	<% end %>
+	</p>
+	<br />
+	
+	<h3>Admin Notes</h3>
+  	<p><%= @job_application.notes %></p>
   
-  
-<% elsif User.current.logged? %>
-  
-  
-<% else %>
-
-
 <% end %>
 
 <%= link_to 'Edit', edit_job_application_url(@job_application.id, :apptracker_id => params[:apptracker_id]), :class => 'icon icon-edit' %>
