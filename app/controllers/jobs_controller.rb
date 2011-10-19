@@ -120,7 +120,6 @@ class JobsController < ApplicationController
     p @job.all_job_app_custom_fields
     
     @job_application_custom_fields = JobApplicationCustomField.find(:all, :order => "#{CustomField.table_name}.position")
-    @available_custom_fields = CustomField.find(:all, :conditions => {:type => "JobApplicationCustomField"})
     
   end
 

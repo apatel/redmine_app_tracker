@@ -2,6 +2,7 @@ class Notification < Mailer
   
   def application_submitted(job_application)
     # Send the email to the applicant
+    @message = job_application.job.application_followup_message
     recipients Applicant.find_by_id(job_application.applicant_id).email
     subject "Application Submitted"
     body :user => Applicant.find_by_id(job_application.applicant_id),

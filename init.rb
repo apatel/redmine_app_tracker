@@ -1,8 +1,16 @@
 require 'redmine'
 # TODO find out if all RESTful actions need a matching permission
+
+# Patches to the Redmine core
+require 'dispatcher'
+
+Dispatcher.to_prepare :redmine_apptracker do
+  require_dependency 'custom_fields_helper'
+  CustomFieldsHelper.send(:include, CustomFieldsHelperPatch) unless CustomFieldsHelper.included_modules.include?(CustomFieldsHelperPatch)
+end
+
 Redmine::Plugin.register :redmine_apptracker do
   name 'Redmine Apptracker plugin'
-  author 'Robert A. Schuman'
   description 'An application tracker plugin for Redmine.'
   version '0.0.1'
 

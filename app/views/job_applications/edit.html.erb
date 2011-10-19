@@ -23,10 +23,13 @@
   
   <br />
   <h3>Job Application Attachments</h3>
-  
-	<% unless @job_application_material.nil? || @job_application_material[0].nil? %>
+	<% unless @job_application_materials.nil? || @job_application_materials.blank? %>
 	  <h4>Existing</h4>
-	  <%= link_to_attachments @job_application_material %>
+	  <% @job_application_materials.each do |jam| %>
+	    <%= link_to_attachments jam %><br />
+	  <% end %>  
+	<% else %>
+	  No attachments.
 	<% end %>
   
   <h4>Add New</h4>

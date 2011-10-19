@@ -84,7 +84,7 @@ class JobApplicationsController < ApplicationController
     #@applicant = Applicant.find_by_email(User.current.mail)
     @applicant = @job_application.applicant
     @apptracker = Apptracker.find(params[:apptracker_id])
-    @job_application_material = @job_application.job_application_materials.find :first, :include => [:attachments]
+    @job_application_materials = @job_application.job_application_materials.find :all, :include => [:attachments]
   end
 
   # POST /job_applications
