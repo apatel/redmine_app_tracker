@@ -4,16 +4,20 @@ class ApplicantsController < ApplicationController
   #before_filter :require_admin
 
   default_search_scope :applicants
+  
+  helper :sort
+  include SortHelper
 
   # GET /applicants
   # GET applicants_url
   # show listing of all applicants associated with a single apptracker
   # FIXME Update this to reflect join condition with the Apptracker Model
   def index
-    p "apptracker id"
-    p params[:apptracker_id]
+    sort_init 'last_name', 'asc'
+    sort_update %w(first_name last_name user_name)
+    
     @apptracker = Apptracker.find(params[:apptracker_id])
-    @applicants = Applicant.all
+    @applicants = Applicant.find(:all, :order => sort_clause)
   end
   
   # GET /applicants/1

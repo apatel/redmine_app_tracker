@@ -8,12 +8,14 @@ class JobApplicationsController < ApplicationController
   include AttachmentsHelper
   helper :custom_fields
   include CustomFieldsHelper
+  helper :sort
+  include SortHelper
   
   # GET /job_applications
   # GET job_applications_url
   def index
     # TODO establish calling page in order to return proper search results (from job scope or applicant scope)
-
+    
     if(User.current.admin?)
       @apptracker = Apptracker.find(params[:apptracker_id])
       if(params[:view_scope] == 'job' || (params[:applicant_id].nil? && params[:apptracker_id].nil?))

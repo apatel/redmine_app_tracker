@@ -3,26 +3,26 @@
   <tr>
     <% if(User.current.admin?)%>
       <!-- Admin scope -->
-      <th style="width:20%; text-align:left;">Title</th>
-      <th style="width:10%; text-align:left;">Category</th>
-      <th style="width:30%; text-align:left;">Description</th>
-      <th style="width:10%; text-align:left;">Job Status</th>
-	  <th style="width:20%; text-align:left;">Application Deadline</th>
-      <th style="width:5%; text-align:left;"></th>
-	  <th style="width:5%; text-align:left;"></th>
+      <%= sort_header_tag('title') %>
+      <%= sort_header_tag('category') %>
+      <%= sort_header_tag('description') %>
+      <%= sort_header_tag('job_status') %>
+	  <%= sort_header_tag('application_deadline') %>
+      <th></th>
+	  <th></th>
     <% elsif (User.current.logged?)%>
       <!-- Applicant scope -->
-      <th style="width:25%; text-align:left;">Title</th>
-      <th style="width:15%; text-align:left;">Category</th>
-      <th style="width:40%; text-align:left;">Description</th>
-	  <th style="width:20%; text-align:left;">Application Deadline</th>
-      <th style="width:10%; text-align:left;"></th>
+      <%= sort_header_tag('title') %>
+      <%= sort_header_tag('category') %>
+      <%= sort_header_tag('description') %>
+	  <%= sort_header_tag('application_deadline') %>
+      <th></th>
     <% else %>
       <!-- Anonymous scope -->
-      <th style="width:30%; text-align:left;">Title</th>
-      <th style="width:15%; text-align:left;">Category</th>
-      <th style="width:45%; text-align:left;">Description</th>
-	  <th style="width:20%; text-align:left;">Application Deadline</th>
+      <%= sort_header_tag('title') %>
+      <%= sort_header_tag('category') %>
+      <%= sort_header_tag('description') %>
+	  <%= sort_header_tag('application_deadline') %>
     <% end %>
   </tr>
 </thead>
@@ -31,13 +31,13 @@
     <tr>
       <% if(User.current.admin?)%>
         <!-- Admin scope -->
-        <td style="width:20%"><%= link_to "#{job.title}", job_url(job.id, :apptracker_id => params[:apptracker_id]) %></a></td>
-        <td style="width:10%"><%=h job.category %></a></td>
-        <td style="width:30%"><%=h job.description %></td>
-        <td style="width:10%"><%=h job.status %></td>
-		<td style="width:20%"><%=h job.submission_date.month %>/<%=h job.submission_date.day %>/<%=h job.submission_date.year %> <%= job.submission_date.strftime("%I:%M %p") %></td>
-        <td style="width:5%"><%= link_to 'Edit', edit_job_url(job.id, :apptracker_id => params[:apptracker_id]), :class => 'icon icon-edit' %></td>
-        <td style="width:5%"><%= link_to 'Delete', job_url(:id => job.id, :apptracker_id => params[:apptracker_id]), 
+        <td><%= link_to "#{job.title}", job_url(job.id, :apptracker_id => params[:apptracker_id]) %></a></td>
+        <td><%=h job.category %></a></td>
+        <td><%=h job.description %></td>
+        <td><%=h job.status %></td>
+		<td><%=h job.submission_date.month %>/<%=h job.submission_date.day %>/<%=h job.submission_date.year %> <%= job.submission_date.strftime("%I:%M %p") %></td>
+        <td><%= link_to 'Edit', edit_job_url(job.id, :apptracker_id => params[:apptracker_id]), :class => 'icon icon-edit' %></td>
+        <td><%= link_to 'Delete', job_url(:id => job.id, :apptracker_id => params[:apptracker_id]), 
           :confirm => "All links to applicants will be destroyed.  Are you sure you want to delete the \"#{job.title}\" job?", 
           :method => :delete,
           :class => 'icon icon-del' %>
@@ -45,17 +45,17 @@
       <% elsif job.status != 'inactive' %> 
         <% if User.current.logged? %>
           <!-- Applicant scope -->
-          <td style="width:25%"><%= link_to "#{job.title}", job_url(job.id, :apptracker_id => params[:apptracker_id]) %></td>
-          <td style="width:15%"><%=h job.category %></td>
-          <td style="width:50%"><%=h job.description %></td>
-		  <td style="width:20%"><%=h job.submission_date.month %>/<%=h job.submission_date.day %>/<%=h job.submission_date.year %> <%= job.submission_date.strftime("%I:%M %p") %></td>
-          <td style="width:10%"></td>
+          <td><%= link_to "#{job.title}", job_url(job.id, :apptracker_id => params[:apptracker_id]) %></td>
+          <td><%=h job.category %></td>
+          <td><%=h job.description %></td>
+		  <td><%=h job.submission_date.month %>/<%=h job.submission_date.day %>/<%=h job.submission_date.year %> <%= job.submission_date.strftime("%I:%M %p") %></td>
+          <td></td>
         <% else %>
           <!-- Anonymous scope -->
-          <td style="width:30%"><%= link_to "#{job.title}", job_url(job.id, :apptracker_id => params[:apptracker_id]) %></a></td>
-          <td style="width:15%"><%=h job.category %></a></td>
-          <td style="width:55%"><%=h job.description %></td>
-		  <td style="width:20%"><%=h job.submission_date.month %>/<%=h job.submission_date.day %>/<%=h job.submission_date.year %> <%= job.submission_date.strftime("%I:%M %p") %></td>
+          <td><%= link_to "#{job.title}", job_url(job.id, :apptracker_id => params[:apptracker_id]) %></a></td>
+          <td><%=h job.category %></a></td>
+          <td><%=h job.description %></td>
+		  <td><%=h job.submission_date.month %>/<%=h job.submission_date.day %>/<%=h job.submission_date.year %> <%= job.submission_date.strftime("%I:%M %p") %></td>
         <% end %>
       <% end %>
     </tr>

@@ -8,6 +8,7 @@ class JobApplicationMaterialsController < ApplicationController
   include AttachmentsHelper
 
   def index
+    
     @apptracker = Apptracker.find(params[:apptracker_id])
     if(User.current.admin?)
       if(params[:view_scope] == 'job' || (params[:applicant_id].nil? && params[:apptracker_id].nil?))

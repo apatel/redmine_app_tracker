@@ -7,18 +7,23 @@ class JobsController < ApplicationController
   include AttachmentsHelper
   helper :custom_fields
   include CustomFieldsHelper
+  helper :sort
+  include SortHelper
   
   default_search_scope :jobs
 
   # GET /jobs
   # GET jobs_url
   def index
+    sort_init 'submission_date', 'asc'
+    sort_update %w(title category description status submission_date)
+    
     # secure the parent apptracker id and find its jobs
     @apptracker = Apptracker.find(params[:apptracker_id])
     if(User.current.admin?)
-      @jobs = @apptracker.jobs
+      @jobs = @apptracker.jobs.find(:all, :order => sort_clause)
     else
-      @jobs = @apptracker.jobs.find(:all, :conditions => ["status = ? and submission_date > ?", Job::JOB_STATUS[0], DateTime.now])
+      @jobs = @apptracker.jobs.find(:all, :conditions => ["status = ? and submission_date > ?", Job::JOB_STATUS[0], DateTime.now], :order => sort_clause)
     end
   end
   
@@ -28,7 +33,10 @@ class JobsController < ApplicationController
     # secure the parent apptracker id and find requested job
     @apptracker = Apptracker.find(params[:apptracker_id])
     @job = @apptracker.jobs.find(params[:id])
-    @job_applications = @job.job_applications
+    
+    sort_init 'created_at', 'desc'
+    sort_update %w(id submission_status, acceptance_status, created_at)
+    @job_applications = @job.job_applications.find(:all, :order => sort_clause)
     
     @job_attachments = @job.job_attachments.build
     job_attachments = @job.job_attachments.find :first, :include => [:attachments]

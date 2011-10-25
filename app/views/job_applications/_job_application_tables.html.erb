@@ -6,12 +6,12 @@
 	  <tr>
 	    <% if(User.current.admin?)%>
 	      <!-- Admin Role -->
-		  <th style="width:10%; text-align:left;">Application ID</th>
+		  <%= sort_header_tag('id', :caption => 'Application ID') %>
 		  <th style="width:10%; text-align:left;">Job</th>
 	      <th style="width:10%; text-align:left;">Applicant</th>
-	      <th style="width:10%; text-align:left;">Date Submitted</th>
-	      <th style="width:5%; text-align:left;">Submission Status</th>
-		  <th style="width:5%; text-align:left;">Acceptance Status</th>
+		  <%= sort_header_tag('created_at', :caption => 'Date Submitted') %>
+		  <%= sort_header_tag('submission_status', :caption => 'Submission Status') %>
+		  <%= sort_header_tag('acceptance_status', :caption => 'Acceptance Status') %>
 		  <th style="width:5%; text-align:left;"></th>
 		  <th style="width:5%; text-align:left;"></th>
 
