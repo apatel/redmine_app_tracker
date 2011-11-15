@@ -18,7 +18,7 @@ class JobsController < ApplicationController
   # GET /jobs
   # GET jobs_url
   def index
-    sort_init 'submission_date', 'asc'
+    sort_init 'submission_date', 'desc'
     sort_update %w(title category description status submission_date)
     
     # secure the parent apptracker id and find its jobs
@@ -39,7 +39,9 @@ class JobsController < ApplicationController
     @zipped_file = params[:zipped_file]
     
     sort_init 'created_at', 'desc'
-    sort_update %w(id submission_status, acceptance_status, created_at)
+    sort_update 'title' => "#{Job.table_name}.title",
+                'last_name' => "#{Applicant.table_name}.last_name"
+    #sort_update %w(id submission_status, acceptance_status, created_at)
     @job_applications = @job.job_applications.find(:all, :order => sort_clause)
     
     @job_attachments = @job.job_attachments.build

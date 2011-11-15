@@ -7,8 +7,8 @@
 	    <% if(User.current.admin?)%>
 	      <!-- Admin Role -->
 		  <%= sort_header_tag('id', :caption => 'Application ID') %>
-		  <th style="width:10%; text-align:left;">Job</th>
-	      <th style="width:10%; text-align:left;">Applicant</th>
+		  <%= sort_header_tag('title', :caption => 'Job') %>
+	      <%= sort_header_tag('last_name', :caption => 'Applicant') %>
 		  <%= sort_header_tag('created_at', :caption => 'Date Submitted') %>
 		  <%= sort_header_tag('submission_status', :caption => 'Submission Status') %>
 		  <%= sort_header_tag('acceptance_status', :caption => 'Acceptance Status') %>
