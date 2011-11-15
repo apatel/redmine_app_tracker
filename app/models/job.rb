@@ -1,6 +1,7 @@
 class Job < ActiveRecord::Base
   # associations
   belongs_to :apptracker
+  
   # FIXME Should job_applications to a job be destroyed if a job is deleted?
   has_many :job_applications
   has_many :applicants, :through => :job_applications
@@ -12,7 +13,11 @@ class Job < ActiveRecord::Base
                           :join_table => "#{table_name_prefix}custom_fields_jobs#{table_name_suffix}",
                           :association_foreign_key => 'custom_field_id'
        
-  acts_as_searchable :columns => ["#{table_name}.title", "#{table_name}.description"], :project_key => "#{table_name}.apptracker.project_id"
+  acts_as_searchable :columns => ["#{table_name}.title", "#{table_name}.description"], :date_column => :created_at
+  acts_as_event :title => Proc.new {|o| "#{o.title}"},
+                :url => Proc.new {|o| {:controller => 'jobs', :action => 'show', :id => o.id}},
+                :type => Proc.new {|o| 'job' },
+                :datetime => :created_at
                         
   acts_as_customizable
   acts_as_attachable :delete_permission => :manage_documents

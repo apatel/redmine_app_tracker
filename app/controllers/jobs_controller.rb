@@ -1,3 +1,6 @@
+require 'rubygems'
+require 'zip/zipfilesystem'
+
 class JobsController < ApplicationController
   unloadable
   before_filter :require_admin, :except => [:index, :show]
@@ -33,6 +36,7 @@ class JobsController < ApplicationController
     # secure the parent apptracker id and find requested job
     @apptracker = Apptracker.find(params[:apptracker_id])
     @job = @apptracker.jobs.find(params[:id])
+    @zipped_file = params[:zipped_file]
     
     sort_init 'created_at', 'desc'
     sort_update %w(id submission_status, acceptance_status, created_at)
@@ -178,8 +182,6 @@ class JobsController < ApplicationController
   
   def create_custom_field
     job = Job.find_by_id params[:id]
-    p "attributes"
-    p job.attributes
     custom_field = CustomField.create!(params[:custom_field])
     custom_field.type = "JobApplicationCustomField"
     if custom_field.save
@@ -202,6 +204,78 @@ class JobsController < ApplicationController
     job.job_application_custom_fields.delete custom_field
     job.save
     redirect_to :action => "edit", :id => job, :apptracker_id => job.apptracker_id
+  end
+  
+  def print_materials    
+    @job = Job.find(params[:job])
+    @material_types = params[:application_material_types]
+    @ja_materials = []
+    @applications = @job.job_applications
+    if params[:applicant_referral]
+      @ja_referrals = []
+    end
+    @applications.each do |app|
+      @ja_materials << JobApplicationMaterial.find(:first, :conditions => {:job_application_id => app.id})
+      unless @ja_referrals.nil?
+        @ja_referrals << JobApplicationReferral.find(:all, :conditions => {:job_application_id => app.id})
+      end  
+    end   
+  
+    filepaths = []
+    @ja_materials.each do |jam|
+      jam.attachments.each do |jama|
+        @material_types.each do |mt|
+          if mt.include? jama.description
+            filepaths << "#{RAILS_ROOT}/files/" + jama.disk_filename
+          end  
+        end
+      end    
+    end 
+    
+    unless @ja_referrals.nil?
+      @ja_referrals.each do |jar|
+        jar.each do |ref|
+          ref.attachments.each do |jara|
+            filepaths << "#{RAILS_ROOT}/files/" + jara.disk_filename
+          end  
+        end    
+      end
+    end 
+    
+    @file_name = @job.title.sub(/ /, '-')  
+    zip("#{RAILS_ROOT}/public/uploads/#{@file_name}-materials.zip", filepaths)
+    @zipped_file = "/uploads/#{@file_name}-materials.zip"
+    p "zipped"
+    p @zipped_file
+    
+    redirect_to job_path(@job, :apptracker_id => @job.apptracker_id, :zipped_file => @zipped_file)
+  end  
+  
+  def zip(zip_file_path, list_of_file_paths)
+
+    @zip_file_path = zip_file_path
+    list_of_file_paths = [list_of_file_paths] if list_of_file_paths.class == String
+    @list_of_file_paths = list_of_file_paths
+    
+    # check to see if the file exists already, and if it does, delete it.
+    if File.file?(@zip_file_path)
+      File.delete(@zip_file_path)
+    end
+
+    Zip::ZipFile.open(@zip_file_path, Zip::ZipFile::CREATE) do |zipfile|
+      @list_of_file_paths.each do | file_path |
+        if File.exists?file_path
+          file_name = File.basename( file_path )
+          if zipfile.find_entry( file_name )
+            zipfile.replace( file_name, file_path )
+          else
+            zipfile.add( file_name, file_path)
+          end
+        else
+          puts "Warning: file #{file_path} does not exist"
+        end
+      end
+    end
   end
   
 end

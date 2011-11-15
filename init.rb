@@ -48,4 +48,5 @@ Redmine::Plugin.register :redmine_apptracker do
     search.register :jobs
     search.register :apptrackers
   end
+  
 end

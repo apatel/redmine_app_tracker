@@ -1,11 +1,14 @@
 class Apptracker < ActiveRecord::Base
   # associations
   has_many :jobs, :dependent => :destroy
-  has_many :applicants
   has_and_belongs_to_many :applicants
   belongs_to :project
   
-  acts_as_searchable :columns => ["#{table_name}.title", "#{table_name}.description"], :order_column => "created_at", :include => [:project]
+  acts_as_searchable :columns => ["#{table_name}.title", "#{table_name}.description"], :order_column => "created_at", :include => :project
+  acts_as_event :title => Proc.new {|o| "#{o.title}"},
+                :url => Proc.new {|o| {:controller => 'apptrackers', :action => 'show', :id => o.id}},
+                :type => Proc.new {|o| 'apptracker' },
+                :datetime => :created_at
 
   # validation
   validates_presence_of :title, :status

@@ -66,16 +66,7 @@
       <% end %>
     <% end %>
 	
-	<% unless @job_application_material.nil? %>
-	  <p>
-	    <%= link_to "Create Zip File of Applicant Materials", zip_files_job_application_materials_url(:files => @job_application_material, :apptracker_id => @apptracker.id) %>
-	  </p>
-	  <% unless @zipped_file.nil? %>
-	    <p>
-	  	  <%= link_to "Download Zip", @zipped_file %>
-	    </p>
-	  <% end %>	
-	<% end %>
+
 </tbody>
 </table>
 

@@ -2,12 +2,17 @@ class Applicant < ActiveRecord::Base
   
   # associations
   has_and_belongs_to_many :apptrackers
+  has_many :projects, :through => :apptrackers
 
   has_many :job_application_materials, :through => :job_applications
   has_many :job_application_referrals, :through => :job_applications
   has_many :job_applications, :dependent => :destroy
   
-  acts_as_searchable :columns => ["#{table_name}.first_name", "#{table_name}.last_name"], :order_column => "created_at", :project_key => 2
+  acts_as_searchable :columns => ["#{table_name}.user_name", "#{table_name}.first_name", "#{table_name}.last_name"], :order_column => "created_at", :date_column => :created_at
+  acts_as_event :title => Proc.new {|o| "#{o.user_name}"},
+                :url => Proc.new {|o| {:controller => 'applicants', :action => 'show', :id => o.id}},
+                :type => Proc.new {|o| 'applicant' },
+                :datetime => :created_at
 
   # FIXME uncomment this when starting to implement Redmine login functionality
   # belongs_to :user

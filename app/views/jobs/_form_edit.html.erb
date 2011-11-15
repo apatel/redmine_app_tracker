@@ -44,6 +44,7 @@
   </p>
   
   <p>
+	<%= label_tag 'job_materials', 'Required Application Materials'%><span class="required">*</span><br />
 	<% for material in Job::JOB_MATERIALS %>
 	  <%= check_box_tag "application_material_types[]", material, @job.application_material_types.nil? ? false : @job.application_material_types.split(',').include?(material) %>
 	  <%= material %>
