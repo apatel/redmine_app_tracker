@@ -12,8 +12,29 @@
   <!-- render Job Applications partial -->
   <h3>Submitted Applications</h3>
   <%= render :partial => "job_applications/job_application_tables" %>
-  <!-- render students applying to this job -->
-  <!-- render Application materials associated with this job -->
+  <p></p>
+
+  <h3>Zip/Download Submitted Materials</h3>
+  <p>
+	<% form_tag(:controller => 'jobs', :action => 'print_materials') do %>
+	  <%= label_tag 'job_materials', 'Select Application Materials to Download'%><br />
+	  <br />
+	  <% for material in @job.application_material_types.split(',') %>
+	    <%= check_box_tag "application_material_types[]", material, @job.application_material_types.nil? ? false : @job.application_material_types.split(',').include?(material) %>
+	    <%= material %><br />
+	  <% end %>
+	  <%= check_box_tag "applicant_referral"%> Applicant Referrals<br />
+	  <%= hidden_field_tag "job", @job.id %>
+	  <br />
+	  <%= submit_tag 'Create Zip File' %>
+	<% end %>
+
+	<% unless @zipped_file.nil? %>
+    <p>
+  	  <%= link_to "Download Zip File", @zipped_file %>
+    </p>
+    <% end %>
+  </p>
 
 <% elsif User.current.logged? %>
   <% @applicant = Applicant.find_by_email(User.current.mail) %>
@@ -37,29 +58,6 @@
   <%= link_to "Log In", signin_url %> or <%= link_to "Register", :controller => "account", :action => "register", :apptracker_id => @apptracker.id %> to Apply to This Job
 <% end %>
 </strong>
-<p></p>
-
-<h3>Zip/Download Submitted Materials</h3>
-<p>
-	<% form_tag(:controller => 'jobs', :action => 'print_materials') do %>
-	  <%= label_tag 'job_materials', 'Select Application Materials to Download'%><br />
-	  <br />
-	  <% for material in @job.application_material_types.split(',') %>
-	    <%= check_box_tag "application_material_types[]", material, @job.application_material_types.nil? ? false : @job.application_material_types.split(',').include?(material) %>
-	    <%= material %><br />
-	  <% end %>
-	  <%= check_box_tag "applicant_referral"%> Applicant Referrals<br />
-	  <%= hidden_field_tag "job", @job.id %>
-	  <br />
-	  <%= submit_tag 'Create Zip File' %>
-	<% end %>
-	
-	<% unless @zipped_file.nil? %>
-    <p>
-  	  <%= link_to "Download Zip File", @zipped_file %>
-    </p>
-    <% end %>
-</p>
 	
 <p></p>
 <h3>Job Details</h3>

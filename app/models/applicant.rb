@@ -13,6 +13,9 @@ class Applicant < ActiveRecord::Base
                 :url => Proc.new {|o| {:controller => 'applicants', :action => 'show', :id => o.id}},
                 :type => Proc.new {|o| 'applicant' },
                 :datetime => :created_at
+                
+  acts_as_activity_provider :find_options => {:select => "#{Applicant.table_name}.*", 
+                                              :joins => "LEFT JOIN #{JobApplication.table_name} ON #{Applicant.table_name}.id=#{JobApplication.table_name}.applicant_id"}           
 
   # FIXME uncomment this when starting to implement Redmine login functionality
   # belongs_to :user

@@ -39,8 +39,11 @@ class JobsController < ApplicationController
     @zipped_file = params[:zipped_file]
     
     sort_init 'created_at', 'desc'
-    sort_update 'title' => "#{Job.table_name}.title",
-                'last_name' => "#{Applicant.table_name}.last_name"
+    sort_update 'last_name' => "#{Applicant.table_name}.last_name",
+                'id' => "#{JobApplication.table_name}.id",
+                'submission_status' => "#{JobApplication.table_name}.submission_status",
+                'acceptance_status' => "#{JobApplication.table_name}.acceptance_status",
+                'created_at' => "#{JobApplication.table_name}.created_at"
     #sort_update %w(id submission_status, acceptance_status, created_at)
     @job_applications = @job.job_applications.find(:all, :order => sort_clause)
     
