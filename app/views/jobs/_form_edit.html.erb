@@ -20,21 +20,22 @@
 
   <p>
     <%= f.label(:description) %><span class="required">*</span><br />
-    <%= f.text_area(:description, :size => "60x12") %>
+    <%= f.text_area(:description, :rows => 12, :class => 'wiki-edit') %>
+	<%= wikitoolbar_for 'job_description' %>
   </p>
 
    <p>
-    <%= f.label(:postions_available) %><br />
+    <%= f.label(:postions_available, "Positions Available") %><br />
     <%= f.text_field(:positions_available, :value => 1, :size => 3) %>
   </p>
   
   <p>
-    <%= f.label(:application_followup_message) %><br />
+    <%= f.label(:application_followup_message, "Application Follow-up Message") %><br />
     <%= f.text_area(:application_followup_message, :size => "60x5") %>
   </p>
 
   <p>
-    <%= f.label(:referrer_count) %><span class="required">*</span><br />
+    <%= f.label(:referrer_count, "Amount of Referrals Needed") %><span class="required">*</span><br />
     <%= f.text_field(:referrer_count, :size => 3) %>
   </p>
   
