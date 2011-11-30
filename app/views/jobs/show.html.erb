@@ -23,7 +23,6 @@
 	    <%= check_box_tag "application_material_types[]", material, @job.application_material_types.nil? ? false : @job.application_material_types.split(',').include?(material) %>
 	    <%= material %><br />
 	  <% end %>
-	  <%= check_box_tag "applicant_referral"%> Applicant Referrals<br />
 	  <%= hidden_field_tag "job", @job.id %>
 	  <br />
 	  <%= submit_tag 'Create Zip File' %>

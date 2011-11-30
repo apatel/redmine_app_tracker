@@ -22,22 +22,38 @@
   <p><%= render :partial => 'list_job_custom_fields', :locals => { :job => @job, :job_application => @job_application } %></p>
   
   <br />
-  <h3>Job Application Attachments</h3>
-	<% unless @job_application_materials.nil? || @job_application_materials.blank? %>
+  <h3>Job Application Materials</h3>
+    <% unless @job_application_materials.nil? || @job_application_materials.empty? %>
 	  <h4>Existing</h4>
 	  <% @job_application_materials.each do |jam| %>
 	    <%= link_to_attachments jam %><br />
 	  <% end %>  
 	<% else %>
 	  No attachments.
+	  <% @job_application.job_application_materials.build() %>
 	<% end %>
-  
-  <h4>Add New</h4>
-      <% f.fields_for :job_application_materials do |jam| %>
-		<div class="box">
+	
+    <% unless @job.application_material_types.nil? %>	
+	  <% @job.application_material_types.split(',').each do |amt| %>
+		<h4><%=h amt %></h4>
+
+	    <% f.fields_for :job_application_materials do |jam| %>
+		  <%= jam.hidden_field(:job_application_id, :value => @job_application ) %>
+		  <div class="box">
 			<p><label><%=l(:label_attachment_plural)%></label><%= render :partial => 'attachments/form' %></p>
-		</div>
-    <% end %>
+		  </div>
+	    <% end %>
+	  <% end %>
+	<% end %>
+
+	<% if !@job.referrer_count.nil? %>
+	  <h4>Referrals (<%= @job.referrer_count %> required)</h4>
+
+
+		  <%= label_tag :email, "Please enter referrer's email(s) separated by a comma:" %><br />
+		  <%= text_field_tag :email %><br />
+
+	<% end %>
 	
   <% if(User.current.admin?)%>
     <h3>Job Application Status</h3>

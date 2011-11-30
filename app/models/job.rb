@@ -37,7 +37,7 @@ class Job < ActiveRecord::Base
   # The first entry of the JOB_STATUS array is reserved for allowing anonymous to see a job's details
   JOB_STATUS = ["Active", "Inactive", "Filled"]
   JOB_CATEGORIES = ["Internship", "Fellowship", "Program", "Staff"]
-  JOB_MATERIALS = ["Resume or CV", "Personal Statement", "Proposed Work", "Recent Publication", "Letters of Reference","Academic Transcripts"]
+  JOB_MATERIALS = ["Resume or CV", "Personal Statement", "Proposed Work", "Recent Publication","Academic Transcripts"]
   
   def all_job_app_custom_fields
     @all_job_app_custom_fields ||= (JobApplicationCustomField.for_all + job_application_custom_fields).uniq.sort

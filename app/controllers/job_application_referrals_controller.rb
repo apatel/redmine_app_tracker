@@ -76,9 +76,11 @@ class JobApplicationReferralsController < ApplicationController
 
   def request_referral
     @job_application = JobApplication.find(params[:id])
-    @email = params[:email]
+    @emails = params[:email].split(',')
     #Send Notification to Referrer
-    Notification.deliver_request_referral(@job_application, @email)
+    @emails.each do |email|
+      Notification.deliver_request_referral(@job_application, email)
+    end
     
     redirect_to(job_applications_url(:apptracker_id => @job_application.apptracker_id, :applicant_id => @job_application.applicant_id), :notice => "Referral request has been sent.")
   end

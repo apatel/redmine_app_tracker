@@ -37,13 +37,6 @@
         :applicant_id => User.current.id), 
         {:id => 'tab-JobApplications', :onclick => "showTab('JobApplications'); this.blur(); return false;"} %>
       </li>
-
-      <li><%= link_to 'My Referrals', job_application_referrals_url(
-        :apptracker_id => params[:apptracker_id], 
-        :project_identifier => params[:project_identifier], 
-        :applicant_id => User.current.id), 
-        {:id => 'tab-Referrers', :onclick => "showTab('Referrers'); this.blur(); return false;"} %>
-      </li>
    
     <% else %>
       <!-- Anonymous Role -->

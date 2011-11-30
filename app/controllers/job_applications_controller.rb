@@ -106,6 +106,12 @@ class JobApplicationsController < ApplicationController
         attachments = Attachment.attach_files(@job_application_material, params[:attachments])
         render_attachment_warning_if_needed(@job_application_material)
         
+        #send referrer emails
+        @emails = params[:email].split(',')
+        @emails.each do |email|
+          Notification.deliver_request_referral(@job_application, email)
+        end
+        
         #Send Notification
         Notification.deliver_application_submitted(@job_application) 
         
@@ -138,6 +144,12 @@ class JobApplicationsController < ApplicationController
     # update the job_application's attributes, and indicate a message to the user opon success/failure
     respond_to do |format|
       if(@job_application.update_attributes(params[:job_application]))
+        #send referrer emails
+        @emails = params[:email].split(',')
+        @emails.each do |email|
+          Notification.deliver_request_referral(@job_application, email)
+        end
+        
         #Send Notification
         Notification.deliver_application_updated(@job_application)
         # no errors, redirect with success message
