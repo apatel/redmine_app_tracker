@@ -48,11 +48,8 @@
 
 	<% if !@job.referrer_count.nil? %>
 	  <h4>Referrals (<%= @job.referrer_count %> required)</h4>
-
-
-		  <%= label_tag :email, "Please enter referrer's email(s) separated by a comma:" %><br />
-		  <%= text_field_tag :email %><br />
-
+	  <%= label_tag :email, "Please enter referrer's email(s) separated by a comma:" %><br />
+	  <%= text_field_tag :email %><br />
 	<% end %>
 	
   <% if(User.current.admin?)%>

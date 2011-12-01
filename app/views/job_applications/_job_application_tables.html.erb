@@ -12,6 +12,8 @@
 		  <%= sort_header_tag('created_at', :caption => 'Date Submitted') %>
 		  <%= sort_header_tag('submission_status', :caption => 'Submission Status') %>
 		  <%= sort_header_tag('acceptance_status', :caption => 'Acceptance Status') %>
+		  <th style="width:5%; text-align:left;">Referrals Required</th>
+		  <th style="width:5%; text-align:left;">Referrals Received</th>
 		  <th style="width:5%; text-align:left;"></th>
 		  <th style="width:5%; text-align:left;"></th>
 
@@ -21,6 +23,8 @@
 		  <th style="width:10%; text-align:left;">Job</th>
 	      <th style="width:10%; text-align:left;">Date Submitted</th>
 	      <th style="width:5%; text-align:left;">Submission Status</th>
+	      <th style="width:5%; text-align:left;">Referrals Required</th>
+	      <th style="width:5%; text-align:left;">Referrals Received</th>
 		  <th style="width:5%; text-align:left;"></th>
 		  <th style="width:5%; text-align:left;"></th>
 	    <% else %>
@@ -44,6 +48,8 @@
 		  
 		  <td style="width:10%"><%= ja.submission_status %></td>
 		  <td style="width:10%"><%= ja.acceptance_status %></td>
+		  <td style="width:5%"><%= ja.job.referrer_count %></td>
+		  <td style="width:5%"><%= ja.job_application_referrals.all.count %></td>
 		  <td style="width:5%"><%= link_to 'Edit', edit_job_application_url(ja.id, :apptracker_id => params[:apptracker_id]), :class => 'icon icon-edit' %></td>
           <td style="width:5%"><%= link_to 'Delete', job_application_url(:id => ja.id), 
             :confirm => "Are you sure you want to delete #{ja.applicant.first_name} #{ja.applicant.last_name}\'s record?", 
@@ -53,11 +59,12 @@
 
         <% elsif (User.current.logged?)%>
           <!-- Applicant Role -->
-          <!-- No view for Applicants -->
 		  <td style="width:10%"><%= link_to "#{ja.id}", job_application_url(ja.id, :apptracker_id => params[:apptracker_id]) %></td>
 		  <td style="width:10%"><%= link_to "#{ja.job.title}", job_url(ja.job.id, :apptracker_id => params[:apptracker_id]) %></td>
 		  <td style="width:10%"><%= ja.created_at %></td>
 		  <td style="width:10%"><%= ja.submission_status %></td>
+		  <td style="width:5%"><%= ja.job.referrer_count %></td>
+		  <td style="width:5%"><%= ja.job_application_referrals.all.empty? ? 0 : ja.job_application_referrals.all.length %></td>
 		  <% if ja.job.submission_date > DateTime.now %>
 		    <td style="width:5%"><%= link_to 'Edit', edit_job_application_url(ja.id, :apptracker_id => params[:apptracker_id]), :class => 'icon icon-edit' %></td>
             <td style="width:5%"><%= link_to 'Delete', job_application_url(:id => ja.id), 
