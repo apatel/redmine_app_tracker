@@ -7,7 +7,7 @@
 
 <p>	
 Applicant: <%= @applicant.first_name %> <%= @applicant.last_name %><br />
-Job Title: <%=h Job.find(@job_application.job_id).title %><br />
+Job Title: <%= link_to Job.find(@job_application.job_id).title, job_path(@job_application.job_id, :apptracker_id => @job_application.apptracker_id) %><br />
 
 
   <h3>Additional Information</h3>
@@ -29,8 +29,8 @@ Job Title: <%=h Job.find(@job_application.job_id).title %><br />
   No attachments.
 <% end %>
 <br />
+<h3>Job Application Referrals</h3>
 <% if User.current.admin? %>
-	<h3>Job Application Referrals</h3>
 	<% unless @job_application_referrals.nil? || @job_application_referrals.blank? %>
 	  <% @job_application_referrals.each do |jar| %>
 	    <p>
@@ -49,8 +49,11 @@ Job Title: <%=h Job.find(@job_application.job_id).title %><br />
 	
 	<h3>Admin Notes</h3>
   	<p><%= @job_application.notes %></p>
-  
+<% else %>
+    <p>Referrals Submitted: <%= @job_application.job_application_referrals.all.empty? ? 0 : @job_application.job_application_referrals.all.length %></p>
 <% end %>
 
-<%= link_to 'Edit', edit_job_application_url(@job_application.id, :apptracker_id => params[:apptracker_id]), :class => 'icon icon-edit' %>
+<% if @job_application.job.submission_date > DateTime.now %>
+  <%= link_to 'Edit Application', edit_job_application_url(@job_application.id, :apptracker_id => params[:apptracker_id]), :class => 'icon icon-edit' %>
+<% end %>
 <br /><br />

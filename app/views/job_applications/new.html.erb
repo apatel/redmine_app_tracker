@@ -1,3 +1,22 @@
+<script>
+document.observe("dom:loaded", function() {
+	var form = $('new_job_application');
+	var uploads = form.getInputs('file', 'attachments[1][file]');
+	var descriptions = form.getInputs('text', 'attachments[1][description]');
+	var u=1;
+	var d=1;
+	uploads.each(function(upload_name){
+		$(upload_name).writeAttribute('name', 'attachments[' + u + '][file]');
+		u++;
+	});
+	descriptions.each(function(desc_name){
+		$(desc_name).writeAttribute('name', 'attachments[' + d + '][description]');
+		d++;
+	});
+	
+});
+</script>
+
 <% flash[:notice] %>
 <div class="contextual">
   <%= link_to 'Back', jobs_url(:apptracker_id => params[:apptracker_id]), :class => 'icon icon-history' %>
@@ -15,21 +34,17 @@
   <%= f.hidden_field(:applicant_id, :value => @applicant.id ) %>
   <%= f.hidden_field(:job_id, :value => @job.id ) %>
 
-  <%
-    # FIXME Implement an Ajax interface that allows the user to input an :application_material_count, generating a data input table with a row count matching the value found in :application_material_count 
-  %>
-
   <p><%= render :partial => 'list_job_custom_fields', :locals => { :job => @job, :job_application => @job_application } %></p>
   
   <br />
   <h3>Job Application Materials</h3>
     <% unless @job.application_material_types.nil? %>
 	  <% @job_application.job_application_materials.build() %>	
-	  <% @job.application_material_types.split(',').each do |amt| %>
-		<h4><%=h amt %></h4>
-		
-	    <% f.fields_for :job_application_materials do |jam| %>
-		  <%= jam.hidden_field(:job_application_id, :value => @job_application ) %>
+	  
+	  <% f.fields_for :job_application_materials do |jam| %>
+	    <%= jam.hidden_field(:job_application_id, :value => @job_application ) %>
+	    <% @job.application_material_types.split(',').each do |amt| %>
+		  <h4><%=h amt %></h4>
 		  <div class="box">
 			<p><label><%=l(:label_attachment_plural)%></label><%= render :partial => 'attachments/form' %></p>
 		  </div>
@@ -39,11 +54,8 @@
 	
 	<% if !@job.referrer_count.nil? %>
 	  <h4>Referrals (<%= @job.referrer_count %> required)</h4>
-	  
-		  
-		  <%= label_tag :email, "Please enter referrer's email(s) separated by a comma:" %><br />
-		  <%= text_field_tag :email %><br />
-	  
+	  <%= label_tag :email, "Please enter referrer's email(s) separated by a comma:" %><br />
+	  <%= text_field_tag :email %><br />
 	<% end %>
     <br />
   <p>

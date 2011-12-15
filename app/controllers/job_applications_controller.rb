@@ -14,7 +14,13 @@ class JobApplicationsController < ApplicationController
   # GET /job_applications
   # GET job_applications_url
   def index
-    # TODO establish calling page in order to return proper search results (from job scope or applicant scope)
+    sort_init 'created_at', 'desc'
+    sort_update 'last_name' => "#{Applicant.table_name}.last_name",
+                'id' => "#{JobApplication.table_name}.id",
+                'submission_status' => "#{JobApplication.table_name}.submission_status",
+                'acceptance_status' => "#{JobApplication.table_name}.acceptance_status",
+                'created_at' => "#{JobApplication.table_name}.created_at"
+    #sort_update %w(id submission_status, acceptance_status, created_at)
     
     if(User.current.admin?)
       @apptracker = Apptracker.find(params[:apptracker_id])
@@ -36,7 +42,7 @@ class JobApplicationsController < ApplicationController
 
     elsif(User.current.logged?)
       @applicant = Applicant.find_by_email(User.current.mail)
-      @job_applications = @applicant.job_applications
+      @job_applications = @applicant.nil? ? nil : @applicant.job_applications
       @apptracker = Apptracker.find(params[:apptracker_id])
     end
   end
@@ -87,6 +93,8 @@ class JobApplicationsController < ApplicationController
     @applicant = @job_application.applicant
     @apptracker = Apptracker.find(params[:apptracker_id])
     @job_application_materials = @job_application.job_application_materials.find :all, :include => [:attachments]
+    p "job app materials"
+    p @job_application_materials
   end
 
   # POST /job_applications
@@ -131,19 +139,17 @@ class JobApplicationsController < ApplicationController
     # find the job_application within its parent applicant
     @applicant = Applicant.find(params[:job_application][:applicant_id])
     @job_application = @applicant.job_applications.find(params[:id])
-    
-    job_app_file = Hash.new
-    job_app_file["job_application_id"] = @job_application.id
-    #job_app_file["title"] = @job.title
-    #job_app_file["filename"] = @job.title
-    #job_app_file["notes"] = @job.title
-    @job_application_material = @job_application.job_application_materials.find :first
-    attachments = Attachment.attach_files(@job_application_material, params[:attachments])
-    render_attachment_warning_if_needed(@job_application_material) 
         
     # update the job_application's attributes, and indicate a message to the user opon success/failure
     respond_to do |format|
       if(@job_application.update_attributes(params[:job_application]))
+        # attach files
+        job_app_file = Hash.new
+        job_app_file["job_application_id"] = @job_application.id
+        @job_application_material = @job_application.job_application_materials.find :first
+        attachments = Attachment.attach_files(@job_application_material, params[:attachments])
+        render_attachment_warning_if_needed(@job_application_material)
+        
         #send referrer emails
         @emails = params[:email].split(',')
         @emails.each do |email|
@@ -153,7 +159,11 @@ class JobApplicationsController < ApplicationController
         #Send Notification
         Notification.deliver_application_updated(@job_application)
         # no errors, redirect with success message
-        format.html { redirect_to(job_applications_url(:apptracker_id => @job_application.apptracker_id, :applicant_id => @job_application.applicant_id), :notice => "#{@job_application.applicant.first_name} #{@job_application.applicant.last_name}\'s information has been updated.") }
+        if(User.current.admin?)
+          format.html { redirect_to(job_url(@job_application.job_id, :apptracker_id => @job_application.apptracker_id), :notice => "#{@job_application.applicant.first_name} #{@job_application.applicant.last_name}\'s information has been updated.") }
+        else  
+          format.html { redirect_to(job_applications_url(:apptracker_id => @job_application.apptracker_id, :applicant_id => @job_application.applicant_id), :notice => "#{@job_application.applicant.first_name} #{@job_application.applicant.last_name}\'s information has been updated.") }
+        end  
       else
         # validation prevented update; redirect to edit form with error messages
 

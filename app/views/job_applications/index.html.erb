@@ -7,7 +7,11 @@
 
 <%= render :partial => "shared/tabs" %>
 
-<%= render :partial => "job_application_tables" %>
+<% if User.current.admin? %>
+  <%= render :partial => "job_application_tables", :locals => { :box => true } %>
+<% else %>
+  <%= render :partial => "job_application_tables" %>
+<% end %>
 
 <br /><br />
 

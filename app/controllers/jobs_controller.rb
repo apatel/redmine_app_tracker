@@ -84,7 +84,7 @@ class JobsController < ApplicationController
     else
       @job = @apptracker.jobs.find(params[:job_id])
     end    
-    @job.application_material_types = params[:application_material_types].join(",")
+    @job.application_material_types = params[:application_material_types].join(",") + "," + params[:other_app_materials]
     respond_to do |format|
       if(params[:form][:form_id].to_i == 1)
         if(@job.save)
@@ -149,7 +149,7 @@ class JobsController < ApplicationController
     # update the job's attributes, and indicate a message to the user opon success/failure
     respond_to do |format|
       if(@job.update_attributes(params[:job]))
-        @job.application_material_types = params[:application_material_types].join(",")
+        @job.application_material_types = params[:application_material_types].join(",") + "," + params[:other_app_materials]
         @job.save
         # no errors, redirect with success message
         @job_attachment = JobAttachment.find(:first, :conditions => {:job_id => @job.id})
@@ -215,22 +215,28 @@ class JobsController < ApplicationController
     @job = Job.find(params[:job])
     @material_types = params[:application_material_types]
     @ja_materials = []
-    @applications = @job.job_applications
     if params[:applicant_referral]
       @ja_referrals = []
     end
+    applicants = Array.new
+    unless params[:applicants_to_zip].nil?
+      params[:applicants_to_zip].each do |ja|
+        applicants << JobApplication.find(ja).applicant.id
+      end
+    end
+    @applications = JobApplication.find(:all, :conditions => ["job_id = ? and applicant_id in (?)", @job.id, applicants])
     @applications.each do |app|
       @ja_materials << JobApplicationMaterial.find(:first, :conditions => {:job_application_id => app.id})
       unless @ja_referrals.nil?
         @ja_referrals << JobApplicationReferral.find(:all, :conditions => {:job_application_id => app.id})
       end  
-    end   
+    end  
   
     filepaths = []
     @ja_materials.each do |jam|
       jam.attachments.each do |jama|
         @material_types.each do |mt|
-          if mt.include? jama.description
+          if mt.downcase.include? jama.description
             filepaths << "#{RAILS_ROOT}/files/" + jama.disk_filename
           end  
         end
@@ -247,7 +253,7 @@ class JobsController < ApplicationController
       end
     end 
     
-    @file_name = @job.title.sub(/ /, '-')  
+    @file_name = @job.title.gsub(/ /, '-')  
     zip("#{RAILS_ROOT}/public/uploads/#{@file_name}-materials.zip", filepaths)
     @zipped_file = "/uploads/#{@file_name}-materials.zip"
     p "zipped"
@@ -257,7 +263,7 @@ class JobsController < ApplicationController
   end  
   
   def zip(zip_file_path, list_of_file_paths)
-
+    p "in zip method"
     @zip_file_path = zip_file_path
     list_of_file_paths = [list_of_file_paths] if list_of_file_paths.class == String
     @list_of_file_paths = list_of_file_paths
