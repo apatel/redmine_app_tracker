@@ -109,19 +109,15 @@ class JobApplicationsController < ApplicationController
         job_app_file["job_application_id"] = @job_application.id
         @job_application_material = @job_application.job_application_materials.build(job_app_file)
         @job_application_material.save
-        p "descriptions"
         materials = @job_application.job.application_material_types.split(',')
         i = 1
         materials.each do |amt|
           unless params[:attachments][i.to_s]['file'].nil?
-            p params[:attachments][i.to_s]['description']
             params[:attachments][i.to_s]['description'] = amt
-            p params[:attachments][i.to_s]['description']
           end  
           i = i + 1
         end  
         
-          
         attachments = Attachment.attach_files(@job_application_material, params[:attachments])
         render_attachment_warning_if_needed(@job_application_material)
         
@@ -158,6 +154,15 @@ class JobApplicationsController < ApplicationController
         job_app_file = Hash.new
         job_app_file["job_application_id"] = @job_application.id
         @job_application_material = @job_application.job_application_materials.find :first
+        materials = @job_application.job.application_material_types.split(',')
+        i = 1
+        materials.each do |amt|
+          unless params[:attachments][i.to_s]['file'].nil?
+            params[:attachments][i.to_s]['description'] = amt
+          end  
+          i = i + 1
+        end
+        
         attachments = Attachment.attach_files(@job_application_material, params[:attachments])
         render_attachment_warning_if_needed(@job_application_material)
         
