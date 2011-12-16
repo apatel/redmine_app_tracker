@@ -268,7 +268,7 @@ class JobsController < ApplicationController
     @ja_materials = []
     @ja_referrals = []
     filepaths = []
-    @applicants = JobApplication.find(ja).applicants
+    @applicants = @job.applicants
     @applications = JobApplication.find(:all, :conditions => {:job_id => @job.id})
     
     @applications.each do |app|

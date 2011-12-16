@@ -32,7 +32,9 @@
 	  <br />
 	  <%= submit_tag 'Create Zip File' %>
   <% end %>
-
+	<p>
+	  <%= link_to 'Zip All', zip_all_jobs_path(:job => @job.id) %>
+	</p>
 	<% unless @zipped_file.nil? %>
     <p>
   	  <%= link_to "Download Zip File", @zipped_file %>
