@@ -1,6 +1,11 @@
 <script>
 document.observe("dom:loaded", function() {
-	var form = $('new_job_application');
+	var forms = document.getElementsByClassName('form', 'edit_job_application')
+	forms.each(function(form_name){
+		var form = form_name
+	});
+	alert(form);
+	//var form = $('edit_job_application');
 	var uploads = form.getInputs('file', 'attachments[1][file]');
 	var descriptions = form.getInputs('text', 'attachments[1][description]');
 	var u=1;

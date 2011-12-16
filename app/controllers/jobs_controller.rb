@@ -133,8 +133,6 @@ class JobsController < ApplicationController
       "JobApplicationCustomField".to_s.constantize.new(params[:custom_field])
     rescue
     end
-    p "custom fields"
-    p @job.all_job_app_custom_fields
     
     @job_application_custom_fields = JobApplicationCustomField.find(:all, :order => "#{CustomField.table_name}.position")
     
@@ -260,7 +258,57 @@ class JobsController < ApplicationController
     p @zipped_file
     
     redirect_to job_path(@job, :apptracker_id => @job.apptracker_id, :zipped_file => @zipped_file)
-  end  
+  end
+  
+  def zip_all
+    @job = Job.find(params[:job])
+    @material_types = @job.application_material_types
+    @ja_materials = []
+    @ja_referrals = []
+    @applicants = JobApplication.find(ja).applicants
+
+    @applications = JobApplication.find(:all, :conditions => {:job_id => @job.id})
+    @applications.each do |app|
+      @ja_materials << JobApplicationMaterial.find(:first, :conditions => {:job_application_id => app.id})
+      unless @ja_referrals.nil?
+        @ja_referrals << JobApplicationReferral.find(:all, :conditions => {:job_application_id => app.id})
+      end  
+    end  
+  
+    filepaths = []
+    @ja_materials.each do |jam|
+      jam.attachments.each do |jama|
+        @material_types.each do |mt|
+          if mt.downcase.include? jama.description
+            filepaths << "#{RAILS_ROOT}/files/" + jama.disk_filename
+          end  
+        end
+      end    
+    end 
+    
+    unless @ja_referrals.nil?
+      @ja_referrals.each do |jar|
+        jar.each do |ref|
+          ref.attachments.each do |jara|
+            filepaths << "#{RAILS_ROOT}/files/" + jara.disk_filename
+          end  
+        end    
+      end
+    end 
+    
+    @file_name = @job.title.gsub(/ /, '-')  
+    zip("#{RAILS_ROOT}/public/uploads/#{@file_name}-materials.zip", filepaths)
+    @zipped_file = "/uploads/#{@file_name}-materials.zip"
+    p "zipped"
+    p @zipped_file
+    
+    redirect_to job_path(@job, :apptracker_id => @job.apptracker_id, :zipped_file => @zipped_file)
+    
+  end
+  
+  def zip_some
+    
+  end    
   
   def zip(zip_file_path, list_of_file_paths)
     p "in zip method"
