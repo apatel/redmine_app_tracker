@@ -1,18 +1,6 @@
 <script>
 document.observe("dom:loaded", function() {
-	var form = $('new_job_application');
-	var uploads = form.getInputs('file', 'attachments[1][file]');
-	var descriptions = form.getInputs('text', 'attachments[1][description]');
-	var u=1;
-	var d=1;
-	uploads.each(function(upload_name){
-		$(upload_name).writeAttribute('name', 'attachments[' + u + '][file]');
-		u++;
-	});
-	descriptions.each(function(desc_name){
-		$(desc_name).writeAttribute('name', 'attachments[' + d + '][description]');
-		d++;
-	});
+	$$('input[name="attachments[1][file]"]').each(function(elem, i){ $(elem).writeAttribute('name', 'attachments[' + (i + 1) + '][file]').next('label.inline').remove(); });
 });
 </script>
 

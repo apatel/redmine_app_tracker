@@ -263,19 +263,21 @@ class JobsController < ApplicationController
   def zip_all
     @job = Job.find(params[:job])
     @material_types = @job.application_material_types
+    @file_name = @job.title.gsub(/ /, '-')
+    @zip_file_path = "#{RAILS_ROOT}/public/uploads/#{@file_name}-materials.zip"
     @ja_materials = []
     @ja_referrals = []
+    filepaths = []
     @applicants = JobApplication.find(ja).applicants
-
     @applications = JobApplication.find(:all, :conditions => {:job_id => @job.id})
+    
     @applications.each do |app|
       @ja_materials << JobApplicationMaterial.find(:first, :conditions => {:job_application_id => app.id})
       unless @ja_referrals.nil?
         @ja_referrals << JobApplicationReferral.find(:all, :conditions => {:job_application_id => app.id})
       end  
     end  
-  
-    filepaths = []
+    
     @ja_materials.each do |jam|
       jam.attachments.each do |jama|
         @material_types.each do |mt|
@@ -296,12 +298,29 @@ class JobsController < ApplicationController
       end
     end 
     
-    @file_name = @job.title.gsub(/ /, '-')  
-    zip("#{RAILS_ROOT}/public/uploads/#{@file_name}-materials.zip", filepaths)
-    @zipped_file = "/uploads/#{@file_name}-materials.zip"
-    p "zipped"
-    p @zipped_file
+    @list_of_file_paths = [filepaths] if filepaths.class == String
     
+    # check to see if the file exists already, and if it does, delete it.
+    if File.file?(@zip_file_path)
+      File.delete(@zip_file_path)
+    end
+
+    Zip::ZipFile.open(@zip_file_path, Zip::ZipFile::CREATE) do |zipfile|
+      @list_of_file_paths.each do | file_path |
+        if File.exists?file_path
+          file_name = File.basename( file_path )
+          if zipfile.find_entry( file_name )
+            zipfile.replace( file_name, file_path )
+          else
+            zipfile.add( file_name, file_path)
+          end
+        else
+          puts "Warning: file #{file_path} does not exist"
+        end
+      end
+    end
+    
+    @zipped_file = "/uploads/#{@file_name}-materials.zip"
     redirect_to job_path(@job, :apptracker_id => @job.apptracker_id, :zipped_file => @zipped_file)
     
   end
