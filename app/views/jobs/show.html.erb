@@ -9,7 +9,7 @@
 
 <strong>
 <% if User.current.admin? %>
-  <% form_tag({:controller => 'jobs', :action => 'print_materials'}, :id => 'applicant_form') do %>
+  <% form_tag({:controller => 'jobs', :action => 'zip_some'}, :id => 'applicant_form') do %>
 
   <!-- render Job Applications partial -->
   <h3>Submitted Applications</h3>
@@ -33,7 +33,7 @@
 	  <%= submit_tag 'Create Zip File' %>
   <% end %>
 	<p>
-	  <%= link_to 'Zip All', zip_all_jobs_path(:job => @job.id) %>
+	  <%= button_to 'Zip All', zip_all_jobs_path(:job => @job.id) %>
 	</p>
 	<% unless @zipped_file.nil? %>
     <p>

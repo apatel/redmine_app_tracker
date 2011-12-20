@@ -157,7 +157,7 @@ class JobApplicationsController < ApplicationController
         materials = @job_application.job.application_material_types.split(',')
         i = 1
         materials.each do |amt|
-          unless params[:attachments][i.to_s]['file'].nil?
+          unless params[:attachments].nil? || params[:attachments][i.to_s].nil? || params[:attachments][i.to_s]['file'].nil?
             params[:attachments][i.to_s]['description'] = amt
           end  
           i = i + 1

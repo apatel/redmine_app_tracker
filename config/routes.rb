@@ -9,7 +9,7 @@ ActionController::Routing::Routes.draw do |map|
   # TODO phase out the application materials model
   # map.resources :application_materials
   # map.connect   'application_materials/download/:id', :controller => 'application_materials', :action => 'download'
-  map.resources :jobs, :collection => {:zip_files => [:get,:post], :zip_all => [:get,:post]}
+  map.resources :jobs, :collection => {:zip_some => [:get,:post], :zip_all => [:get,:post]}
   # TODO phase out the referrer model
   # map.resources :referrers
   map.resources :job_applications

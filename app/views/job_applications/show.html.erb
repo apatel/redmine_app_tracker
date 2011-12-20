@@ -53,7 +53,7 @@ Job Title: <%= link_to Job.find(@job_application.job_id).title, job_path(@job_ap
     <p>Referrals Submitted: <%= @job_application.job_application_referrals.all.empty? ? 0 : @job_application.job_application_referrals.all.length %></p>
 <% end %>
 
-<% if @job_application.job.submission_date > DateTime.now %>
+<% if @job_application.job.submission_date > DateTime.now || User.current.admin? %>
   <%= link_to 'Edit Application', edit_job_application_url(@job_application.id, :apptracker_id => params[:apptracker_id]), :class => 'icon icon-edit' %>
 <% end %>
 <br /><br />

@@ -209,65 +209,17 @@ class JobsController < ApplicationController
     redirect_to :action => "edit", :id => job, :apptracker_id => job.apptracker_id
   end
   
-  def print_materials    
-    @job = Job.find(params[:job])
-    @material_types = params[:application_material_types]
-    @ja_materials = []
-    if params[:applicant_referral]
-      @ja_referrals = []
-    end
-    applicants = Array.new
-    unless params[:applicants_to_zip].nil?
-      params[:applicants_to_zip].each do |ja|
-        applicants << JobApplication.find(ja).applicant.id
-      end
-    end
-    @applications = JobApplication.find(:all, :conditions => ["job_id = ? and applicant_id in (?)", @job.id, applicants])
-    @applications.each do |app|
-      @ja_materials << JobApplicationMaterial.find(:first, :conditions => {:job_application_id => app.id})
-      unless @ja_referrals.nil?
-        @ja_referrals << JobApplicationReferral.find(:all, :conditions => {:job_application_id => app.id})
-      end  
-    end  
-  
-    filepaths = []
-    @ja_materials.each do |jam|
-      jam.attachments.each do |jama|
-        @material_types.each do |mt|
-          if mt.downcase.include? jama.description
-            filepaths << "#{RAILS_ROOT}/files/" + jama.disk_filename
-          end  
-        end
-      end    
-    end 
-    
-    unless @ja_referrals.nil?
-      @ja_referrals.each do |jar|
-        jar.each do |ref|
-          ref.attachments.each do |jara|
-            filepaths << "#{RAILS_ROOT}/files/" + jara.disk_filename
-          end  
-        end    
-      end
-    end 
-    
-    @file_name = @job.title.gsub(/ /, '-')  
-    zip("#{RAILS_ROOT}/public/uploads/#{@file_name}-materials.zip", filepaths)
-    @zipped_file = "/uploads/#{@file_name}-materials.zip"
-    p "zipped"
-    p @zipped_file
-    
-    redirect_to job_path(@job, :apptracker_id => @job.apptracker_id, :zipped_file => @zipped_file)
-  end
-  
   def zip_all
     @job = Job.find(params[:job])
-    @material_types = @job.application_material_types
+    @material_types = @job.application_material_types.split(',')
     @file_name = @job.title.gsub(/ /, '-')
     @zip_file_path = "#{RAILS_ROOT}/public/uploads/#{@file_name}-materials.zip"
-    @ja_materials = []
-    @ja_referrals = []
-    filepaths = []
+    @ja_materials = Array.new
+    @ja_referrals = Array.new
+    filepaths = Array.new
+    counter = 1
+    material_id_hash = Hash.new
+    
     @applicants = @job.applicants
     @applications = JobApplication.find(:all, :conditions => {:job_id => @job.id})
     
@@ -278,44 +230,79 @@ class JobsController < ApplicationController
       end  
     end  
     
-    @ja_materials.each do |jam|
-      jam.attachments.each do |jama|
-        @material_types.each do |mt|
-          if mt.downcase.include? jama.description
-            filepaths << "#{RAILS_ROOT}/files/" + jama.disk_filename
-          end  
-        end
-      end    
-    end 
-    
     unless @ja_referrals.nil?
-      @ja_referrals.each do |jar|
-        jar.each do |ref|
-          ref.attachments.each do |jara|
-            filepaths << "#{RAILS_ROOT}/files/" + jara.disk_filename
-          end  
-        end    
-      end
-    end 
-    
-    @list_of_file_paths = [filepaths] if filepaths.class == String
+      if @material_types.include?("Proposed Work")
+        @material_types.insert(@material_types.index("Proposed Work") + 1, "Referral")
+      elsif @material_types.include?("Cover Letter")
+        @material_types.insert(@material_types.index("Cover Letter") + 1, "Referral")
+      elsif @material_types.include?("Resume or CV")
+        @material_types.insert(@material_types.index("Resume or CV") + 1, "Referral")
+      else 
+        @material_types.insert(@material_types.index("Resume or CV") + 1, "Referral")
+      end  
+    end
+      
+    @material_types.each do |material|
+      material_id_hash[material] = "%03d" % counter.to_s + "_" + material.gsub(/ /, '_')
+      counter = counter + 1
+    end
     
     # check to see if the file exists already, and if it does, delete it.
     if File.file?(@zip_file_path)
       File.delete(@zip_file_path)
     end
-
+    
     Zip::ZipFile.open(@zip_file_path, Zip::ZipFile::CREATE) do |zipfile|
-      @list_of_file_paths.each do | file_path |
-        if File.exists?file_path
-          file_name = File.basename( file_path )
-          if zipfile.find_entry( file_name )
-            zipfile.replace( file_name, file_path )
-          else
-            zipfile.add( file_name, file_path)
-          end
-        else
-          puts "Warning: file #{file_path} does not exist"
+      @applicants.each do |applicant|
+        zipfile.mkdir("#{applicant.last_name}_#{applicant.first_name}")  
+      end  
+      
+      unless @ja_materials.nil?
+        @ja_materials.each do |jam|
+          jam.attachments.each do |jama|
+            ext_name = File.extname("#{RAILS_ROOT}/files/" + jama.disk_filename)
+            new_file_name = "#{Applicant.find(JobApplication.find(jam.job_application_id).applicant_id).last_name}_#{Applicant.find(JobApplication.find(jam.job_application_id).applicant_id).first_name}_#{material_id_hash[jama.description]}_#{jam.job_application_id}#{ext_name}"
+            orig_file_path = "#{RAILS_ROOT}/files/" + jama.disk_filename
+            if File.exists?(orig_file_path)
+              orig_file_name = File.basename(orig_file_path)
+              if zipfile.find_entry(new_file_name)
+                zipfile.remove(new_file_name)
+              end
+              zipfile.get_output_stream("#{Applicant.find(JobApplication.find(jam.job_application_id).applicant_id).last_name}_#{Applicant.find(JobApplication.find(jam.job_application_id).applicant_id).first_name}/" + new_file_name) do |f|
+                input = File.open(orig_file_path)
+                data_to_copy = input.read()
+                f.write(data_to_copy)
+              end
+            else
+              puts "Warning: file #{orig_file_path} does not exist"
+            end
+          end    
+        end
+      end   
+
+      unless @ja_referrals.nil?
+        @ja_referrals.each do |jar|
+          jar.each do |ref|
+            ref.attachments.each do |jara|
+              ext_name = File.extname("#{RAILS_ROOT}/files/" + jara.disk_filename)
+              new_file_name = "#{Applicant.find(JobApplication.find(ref.job_application_id).applicant_id).last_name}_#{Applicant.find(JobApplication.find(ref.job_application_id).applicant_id).first_name}_#{material_id_hash[jama.description]}_#{ref.attachments.index(jara)+1}_#{ref.job_application_id}#{ext_name}"
+              
+              orig_file_path = "#{RAILS_ROOT}/files/" + jara.disk_filename
+              if File.exists?(orig_file_path)
+                orig_file_name = File.basename(orig_file_path)
+                if zipfile.find_entry(new_file_name)
+                  zipfile.remove(new_file_name)
+                end
+                zipfile.get_output_stream("#{Applicant.find(JobApplication.find(ref.job_application_id).applicant_id).last_name}_#{Applicant.find(JobApplication.find(ref.job_application_id).applicant_id).first_name}/" + new_file_name) do |f|
+                  input = File.open(orig_file_path)
+                  data_to_copy = input.read()
+                  f.write(data_to_copy)
+                end
+              else
+                puts "Warning: file #{orig_file_path} does not exist"
+              end
+            end  
+          end    
         end
       end
     end
@@ -326,34 +313,111 @@ class JobsController < ApplicationController
   end
   
   def zip_some
+    @job = Job.find(params[:job])
+    @material_types = params[:application_material_types]
+    @file_name = @job.title.gsub(/ /, '-')
+    @zip_file_path = "#{RAILS_ROOT}/public/uploads/#{@file_name}-materials.zip"
+    filepaths = Array.new
+    counter = 1
+    material_id_hash = Hash.new
+    @ja_materials = Array.new
+    if params[:applicant_referral]
+      @ja_referrals = Array.new
+    end
+    applicants = Array.new
+    unless params[:applicants_to_zip].nil?
+      params[:applicants_to_zip].each do |ja|
+        applicants << JobApplication.find(ja).applicant.id
+      end
+    end
+    @applications = JobApplication.find(:all, :conditions => ["job_id = ? and applicant_id in (?)", @job.id, applicants])
     
-  end    
-  
-  def zip(zip_file_path, list_of_file_paths)
-    p "in zip method"
-    @zip_file_path = zip_file_path
-    list_of_file_paths = [list_of_file_paths] if list_of_file_paths.class == String
-    @list_of_file_paths = list_of_file_paths
+    @applications.each do |app|
+      @ja_materials << JobApplicationMaterial.find(:first, :conditions => {:job_application_id => app.id})
+      unless @ja_referrals.nil?
+        @ja_referrals << JobApplicationReferral.find(:all, :conditions => {:job_application_id => app.id})
+      end  
+    end  
+    
+    unless @ja_referrals.nil?
+      if @material_types.include?("Proposed Work")
+        @material_types.insert(@material_types.index("Proposed Work") + 1, "Referral")
+      elsif @material_types.include?("Cover Letter")
+        @material_types.insert(@material_types.index("Cover Letter") + 1, "Referral")
+      elsif @material_types.include?("Resume or CV")
+        @material_types.insert(@material_types.index("Resume or CV") + 1, "Referral")
+      else 
+        @material_types.insert(@material_types.index("Resume or CV") + 1, "Referral")
+      end  
+    end
+      
+    @material_types.each do |material|
+      material_id_hash[material] = "%03d" % counter.to_s + "_" + material.gsub(/ /, '_')
+      counter = counter + 1
+    end
     
     # check to see if the file exists already, and if it does, delete it.
     if File.file?(@zip_file_path)
       File.delete(@zip_file_path)
     end
-
+    
     Zip::ZipFile.open(@zip_file_path, Zip::ZipFile::CREATE) do |zipfile|
-      @list_of_file_paths.each do | file_path |
-        if File.exists?file_path
-          file_name = File.basename( file_path )
-          if zipfile.find_entry( file_name )
-            zipfile.replace( file_name, file_path )
-          else
-            zipfile.add( file_name, file_path)
-          end
-        else
-          puts "Warning: file #{file_path} does not exist"
+      unless @ja_materials.nil?
+        @ja_materials.each do |jam|
+          jam.attachments.each do |jama|
+            @material_types.each do |mt|
+              if mt == jama.description
+                ext_name = File.extname("#{RAILS_ROOT}/files/" + jama.disk_filename)
+                new_file_name = "#{Applicant.find(JobApplication.find(jam.job_application_id).applicant_id).last_name}_#{Applicant.find(JobApplication.find(jam.job_application_id).applicant_id).first_name}_#{material_id_hash[jama.description]}_#{jam.job_application_id}#{ext_name}"
+                orig_file_path = "#{RAILS_ROOT}/files/" + jama.disk_filename
+                if File.exists?(orig_file_path)
+                  orig_file_name = File.basename(orig_file_path)
+                  if zipfile.find_entry(new_file_name)
+                    zipfile.remove(new_file_name)
+                  end
+                  zipfile.get_output_stream(new_file_name) do |f|
+                    input = File.open(orig_file_path)
+                    data_to_copy = input.read()
+                    f.write(data_to_copy)
+                  end
+                else
+                  puts "Warning: file #{file_path} does not exist"
+                end
+              end  
+            end  
+          end    
+        end 
+      end  
+
+      unless @ja_referrals.nil?
+        @ja_referrals.each do |jar|
+          jar.each do |ref|
+            ref.attachments.each do |jara|
+              ext_name = File.extname("#{RAILS_ROOT}/files/" + jara.disk_filename)
+              new_file_name = "#{Applicant.find(JobApplication.find(ref.job_application_id).applicant_id).last_name}_#{Applicant.find(JobApplication.find(ref.job_application_id).applicant_id).first_name}_#{material_id_hash[jama.description]}_#{ref.attachments.index(jara)+1}_#{ref.job_application_id}#{ext_name}"
+              
+              orig_file_path = "#{RAILS_ROOT}/files/" + jara.disk_filename
+              if File.exists?(orig_file_path)
+                orig_file_name = File.basename(orig_file_path)
+                if zipfile.find_entry(new_file_name)
+                  zipfile.remove(new_file_name)
+                end
+                zipfile.get_output_stream(new_file_name) do |f|
+                  input = File.open(orig_file_path)
+                  data_to_copy = input.read()
+                  f.write(data_to_copy)
+                end
+              else
+                puts "Warning: file #{file_path} does not exist"
+              end
+            end  
+          end    
         end
       end
     end
-  end
+    
+    @zipped_file = "/uploads/#{@file_name}-materials.zip"
+    redirect_to job_path(@job, :apptracker_id => @job.apptracker_id, :zipped_file => @zipped_file)
+  end    
   
 end
