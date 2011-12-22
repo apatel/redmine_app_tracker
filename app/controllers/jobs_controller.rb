@@ -51,6 +51,8 @@ class JobsController < ApplicationController
     job_attachments = @job.job_attachments.find :first, :include => [:attachments]
     @job_attachment = job_attachments
     
+    @job_application_custom_fields = JobApplicationCustomField.find(:all, :order => "#{CustomField.table_name}.position")
+    
     respond_to do |format|
       format.html #show.html.erb
     end

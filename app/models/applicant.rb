@@ -23,10 +23,8 @@ class Applicant < ActiveRecord::Base
 
   # validation
   # FIXME Validations that fail are coming up with a 'translation missing: en' error
-  validates_presence_of :first_name, :last_name, :user_name, :email, :mobile_phone, :dob, :gender,
-                        :grad_month, :grad_year, :highest_degree_level, :gpa, :gpa_scale, :school_name, 
-                        :school_town_city, :school_state_province, :school_country, :home_street_1, 
-                        :home_town_city, :home_state_province, :home_postal_code, :home_country, :home_phone
+  validates_presence_of :first_name, :last_name, :user_name, :email, :address_1, 
+                        :city, :state, :postal_code, :country, :phone
   
   # TODO fix regex validation fields
   # validates_format_of :dob, 

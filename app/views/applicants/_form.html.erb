@@ -22,147 +22,57 @@
     <%= f.text_field(:email, :value => @user.mail) %>
   </p>
 
+  <h3>Address</h3>
   <p>
-    <%= f.label(:mobile_phone, "Mobile Phone") %><span class="required">*</span><br />
-    <%= f.text_field(:mobile_phone) %>
+    <%= f.label(:address_1, "Address Street") %><span class="required">*</span><br />
+    <%= f.text_field(:address_1) %>
   </p>
 
   <p>
-    <%= f.label(:dob,  "Date of Birth") %><span class="required">*</span> (format = MM/DD/YYYY) <br />
-    <%= f.text_field(:dob) %>
+    <%= f.label(:address_2, "Address Street 2") %><br />
+    <%= f.text_field(:address_2) %>
   </p>
 
   <p>
-    <%= f.label(:gender, "Gender") %><span class="required">*</span><br />
-    <%= f.select(:gender, Applicant::GENDER_OPTIONS, {:include_blank => true}) %>
-  </p>
-  
-  <h3>College/Academic Information</h3>
-  <p>
-    <%= f.label(:grad_month, "Graduation Month") %><span class="required">*</span><br />
-    <%= f.text_field(:grad_month) %>
+    <%= f.label(:city, "Address City") %><span class="required">*</span><br />
+    <%= f.text_field(:city) %>
   </p>
 
   <p>
-    <%= f.label(:grad_year, "Graduation Year") %><span class="required">*</span><br />
-    <%= f.text_field(:grad_year) %>
+    <%= f.label(:state, "Address State") %><span class="required">*</span><br />
+    <%= f.text_field(:state) %>
   </p>
 
   <p>
-    <%= f.label(:highest_degree_level, "Highest Degree Level") %><span class="required">*</span><br />
-    <%= f.select(:highest_degree_level, Applicant::HIGHEST_DEGREE_LEVEL, {:include_blank => true}) %>
+    <%= f.label(:postal_code, "Address Postal Code") %><span class="required">*</span><br />
+    <%= f.text_field(:postal_code) %>
   </p>
 
   <p>
-    <%= f.label(:gpa, "GPA") %><span class="required">*</span> (format = 4.55) <br />
-    <%= f.text_field(:gpa) %>
+    <%= f.label(:country, "Address Country") %><span class="required">*</span><br />
+    <%= f.text_field(:country) %>
   </p>
 
   <p>
-    <%= f.label(:gpa_scale, "GPA Scale") %><span class="required">*</span> (format = 4.0) <br />
-    <%= f.text_field(:gpa_scale) %>
-  </p>
-  
-  <p>
-    <%= f.label(:school_name, "School Name") %><span class="required">*</span><br />
-    <%= f.text_field(:school_name) %>
+    <%= f.label(:phone, "Phone") %><span class="required">*</span><br />
+    <%= f.text_field(:phone) %>
   </p>
 
   <p>
-    <%= f.label(:school_town_city, "School Town/City") %><span class="required">*</span><br />
-    <%= f.text_field(:school_town_city) %>
+    <%= f.label(:website, "Website") %><br />
+    <%= f.text_field(:website) %>
   </p>
 
   <p>
-    <%= f.label(:school_state_province, "School State/Province") %><span class="required">*</span><br />
-    <%= f.text_field(:school_state_province) %>
+    <%= f.label(:blog, "Blog") %><br />
+    <%= f.text_field(:blog) %>
   </p>
 
   <p>
-    <%= f.label(:school_country, "School Country") %><span class="required">*</span><br />
-    <%= f.text_field(:school_country) %>
+    <%= f.label(:social_networks, "Social Networks") %><br />
+    <%= f.text_field(:social_networks) %>
   </p>
 
-  <p>
-    <%= f.label(:academic_other_info, "Other Academic Info") %><br />
-    <%= f.text_area(:academic_other_info, :size => "60x8") %>
-  </p>
-
-
-  <h3>Home Address</h3>
-  <p>
-    <%= f.label(:home_street_1, "Home Address Street") %><span class="required">*</span><br />
-    <%= f.text_field(:home_street_1) %>
-  </p>
-
-  <p>
-    <%= f.label(:home_street_2, "Home Address Street 2") %><span class="required">*</span><br />
-    <%= f.text_field(:home_street_2) %>
-  </p>
-
-  <p>
-    <%= f.label(:home_town_city, "Home Address Town/City" %><span class="required">*</span><br />
-    <%= f.text_field(:home_town_city) %>
-  </p>
-
-  <p>
-    <%= f.label(:home_state_province, "Home Address State/Province") %><span class="required">*</span><br />
-    <%= f.text_field(:home_state_province) %>
-  </p>
-
-  <p>
-    <%= f.label(:home_postal_code, "Home Address Postal Code") %><span class="required">*</span><br />
-    <%= f.text_field(:home_postal_code) %>
-  </p>
-
-  <p>
-    <%= f.label(:home_country, "Home Address Country") %><span class="required">*</span><br />
-    <%= f.text_field(:home_country) %>
-  </p>
-
-  <p>
-    <%= f.label(:home_phone, "Home Phone") %><span class="required">*</span><br />
-    <%= f.text_field(:home_phone) %>
-  </p>
-
-  <h3>Dorm/Apartment Address</h3>
-  <em>Please only enter this if your current dorm/apartment address differs from your home address</em>
-  <p>
-    <%= f.label(:dorm_street_1, "Dorm Address Street") %><br />
-    <%= f.text_field(:dorm_street_1) %>
-  </p>
-
-  <p>
-    <%= f.label(:dorm_street_2, "Dorm Address Street 2") %><br />
-    <%= f.text_field(:dorm_street_2) %>
-  </p>
-
-  <p>
-    <%= f.label(:dorm_town_city, "Dorm Address Town/City") %><br />
-    <%= f.text_field(:dorm_town_city) %>
-  </p>
-
-  <p>
-    <%= f.label(:dorm_state_province, "Dorm Address State/Province") %><br />
-    <%= f.text_field(:dorm_state_province) %>
-  </p>
-
-  <p>
-    <%= f.label(:dorm_postal_code, "Dorm Address Postal Code") %><br />
-    <%= f.text_field(:dorm_postal_code) %>
-  </p>
-
-  <p>
-    <%= f.label(:dorm_country, "Dorm Address Country") %><br />
-    <%= f.text_field(:dorm_country) %>
-  </p>
-
-  <p>
-    <%= f.label(:dorm_phone, , "Dorm Phone") %><br />
-    <%= f.text_field(:dorm_phone) %>
-  </p>
-  
- 
   <p>
     <%= f.submit('Save') %>
   </p>

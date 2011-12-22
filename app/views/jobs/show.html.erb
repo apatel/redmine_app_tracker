@@ -84,6 +84,16 @@ Application Deadline: <%=h @job.submission_date %><br />
 <%=h @job.referrer_count %> reference(s) are required for this position.<br />
 <p>Description: <%=h @job.description %></p>
 
+<% if User.current.admin? %>
+	<% unless @job_application_custom_fields.empty? %>
+	  <h3>Additional Information</h3>
+		<% @job_application_custom_fields.each do |custom_field| %>
+		  <%= custom_field.name %> - <%= custom_field.field_format %>
+		<% end %>
+		<p></p>
+	<% end %>
+<% end %>
+
 <% unless @job_attachment.nil? || @job_attachment.attachments.empty? %>
 <h3>Job Attachments</h3>
   <%= link_to_attachments @job_attachment %>
