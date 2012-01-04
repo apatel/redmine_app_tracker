@@ -1,3 +1,6 @@
+require 'carmen'
+include Carmen
+
 class ApplicantsController < ApplicationController
   unloadable # don't keep reloading this
   #before_filter :require_admin, :except => ['index', 'show']
@@ -33,6 +36,18 @@ class ApplicantsController < ApplicationController
     respond_to do |format|
       format.html #show.html.erb
     end
+  end
+  
+  def country_select
+    p "in here"
+    begin
+       country = Carmen::country_code(params[:id])
+       @states = Carmen::states(country)
+    rescue
+       @states = nil
+    end
+    p @states
+    render :partial => "states"
   end
 
   # GET /applicants/new

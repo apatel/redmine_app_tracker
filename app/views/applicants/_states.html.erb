@@ -1,0 +1,12 @@
+<p>
+  	<div id="state_select">
+	  State or Territory<br />
+	  <% if !@applicant.nil? && !@applicant.state.nil? %>
+	    <%= select :applicant, :state, states%>
+	  <% elsif @states.nil? %>
+	    <%= text_field_tag :state %>
+	  <% else %>
+	    <%= select :applicant, :state, @states%>
+	  <% end %>
+	</div>
+</p>
