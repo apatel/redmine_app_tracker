@@ -25,13 +25,6 @@ class Applicant < ActiveRecord::Base
   # FIXME Validations that fail are coming up with a 'translation missing: en' error
   validates_presence_of :first_name, :last_name, :user_name, :email, :address_1, 
                         :city, :state, :postal_code, :country, :phone
-  
-  # TODO fix regex validation fields
-  # validates_format_of :dob, 
-  #                    :with => /\d{2}(\/)\d(\/)\d{4}/,
-  #                    :message => "Please correct the format of your date of birth (MM/DD/YYYY)"
-  # validates_format_of :gpa, :with => /(\d{1})(\.)(\d{2})/
-  # validates_format_of :gpa_scale, :with => /(\d{1})(\.)(\d{1})/
 
   # TODO validate uniqueness of login name once plugin is integrated into Redmine's user login/authentication
   # validates_uniqueness_of :user_name

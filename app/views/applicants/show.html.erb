@@ -35,5 +35,6 @@ Country: <%=h @applicant.country %><br />
 </table>
 <br />
 <%= link_to 'Edit', edit_applicant_url(@applicant.id, :apptracker_id => params[:apptracker_id]), :class => 'icon icon-edit' %>
-<br />
+<br /><br />
+<%= link_to 'View Open Jobs', jobs_url(:apptracker_id => params[:apptracker_id], :project_identifier => params[:project_identifier]), :class => 'icon icon-view' %>
 

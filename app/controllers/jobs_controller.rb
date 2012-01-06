@@ -3,7 +3,7 @@ require 'zip/zipfilesystem'
 
 class JobsController < ApplicationController
   unloadable
-  before_filter :require_admin, :except => [:index, :show]
+  before_filter :require_admin, :except => [:index, :show, :register]
   #before_filter :authorize
   
   helper :attachments
@@ -37,6 +37,9 @@ class JobsController < ApplicationController
     @apptracker = Apptracker.find(params[:apptracker_id])
     @job = @apptracker.jobs.find(params[:id])
     @zipped_file = params[:zipped_file]
+    
+    session[:auth_source_registration] = nil
+    @user = User.new(:language => Setting.default_language)
     
     sort_init 'created_at', 'desc'
     sort_update 'last_name' => "#{Applicant.table_name}.last_name",
@@ -420,6 +423,44 @@ class JobsController < ApplicationController
     
     @zipped_file = "/uploads/#{@file_name}-materials.zip"
     redirect_to job_path(@job, :apptracker_id => @job.apptracker_id, :zipped_file => @zipped_file)
-  end    
+  end  
+  
+  
+  
+  def register
+    redirect_to(home_url) && return unless Setting.self_registration? || session[:auth_source_registration]
+    if request.get?
+      session[:auth_source_registration] = nil
+      @user = User.new(:language => Setting.default_language)
+    else
+      @user = User.new(params[:user])
+      @user.admin = false
+      @user.register
+      if session[:auth_source_registration]
+        @user.activate
+        @user.login = session[:auth_source_registration][:login]
+        @user.auth_source_id = session[:auth_source_registration][:auth_source_id]
+        if @user.save
+          session[:auth_source_registration] = nil
+          self.logged_user = @user
+          flash[:notice] = l(:notice_account_activated)
+          redirect_to :back
+        end
+      else
+        @user.login = params[:user][:login]
+        @user.password, @user.password_confirmation = params[:password], params[:password_confirmation]
+        # Automatic activation
+        @user.activate
+        @user.last_login_on = Time.now
+        if @user.save
+          self.logged_user = @user
+          flash[:notice] = "Your account has been created. You are now logged in."
+          redirect_to :back
+        else
+          yield if block_given?
+        end
+      end
+    end
+  end  
   
 end

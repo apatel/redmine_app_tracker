@@ -15,7 +15,10 @@
 
 <% form_for(@applicant) do |f| %>
   <%= f.error_messages %>
-  <%= f.hidden_field(:apptracker_id, :value => @apptracker.id ) %>
+  <%= hidden_field_tag :apptracker_id, @apptracker.id %>
+  <% unless @job.nil? %>
+	<%= hidden_field_tag :job_id, @job.id  %>
+  <% end %>	
   <h3>General Information</h3>
   <p>
     <%= f.label(:first_name, "First Name") %><span class="required">*</span><br />
@@ -59,7 +62,7 @@
   </p>
 
   <p>
-  Country<br />
+  Country<span class="required">*</span><br />
   <%= f.select :country, Carmen::country_names, {:include_blank => true}, {:onchange => "change_state_select(this.options[this.selectedIndex].value);"} %>
   </p>
   <% unless @applicant.state.nil? %>
