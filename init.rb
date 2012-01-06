@@ -7,6 +7,28 @@ require 'dispatcher'
 Dispatcher.to_prepare :redmine_apptracker do
   require_dependency 'custom_fields_helper'
   CustomFieldsHelper.send(:include, CustomFieldsHelperPatch) unless CustomFieldsHelper.included_modules.include?(CustomFieldsHelperPatch)
+  
+  #overriding the 30 character limit on the name attribute for custom fields
+  CustomField.class_eval{
+    def validate
+      super
+      remove_name_too_long_error!(errors)
+    end
+
+    def remove_name_too_long_error!(errors)
+      errors.each_error do |attribute, error|
+        if error.attribute == :name && error.type == :too_long
+          errors_hash = errors.instance_variable_get(:@errors)
+          if Array == errors_hash[attribute] && errors_hash[attribute].size > 1
+            errors_hash[attribute].delete_at(errors_hash[attribute].index(error))
+          else
+            errors_hash.delete(attribute)
+          end
+        end
+      end
+    end
+  }
+  
 end
 
 Redmine::Plugin.register :redmine_apptracker do
@@ -48,5 +70,5 @@ Redmine::Plugin.register :redmine_apptracker do
     search.register :jobs
     search.register :apptrackers
   end
-  
+
 end

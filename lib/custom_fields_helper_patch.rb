@@ -1,4 +1,5 @@
 require_dependency 'custom_fields_helper'
+
 module CustomFieldsHelperPatch
   def self.included(base) # :nodoc:
       base.send(:include, InstanceMethods)

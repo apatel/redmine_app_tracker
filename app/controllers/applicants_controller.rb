@@ -39,14 +39,12 @@ class ApplicantsController < ApplicationController
   end
   
   def country_select
-    p "in here"
     begin
        country = Carmen::country_code(params[:id])
        @states = Carmen::states(country)
     rescue
        @states = nil
     end
-    p @states
     render :partial => "states"
   end
 
