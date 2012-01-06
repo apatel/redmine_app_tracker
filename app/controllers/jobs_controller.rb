@@ -429,38 +429,25 @@ class JobsController < ApplicationController
   
   def register
     redirect_to(home_url) && return unless Setting.self_registration? || session[:auth_source_registration]
-    if request.get?
-      session[:auth_source_registration] = nil
-      @user = User.new(:language => Setting.default_language)
-    else
+    if request.post?
       @user = User.new(params[:user])
       @user.admin = false
       @user.register
-      if session[:auth_source_registration]
-        @user.activate
-        @user.login = session[:auth_source_registration][:login]
-        @user.auth_source_id = session[:auth_source_registration][:auth_source_id]
-        if @user.save
-          session[:auth_source_registration] = nil
-          self.logged_user = @user
-          flash[:notice] = l(:notice_account_activated)
-          redirect_to :back
-        end
+      
+      @user.login = params[:user][:login]
+      @user.password, @user.password_confirmation = params[:password], params[:password_confirmation]
+      # Automatic activation
+      @user.activate
+      @user.last_login_on = Time.now
+      if @user.save
+        self.logged_user = @user
+        flash[:notice] = "Your account has been created. You are now logged in."
       else
-        @user.login = params[:user][:login]
-        @user.password, @user.password_confirmation = params[:password], params[:password_confirmation]
-        # Automatic activation
-        @user.activate
-        @user.last_login_on = Time.now
-        if @user.save
-          self.logged_user = @user
-          flash[:notice] = "Your account has been created. You are now logged in."
-          redirect_to :back
-        else
-          yield if block_given?
-        end
+        flash[:notice] = "Your account could not be created."  
       end
-    end
-  end  
-  
+      redirect_to :back
+    else
+      redirect_to(home_url)    
+    end  
+  end
 end
