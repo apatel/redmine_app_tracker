@@ -114,7 +114,7 @@ Application Deadline: <%=h @job.submission_date %><br />
 	<% unless @job_application_custom_fields.empty? %>
 	  <h3>Additional Information</h3>
 		<% @job_application_custom_fields.each do |custom_field| %>
-		  <%= custom_field.name %> - <%= custom_field.field_format %>
+		  <%= custom_field.name %> - <%= custom_field.field_format %> <br />
 		<% end %>
 		<p></p>
 	<% end %>

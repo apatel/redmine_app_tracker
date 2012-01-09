@@ -81,7 +81,9 @@ class ApplicantsController < ApplicationController
     @applicant = @apptracker.applicants.new(params[:applicant])
     unless params[:job_id].nil?
       @job = Job.find(params[:job_id])
-    end 
+    end
+    @user = User.current 
+    
     # attempt to save, and flash the result to the user
     respond_to do |format|
       if(@applicant.save)
@@ -106,7 +108,8 @@ class ApplicantsController < ApplicationController
     @apptracker = Apptracker.find(params[:applicant][:apptracker_id])
     params[:applicant].delete(:apptracker_id)
     @applicant = Applicant.find(params[:id])
-
+    @user = User.current
+    
     # attempt to update attributes, and flash the result to the user
     respond_to do |format|
       if(@applicant.update_attributes(params[:applicant]))
