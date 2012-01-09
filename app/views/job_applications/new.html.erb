@@ -20,7 +20,7 @@ document.observe("dom:loaded", function() {
   <%= f.hidden_field(:apptracker_id, :value => @apptracker.id ) %>
   <%= f.hidden_field(:applicant_id, :value => @applicant.id ) %>
   <%= f.hidden_field(:job_id, :value => @job.id ) %>
-  Some text!		
+	
   <p><%= render :partial => 'list_job_custom_fields', :locals => { :job => @job, :job_application => @job_application } %></p>
   
   <br />
