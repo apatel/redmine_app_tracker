@@ -33,6 +33,8 @@ class JobApplication < ActiveRecord::Base
   end  
   
   def available_custom_fields
+    p 'custom fields'
+    p self
     self.job.job_application_custom_fields || []
   end
 end
