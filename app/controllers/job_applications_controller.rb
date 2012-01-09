@@ -99,6 +99,9 @@ class JobApplicationsController < ApplicationController
     @applicant = Applicant.find_by_email(User.current.mail)
     @job_application = @applicant.job_applications.new(params[:job_application])
     @job_application[:submission_status] = "Submitted"
+    
+    @apptracker = Apptracker.find(params[:job_application][:apptracker_id])
+    @job = Job.find params[:job_application][:job_id]
     respond_to do |format|
       if(@job_application.save)
         #if job application saved then create the job application material
@@ -145,6 +148,10 @@ class JobApplicationsController < ApplicationController
     # find the job_application within its parent applicant
     @applicant = Applicant.find(params[:job_application][:applicant_id])
     @job_application = @applicant.job_applications.find(params[:id])
+    
+    @job = Job.find @job_application.job_id
+    @apptracker = Apptracker.find(params[:apptracker_id])
+    @job_application_materials = @job_application.job_application_materials.find :all, :include => [:attachments]
         
     # update the job_application's attributes, and indicate a message to the user opon success/failure
     respond_to do |format|
@@ -181,9 +188,6 @@ class JobApplicationsController < ApplicationController
         end  
       else
         # validation prevented update; redirect to edit form with error messages
-        @job = Job.find @job_application.job_id
-        @apptracker = Apptracker.find(params[:apptracker_id])
-        @job_application_materials = @job_application.job_application_materials.find :all, :include => [:attachments]
         format.html { render :action => "edit"}
       end
     end
