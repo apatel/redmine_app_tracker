@@ -74,7 +74,8 @@ class JobApplicationsController < ApplicationController
     if @applicant.nil?
       redirect_to(new_applicant_url(:apptracker_id => @apptracker.id, :job_id => @job.id))
     else
-      @job_application = JobApplication.new(:job => @job, :applicant => @applicant)
+      #@job_application = JobApplication.new(:job => @job, :applicant => @applicant)
+      @job_application = JobApplication.new(:job_id => @job.id, :applicant_id => @applicant.id)
       respond_to do |format|
         format.html # new.html.erb
       end
