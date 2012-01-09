@@ -74,7 +74,7 @@ class JobApplicationsController < ApplicationController
     if @applicant.nil?
       redirect_to(new_applicant_url(:apptracker_id => @apptracker.id, :job_id => @job.id))
     else
-      @job_application = @applicant.job_applications.new
+      @job_application = JobApplication.new(:job => @job, :applicant => @applicant)
       respond_to do |format|
         format.html # new.html.erb
       end
@@ -124,11 +124,13 @@ class JobApplicationsController < ApplicationController
         render_attachment_warning_if_needed(@job_application_material)
         
         #send referrer emails
-        @emails = params[:email].split(',')
-        @emails.each do |email|
-          Notification.deliver_request_referral(@job_application, email)
+        unless params[:email].nil?
+          @emails = params[:email].split(',')
+          @emails.each do |email|
+            Notification.deliver_request_referral(@job_application, email)
+          end
         end
-        
+      
         #Send Notification
         Notification.deliver_application_submitted(@job_application) 
         

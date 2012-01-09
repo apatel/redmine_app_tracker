@@ -54,7 +54,7 @@ class JobsController < ApplicationController
     job_attachments = @job.job_attachments.find :first, :include => [:attachments]
     @job_attachment = job_attachments
     
-    @job_application_custom_fields = JobApplicationCustomField.find(:all, :order => "#{CustomField.table_name}.position")
+    @job_application_custom_fields = @job.all_job_app_custom_fields
     
     respond_to do |format|
       format.html #show.html.erb
@@ -68,7 +68,6 @@ class JobsController < ApplicationController
     @apptracker = Apptracker.find(params[:apptracker_id])
     
     if(params[:job_id].nil?)
-    #if(params[:form_sect].to_i == 1)
       @job = @apptracker.jobs.new
     else
       @job = @apptracker.jobs.find(params[:job_id])

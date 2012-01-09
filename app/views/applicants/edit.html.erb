@@ -1,6 +1,7 @@
 <% flash[:notice] %>
 <h2><%=h Apptracker.find(params[:apptracker_id]).title %>: Applicant: <em><%=h "#{@applicant.last_name},#{@applicant.first_name}"%></em></h2>
 
+<%= render :partial => "shared/tabs" %>
 <%= render :partial => "form" %>
 
 <br />

@@ -91,6 +91,7 @@
 				<%= check_box_tag 'job[job_application_custom_field_ids][]', custom_field.id, (@job.all_job_app_custom_fields.include? custom_field), (custom_field.is_for_all? ? {:disabled => "disabled"} : {}) %>
 				<%= custom_field.name %>
 				</label>
+				<br />
 			<% end %>
 			<%= hidden_field_tag 'job[job_application_custom_field_ids][]', '' %>
 			</fieldset>

@@ -40,7 +40,7 @@ class Job < ActiveRecord::Base
   JOB_MATERIALS = ["Resume or CV", "Cover Letter", "Proposed Work", "Writing Sample"]
   
   def all_job_app_custom_fields
-    @all_job_app_custom_fields ||= (JobApplicationCustomField.for_all + job_application_custom_fields).uniq.sort
+    @all_job_app_custom_fields = self.job_application_custom_fields
   end
 
 end

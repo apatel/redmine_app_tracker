@@ -21,10 +21,18 @@ class JobApplication < ActiveRecord::Base
   accepts_nested_attributes_for :job_application_materials, :reject_if => proc { |attributes| attributes['document'].blank? }, :allow_destroy => true
  
   # validation
-  # TODO implement validations
+  #validates_presence_of :job_application_materials, :if => :materials_required?
 
   # constants
   # TODO convert these values into variables that can be set from a settings page within Redmine
   SUBMISSION_STATUS = ['Unsubmitted','Submitted']
   ACCEPTANCE_STATUS = ['Accepted', 'Declined', 'Pending']
+  
+  def materials_required?
+    !self.job.application_material_types.nil? || !self.job.application_material_types.empty?
+  end  
+  
+  def available_custom_fields
+    self.job.job_application_custom_fields || []
+  end
 end

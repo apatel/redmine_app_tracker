@@ -1,6 +1,7 @@
 <% flash[:notice] %>
 <h2><%=h @apptracker.title %>: <em>New Applicant</em></h2>
 
+<%= render :partial => "shared/tabs" %>
 <%= render :partial => "form" %>
 
 <br />
