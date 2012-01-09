@@ -96,11 +96,12 @@ class JobApplicationsController < ApplicationController
   # POST job_applications_url
   def create
     @applicant = Applicant.find_by_email(User.current.mail)
-    @job_application = JobApplication.new(params[:job_application]) 
+    @job = Job.find params[:job_application][:job_id]
+    @job_application = JobApplication.new(params[:job_application], :job_id = @job.id) 
     @job_application[:submission_status] = "Submitted"
     
     @apptracker = Apptracker.find(params[:job_application][:apptracker_id])
-    @job = Job.find params[:job_application][:job_id]
+    
     respond_to do |format|
       if(@job_application.save)
         #if job application saved then create the job application material
