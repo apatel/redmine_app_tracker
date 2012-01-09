@@ -96,7 +96,6 @@ class JobApplicationsController < ApplicationController
   # POST job_applications_url
   def create
     @applicant = Applicant.find_by_email(User.current.mail)
-    @job_application.job = Job.find params[:job_application][:job_id]
     @job_application = JobApplication.new(params[:job_application]) 
     @job_application[:submission_status] = "Submitted"
     
