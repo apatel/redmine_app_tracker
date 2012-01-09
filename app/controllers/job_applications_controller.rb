@@ -97,7 +97,7 @@ class JobApplicationsController < ApplicationController
   def create
     # create a job_application connected to its parent applicant
     @applicant = Applicant.find_by_email(User.current.mail)
-    @job_application = @applicant.job_applications.new(params[:job_application])
+    @job_application = JobApplication.new(params[:job_application])
     @job_application[:submission_status] = "Submitted"
     
     @apptracker = Apptracker.find(params[:job_application][:apptracker_id])
