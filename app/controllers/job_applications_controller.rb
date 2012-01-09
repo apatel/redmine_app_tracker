@@ -97,11 +97,10 @@ class JobApplicationsController < ApplicationController
   def create
     @applicant = Applicant.find_by_email(User.current.mail)
     @job = Job.find params[:job_application][:job_id]
-    log = Logger.new(STDOUT)
-    log.level = Logger::WARN
     logger.warn '[:job_id]'
     logger.warn params[:job_application][:job_id]
-    @job_application = JobApplication.new(params[:job_application]) 
+    params[:job_application][:job_id] = params[:job_application][:job_id].to_i
+    @job_application = JobApplication.new(params[:job_application])
     @job_application[:submission_status] = "Submitted"
     
     @apptracker = Apptracker.find(params[:job_application][:apptracker_id])
