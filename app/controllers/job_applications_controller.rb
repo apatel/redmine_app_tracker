@@ -87,9 +87,6 @@ class JobApplicationsController < ApplicationController
   def edit
     @job_application = JobApplication.find(params[:id])
     @job = Job.find @job_application.job_id
-    #p "Job Application Custom Fields"
-    #p @job.job_application_custom_fields
-    #@applicant = Applicant.find_by_email(User.current.mail)
     @applicant = @job_application.applicant
     @apptracker = Apptracker.find(params[:apptracker_id])
     @job_application_materials = @job_application.job_application_materials.find :all, :include => [:attachments]
@@ -110,13 +107,15 @@ class JobApplicationsController < ApplicationController
         @job_application_material = @job_application.job_application_materials.build(job_app_file)
         @job_application_material.save
         materials = @job_application.job.application_material_types.split(',')
-        i = 1
-        materials.each do |amt|
-          unless params[:attachments][i.to_s]['file'].nil?
-            params[:attachments][i.to_s]['description'] = amt
-          end  
-          i = i + 1
-        end  
+        unless params[:attachments].nil?
+          i = 1
+          materials.each do |amt|
+            unless params[:attachments][i.to_s]['file'].nil?
+              params[:attachments][i.to_s]['description'] = amt
+            end  
+            i = i + 1
+          end 
+        end   
         
         attachments = Attachment.attach_files(@job_application_material, params[:attachments])
         render_attachment_warning_if_needed(@job_application_material)
@@ -182,7 +181,10 @@ class JobApplicationsController < ApplicationController
         end  
       else
         # validation prevented update; redirect to edit form with error messages
-
+        @job = Job.find @job_application.job_id
+        @apptracker = Apptracker.find(params[:apptracker_id])
+        @job_application_materials = @job_application.job_application_materials.find :all, :include => [:attachments]
+        format.html { render :action => "edit"}
       end
     end
   end

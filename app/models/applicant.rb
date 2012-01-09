@@ -23,8 +23,16 @@ class Applicant < ActiveRecord::Base
 
   # validation
   # FIXME Validations that fail are coming up with a 'translation missing: en' error
-  validates_presence_of :first_name, :last_name, :user_name, :email, :address_1, 
-                        :city, :state, :postal_code, :country, :phone
+  validates_presence_of :first_name, :message => "First Name can not be empty."
+  validates_presence_of :last_name, :message => "Last Name can not be empty."
+  validates_presence_of :user_name, :message => "User Name can not be empty."
+  validates_presence_of :email, :message => "Email can not be empty."
+  validates_presence_of :address_1, :message => "Address 1 can not be empty."
+  validates_presence_of :city, :message => "City can not be empty."
+  validates_presence_of :state, :message => "State/Province can not be empty."
+  validates_presence_of :postal_code, :message => "Postal Code can not be empty."
+  validates_presence_of :country, :message => "Country can not be empty."
+  validates_presence_of :phone, :message => "Phone can not be empty."
 
   # TODO validate uniqueness of login name once plugin is integrated into Redmine's user login/authentication
   # validates_uniqueness_of :user_name

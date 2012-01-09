@@ -104,8 +104,11 @@ Application Deadline: <%=h @job.submission_date %><br />
   <br />
 <% end %>
 
+<% unless @job.referrer_count == "0" %>
 <%=h @job.referrer_count %> reference(s) are required for this position.<br />
-<p>Description: <%=h @job.description %></p>
+<% end %>
+
+<p>Description: <%= textilizable @job.description %></p>
 
 <% if User.current.admin? %>
 	<% unless @job_application_custom_fields.empty? %>

@@ -66,7 +66,6 @@ class JobsController < ApplicationController
   def new
     # secure the parent apptracker id and create a new job
     @apptracker = Apptracker.find(params[:apptracker_id])
-    @jobs = @apptracker.jobs
     
     if(params[:job_id].nil?)
     #if(params[:form_sect].to_i == 1)
@@ -84,43 +83,35 @@ class JobsController < ApplicationController
   def create
     # create a job in its parent apptracker
     @apptracker = Apptracker.find(params[:job][:apptracker_id])
-    if(params[:form][:form_id].to_i == 1)
-      @job = @apptracker.jobs.new(params[:job])
+    @job = @apptracker.jobs.new(params[:job])    
+    unless params[:application_material_types].nil?
+      @job.application_material_types = params[:application_material_types].join(",") + "," + params[:other_app_materials]
     else
-      @job = @apptracker.jobs.find(params[:job_id])
-    end    
-    @job.application_material_types = params[:application_material_types].join(",") + "," + params[:other_app_materials]
+      @job.application_material_types = params[:other_app_materials]  
+    end  
+    
     respond_to do |format|
-      if(params[:form][:form_id].to_i == 1)
-        if(@job.save)
-          
-          #if job saved then create the job attachments
-          #@job_attachments = params[:job][:job_attachments_attributes]["0"]
-          job_file = Hash.new
-          job_file["job_id"] = @job.id
-          job_file["name"] = @job.title
-          job_file["filename"] = @job.title
-          job_file["notes"] = @job.title
-          @job_attachment = @job.job_attachments.build(job_file)
-          @job_attachment.save
-          attachments = Attachment.attach_files(@job_attachment, params[:attachments])
-          render_attachment_warning_if_needed(@job_attachment)
-          
-          flash[:notice] = l(:notice_successful_create)
-          
-          # no errors, redirect to second part of form
-          format.html { redirect_to(jobs_url(:apptracker_id => @apptracker.id)) }
-        else
-          # validation prevented save; redirect back to new.html.erb with error messages
-          format.html { render :action => "new" }
-        end
+      if(@job.save)
+        
+        #if job saved then create the job attachments
+        #@job_attachments = params[:job][:job_attachments_attributes]["0"]
+        job_file = Hash.new
+        job_file["job_id"] = @job.id
+        job_file["name"] = @job.title
+        job_file["filename"] = @job.title
+        job_file["notes"] = @job.title
+        @job_attachment = @job.job_attachments.build(job_file)
+        @job_attachment.save
+        attachments = Attachment.attach_files(@job_attachment, params[:attachments])
+        render_attachment_warning_if_needed(@job_attachment)
+        
+        flash[:notice] = l(:notice_successful_create)
+        
+        # no errors, redirect to second part of form
+        format.html { redirect_to(jobs_url(:apptracker_id => @apptracker.id)) }
       else
-        p "in the second form"
-        if(@job.update_attributes(params[:job]))
-          format.html { redirect_to(jobs_url(:apptracker_id => @apptracker.id), :notice => "\'#{@job.title}\' has been updated.") }
-        else
-          format.html { render :action => "new" }
-        end
+        # validation prevented save; redirect back to new.html.erb with error messages
+        format.html { render :action => "new" }
       end
     end
   end
@@ -132,7 +123,6 @@ class JobsController < ApplicationController
     @apptracker = Apptracker.find(params[:apptracker_id])
     @job = @apptracker.jobs.find(params[:id])
     @job_attachment = @job.job_attachments.find :first, :include => [:attachments]
-    @jobs = @apptracker.jobs
 
     @custom_field = begin
       "JobApplicationCustomField".to_s.constantize.new(params[:custom_field])
@@ -152,7 +142,11 @@ class JobsController < ApplicationController
     # update the job's attributes, and indicate a message to the user opon success/failure
     respond_to do |format|
       if(@job.update_attributes(params[:job]))
-        @job.application_material_types = params[:application_material_types].join(",") + "," + params[:other_app_materials]
+        unless params[:application_material_types].nil?
+          @job.application_material_types = params[:application_material_types].join(",") + "," + params[:other_app_materials]
+        else
+          @job.application_material_types = params[:other_app_materials]  
+        end
         @job.save
         # no errors, redirect with success message
         @job_attachment = JobAttachment.find(:first, :conditions => {:job_id => @job.id})
@@ -168,6 +162,12 @@ class JobsController < ApplicationController
         format.html { redirect_to(edit_job_url(@job, :apptracker_id => @apptracker.id), :notice => "\'#{@job.title}\' has been updated.") }
       else
         # validation prevented update; redirect to edit form with error messages
+        @job_attachment = @job.job_attachments.find :first, :include => [:attachments]
+        @custom_field = begin
+          "JobApplicationCustomField".to_s.constantize.new(params[:custom_field])
+        rescue
+        end
+        @job_application_custom_fields = JobApplicationCustomField.find(:all, :order => "#{CustomField.table_name}.position")
         format.html { render :action => "edit"}
       end
     end

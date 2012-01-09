@@ -29,7 +29,7 @@ class Job < ActiveRecord::Base
   accepts_nested_attributes_for :job_attachments, :reject_if => proc { |attributes| attributes['document'].blank? }, :allow_destroy => true
 
   # validation
-  validates_presence_of :category, :status, :title, :description, :referrer_count
+  validates_presence_of :category, :status, :title, :description, :referrer_count, :application_followup_message
   # validates_uniqueness_of :title
   
   # constants

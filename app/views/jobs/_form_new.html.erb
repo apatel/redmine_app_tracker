@@ -1,8 +1,7 @@
 <% form_for(@job, :html => {:multipart => true}) do |f| %>
   <%= f.error_messages %>
   <%= f.hidden_field(:apptracker_id, :value => @apptracker.id ) %>
-  <%= hidden_field(:form, :form_id, :value => 1) %>
-  Part 1 of 2
+
   <p>
     <%= f.label(:category) %><span class="required">*</span><br />
     <%= f.select(:category, Job::JOB_CATEGORIES, {:include_blank => true}) %>
@@ -30,7 +29,7 @@
   </p>
   
   <p>
-    <%= f.label(:application_followup_message, "Application Follow-up Message") %><br />
+    <%= f.label(:application_followup_message, "Application Follow-up Message") %><span class="required">*</span><br />
     <%= f.text_area(:application_followup_message, :size => "60x5") %>
   </p>
 
@@ -45,7 +44,7 @@
   </p>
   
   <p>
-	<%= label_tag 'job_materials', 'Required Application Materials'%><span class="required">*</span><br />
+	<%= label_tag 'job_materials', 'Required Application Materials'%><br />
 	<% for material in Job::JOB_MATERIALS %>
 	  <%= check_box_tag "application_material_types[]", material, @job.application_material_types.nil? ? false : @job.application_material_types.split(',').include?(material) %>
 	  <%= material %>

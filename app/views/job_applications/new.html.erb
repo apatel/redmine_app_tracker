@@ -39,7 +39,7 @@ document.observe("dom:loaded", function() {
 	  <% end %>
 	<% end %>
 	
-	<% if !@job.referrer_count.nil? %>
+	<% unless @job.referrer_count.nil? || @job.referrer_count == "0" %>
 	  <h4>Referrals (<%= @job.referrer_count %> required)</h4>
 	  <%= label_tag :email, "Please enter referrer's email(s) separated by a comma:" %><br />
 	  <%= text_field_tag :email %><br />
