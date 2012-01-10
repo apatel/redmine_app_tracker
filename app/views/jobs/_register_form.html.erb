@@ -29,12 +29,6 @@
 <p><label for="user_language"><%=l(:field_language)%></label>
 <%= select("user", "language", lang_options_for_select) %></p>
 
-<% if Setting.openid? %>
-<p><label for="user_identity_url"><%=l(:field_identity_url)%></label>
-<%= text_field 'user', 'identity_url'  %></p>
-<% end %>
-
-
 <p></p>
 <p><%= submit_tag "Register" %></p>
 </div>

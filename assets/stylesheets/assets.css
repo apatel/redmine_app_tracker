@@ -1,6 +1,9 @@
 .access-account {
 	font-size: 20pt;
 }
+.register_form {
+	font-size: 8pt;
+}
 .icon-view { background-image: url(/assets/images/zoom.png); }
 
 .left{
