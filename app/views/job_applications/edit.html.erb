@@ -54,13 +54,13 @@ document.observe("dom:loaded", function() {
 	  <%= text_field_tag :email %><br />
 	<% end %>
 	
+  <% if(User.current.admin?)%>
     <h3>Job Application Status</h3>
 	<p>
       <%= f.label(:submission_status) %><span class="required">*</span><br />
       <%= f.select(:submission_status, JobApplication::SUBMISSION_STATUS, {:include_blank => false}) %>
     </p>
-    
-  <% if(User.current.admin?)%>
+
 	<p>
       <%= f.label(:acceptance_status) %><span class="required">*</span><br />
       <%= f.select(:acceptance_status, JobApplication::ACCEPTANCE_STATUS, {:include_blank => false}) %>

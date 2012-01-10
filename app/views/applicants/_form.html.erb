@@ -12,7 +12,7 @@
 	  }
 	 </script>
 <% end %>
-
+<span class="required">*</span> Required Fields
 <% form_for(@applicant) do |f| %>
   <%= f.error_messages %>
   <%= hidden_field_tag :apptracker_id, @apptracker.id %>
@@ -66,7 +66,11 @@
   <%= f.select :country, Carmen::country_names, {:include_blank => true}, {:onchange => "change_state_select(this.options[this.selectedIndex].value);"} %>
   </p>
   <% unless @applicant.state.nil? %>
-    <%= render :partial => 'states', :locals => {:states => Carmen::states(Carmen::country_code(@applicant.country))} %>
+	<% begin %>
+	  <div id='state_select'></div>
+	<% rescue %>
+      <%= render :partial => 'states', :locals => {:states => Carmen::states(Carmen::country_code(@applicant.country))} %>
+	<% end %>
   <% else %>
     <div id='state_select'></div>
   <% end %>
