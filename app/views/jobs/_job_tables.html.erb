@@ -5,7 +5,7 @@
       <!-- Admin scope -->
       <%= sort_header_tag('title') %>
       <%= sort_header_tag('category') %>
-      <%= sort_header_tag('description') %>
+      <%= sort_header_tag('short_desc', :caption => 'Short Description') %>
       <%= sort_header_tag('job_status') %>
 	  <%= sort_header_tag('application_deadline') %>
       <th></th>
@@ -14,14 +14,14 @@
       <!-- Applicant scope -->
       <%= sort_header_tag('title') %>
       <%= sort_header_tag('category') %>
-      <%= sort_header_tag('description') %>
+      <%= sort_header_tag('short_desc') %>
 	  <%= sort_header_tag('application_deadline') %>
       <th></th>
     <% else %>
       <!-- Anonymous scope -->
       <%= sort_header_tag('title') %>
       <%= sort_header_tag('category') %>
-      <%= sort_header_tag('description') %>
+      <%= sort_header_tag('short_desc') %>
 	  <%= sort_header_tag('application_deadline') %>
     <% end %>
   </tr>

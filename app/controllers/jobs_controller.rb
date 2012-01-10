@@ -19,7 +19,7 @@ class JobsController < ApplicationController
   # GET jobs_url
   def index
     sort_init 'submission_date', 'desc'
-    sort_update %w(title category description status submission_date)
+    sort_update %w(title category short_desc status submission_date)
     
     # secure the parent apptracker id and find its jobs
     @apptracker = Apptracker.find(params[:apptracker_id])
