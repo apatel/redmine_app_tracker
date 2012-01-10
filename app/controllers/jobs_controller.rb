@@ -204,8 +204,6 @@ class JobsController < ApplicationController
       cf_ids = job.all_job_app_custom_fields.collect {|cfield| cfield.id }
       cf_ids << custom_field.id
       cf = {"job_application_custom_field_ids" => cf_ids}
-      p "custom fields"
-      p cf_ids
       job.attributes = cf
       job.save
     else

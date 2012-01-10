@@ -24,7 +24,6 @@
 
 	    <% elsif (User.current.logged?)%>
 	      <!-- Applicant Role -->
-		  <th style="width:10%; text-align:left;">Application ID</th>
 		  <th style="width:10%; text-align:left;">Job</th>
 	      <th style="width:10%; text-align:left;">Date Submitted</th>
 	      <th style="width:10%; text-align:left;">Deadline</th>
@@ -72,7 +71,6 @@
 
         <% elsif (User.current.logged?)%>
           <!-- Applicant Role -->
-		  <td style="width:10%"><%= link_to "#{ja.id}", job_application_url(ja.id, :apptracker_id => ja.apptracker_id) %></td>
 		  <td style="width:10%"><%= link_to "#{ja.job.title}", job_url(ja.job.id, :apptracker_id => ja.apptracker_id) %></td>
 		  <td style="width:10%"><%= ja.created_at.month %>/<%= ja.created_at.day %>/<%= ja.created_at.year %> <%= ja.created_at.strftime("%I:%M %p") %></td>
 		  <td style="width:10%"><%= ja.job.submission_date.month %>/<%= ja.job.submission_date.day %>/<%= ja.job.submission_date.year %> <%= ja.job.submission_date.strftime("%I:%M %p") %></td>

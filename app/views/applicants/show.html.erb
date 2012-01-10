@@ -1,3 +1,7 @@
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag "assets.css", :plugin => "redmine_app_tracker", :media => "screen" %>
+<% end %>
+
 <% flash[:notice] %>
 <div class="contextual">
   <%= link_to 'Back', applicants_url, :class => 'icon icon-history' %>

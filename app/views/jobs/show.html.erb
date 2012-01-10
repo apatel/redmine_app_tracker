@@ -12,7 +12,9 @@ function toggle() {
 	}
 } 
 </script>
-
+<% content_for :header_tags do %>
+    <%= stylesheet_link_tag "assets.css", :plugin => "redmine_app_tracker", :media => "screen" %>
+<% end %>
 
 
 <% flash[:notice] %>
@@ -60,6 +62,7 @@ function toggle() {
     </p>
 
 <% elsif User.current.logged? %>
+<span class="access-account">
   <% @applicant = Applicant.find_by_email(User.current.mail) %>
   <% unless @applicant.nil? %>
   
@@ -68,34 +71,37 @@ function toggle() {
   	  <!-- if the applicant has already applied to this job, do not show the "Apply" link -->
 	  <% unless @jobs.include?(@job.id) %>
 	    <!-- go to job application -->
-		<%= link_to "Apply to this job", new_job_application_url(:apptracker_id => params[:apptracker_id], :job_id => @job.id, :user_id => User.current.id) %>
+		<%= link_to "Apply to this job", new_job_application_url(:apptracker_id => params[:apptracker_id], :job_id => @job.id, :user_id => User.current.id), :class => 'access-account' %>
 	  <% else %>
 	    You have already submitted an application for this job. To view what you've submitted, please go to the "My Job Applications" tab.
 	  <% end %>	
   <% else %>
-    <%= link_to "Apply to this job", new_job_application_url(:apptracker_id => params[:apptracker_id], :job_id => @job.id, :user_id => User.current.id) %>
-  
+    <%= link_to "Apply to this job", new_job_application_url(:apptracker_id => params[:apptracker_id], :job_id => @job.id, :user_id => User.current.id), :class => 'access-account' %>
   <% end %>
+</span>
 <% else %>
+<span class="access-account">
   <!-- Take anonymous user to registration or login page -->
-  <%= link_to "Log In", signin_url %> 
+  <%= link_to "Log In", signin_url, :class => 'access-account' %> 
 	or 
-  <a id="displayText" href="javascript:toggle();">Register</a> to Apply to This Job
+  <a id="displayText" href="javascript:toggle();" class="access-account">Register</a> to Apply to This Job
   <div id ="toggleText" style="display: none">
 	<br />
 	<%= render :partial => "register_form" %>
-  </div>	
+  </div>
+</span>	
 <% end %>
 </strong>
 	
 <p></p>
 <h3>Job Details</h3>
 <p>
-Category: <%=h @job.category %><br />
-Application Deadline: <%=h @job.submission_date %><br />
+<strong>Category:</strong> <%=h @job.category %><br />
+<br />
+<strong>Application Deadline:</strong> <%=h @job.submission_date %><br />
 <br />
 <% unless @job.application_material_types.nil? || @job.application_material_types.empty? %>	
-  Required Application Materials:
+  <strong>Application materials that will be uploaded into the system:</strong>
   <ul>
   <% @job.application_material_types.split(',').each do |amt| %>
     <li><%=h amt %></li>
@@ -108,7 +114,7 @@ Application Deadline: <%=h @job.submission_date %><br />
 <%=h @job.referrer_count %> reference(s) are required for this position.<br />
 <% end %>
 
-<p>Description: <%= textilizable @job.description %></p>
+<strong>Description:</strong> <%= textilizable @job.description %><br />
 
 <% if User.current.admin? %>
 	<% unless @job_application_custom_fields.empty? %>
@@ -127,3 +133,31 @@ Application Deadline: <%=h @job.submission_date %><br />
 </p>
 <br />
 
+<strong>
+<span class="access-account">	
+<% if User.current.logged? %>
+  <% @applicant = Applicant.find_by_email(User.current.mail) %>
+  <% unless @applicant.nil? %>
+    <% @jobs = @applicant.job_applications.collect {|x| x.job_id } %>
+    <!-- if the applicant has already applied to this job, do not show the "Apply" link -->
+      <% unless @jobs.include?(@job.id) %>
+      <!-- go to job application -->
+	  <%= link_to "Apply to this job", new_job_application_url(:apptracker_id => params[:apptracker_id], :job_id => @job.id, :user_id => User.current.id) %>
+    <% else %>
+      You have already submitted an application for this job. To view what you've submitted, please go to the "My Job Applications" tab.
+    <% end %>	
+  <% else %>
+    <%= link_to "Apply to this job", new_job_application_url(:apptracker_id => params[:apptracker_id], :job_id => @job.id, :user_id => User.current.id) %>
+  <% end %>
+<% else %>
+  <!-- Take anonymous user to registration or login page -->
+  <%= link_to "Log In", signin_url, :class => 'access-account' %> 
+	or 
+  <a id="displayText" href="javascript:toggle();">Register</a> to Apply to This Job
+  <div id ="toggleText" style="display: none">
+	<br />
+	<%= render :partial => "register_form" %>
+  </div>	
+<% end %>
+</span>
+</strong>
