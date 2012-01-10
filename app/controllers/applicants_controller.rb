@@ -105,7 +105,7 @@ class ApplicantsController < ApplicationController
   # PUT applicant_url(:id => 1)
   def update
     # find the applicant via its parent apptracker
-    @apptracker = Apptracker.find(params[:applicant][:apptracker_id])
+    @apptracker = Apptracker.find([:apptracker_id])
     params[:applicant].delete(:apptracker_id)
     @applicant = Applicant.find(params[:id])
     @user = User.current
