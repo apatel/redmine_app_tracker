@@ -188,15 +188,24 @@ class JobsController < ApplicationController
   end
   
   def create_custom_field
+    custom_field = CustomField.new(params[:custom_field])
+    custom_field.type = params[:type]
+    custom_field = begin
+      if params[:type].to_s.match(/.+CustomField$/)
+        params[:type].to_s.constantize.new(params[:custom_field])
+      end
+    rescue
+    end
     job = Job.find_by_id params[:id]
-    custom_field = CustomField.create!(params[:custom_field])
-    custom_field.type = "JobApplicationCustomField"
+    
     if custom_field.save
       flash[:notice] = l(:notice_successful_create)
       call_hook(:controller_custom_fields_new_after_save, :params => params, :custom_field => custom_field)
       cf = {"job_application_custom_field_ids" => [custom_field.id]}
       job.attributes = cf
       job.save
+    else
+      flash[:notice] = "Custom field could not be added."
     end
     
     redirect_to :action => "edit", :id => job, :apptracker_id => job.apptracker_id
