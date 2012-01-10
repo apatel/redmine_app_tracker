@@ -8,9 +8,22 @@ function toggle() {
   	}
 	else {
 		ele.style.display = "block";
-		text.innerHTML = "Hide Form";
+		text.innerHTML = "Register";
 	}
 } 
+
+function toggle2() {
+	var ele = document.getElementById("toggleText2");
+	var text = document.getElementById("displayText2");
+	if(ele.style.display == "block") {
+    		ele.style.display = "none";
+		text.innerHTML = "Register";
+  	}
+	else {
+		ele.style.display = "block";
+		text.innerHTML = "Register";
+	}
+}
 </script>
 <% content_for :header_tags do %>
     <%= stylesheet_link_tag "assets.css", :plugin => "redmine_app_tracker", :media => "screen" %>
@@ -153,8 +166,8 @@ function toggle() {
   <!-- Take anonymous user to registration or login page -->
   <%= link_to "Log In", signin_url, :class => 'access-account' %> 
 	or 
-  <a id="displayText" href="javascript:toggle();">Register</a> to Apply to This Job
-  <div id ="toggleText" style="display: none">
+  <a id="displayText2" href="javascript:toggle2();">Register</a> to Apply to This Job
+  <div id ="toggleText2" style="display: none">
 	<br />
 	<span class="register_form"><%= render :partial => "register_form" %></span>
   </div>	
