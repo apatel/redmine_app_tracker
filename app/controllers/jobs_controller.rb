@@ -453,7 +453,7 @@ class JobsController < ApplicationController
         self.logged_user = @user
         flash[:notice] = "Your account has been created. You are now logged in."
       else
-        flash[:notice] = "Your account could not be created."  
+        flash[:error] = "Your account could not be created."
       end
       redirect_to :back
     else

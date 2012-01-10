@@ -24,6 +24,7 @@ class Applicant < ActiveRecord::Base
   # validation
   # FIXME Validations that fail are coming up with a 'translation missing: en' error
   validates_presence_of :first_name, :last_name, :user_name, :email, :address_1, :city, :state, :postal_code, :country, :phone
+  validates_length_of :phone, :maximum => 30
 
   # TODO validate uniqueness of login name once plugin is integrated into Redmine's user login/authentication
   # validates_uniqueness_of :user_name

@@ -25,7 +25,26 @@ class JobApplication < ActiveRecord::Base
   SUBMISSION_STATUS = ['Unsubmitted','Submitted']
   ACCEPTANCE_STATUS = ['Accepted', 'Declined', 'Pending'] 
   
+  def validate
+     
+  end
+  
   def available_custom_fields
     self.job.all_job_app_custom_fields || []
   end
+  
+  # def required_jobapp_materials
+  #   materials = self.job.application_material_types.split(',')
+  #   
+  #   unless params[:attachments].nil?
+  #     i = 1
+  #     materials.each do |amt|
+  #       unless params[:attachments][i.to_s].nil?
+  #         params[:attachments][i.to_s]['description'] = amt
+  #       end  
+  #       i = i + 1
+  #     end 
+  #   end
+  # end
+  
 end

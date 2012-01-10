@@ -95,55 +95,95 @@ class JobApplicationsController < ApplicationController
   # POST /job_applications
   # POST job_applications_url
   def create
+    flash[:error] = nil
     @applicant = Applicant.find_by_email(User.current.mail)
     @job = Job.find params[:job_application][:job_id]
-    
     @job_application = JobApplication.new(:job => @job, :applicant => @applicant)
-    @job_application.update_attributes(params[:job_application])
-    @job_application[:submission_status] = "Submitted"
+    
     
     @apptracker = Apptracker.find(params[:job_application][:apptracker_id])
     
-    respond_to do |format|
-      if(@job_application.save)
-        #if job application saved then create the job application material
-        job_app_file = Hash.new
-        job_app_file["job_application_id"] = @job_application.id
-        @job_application_material = @job_application.job_application_materials.build(job_app_file)
-        @job_application_material.save
-        materials = @job_application.job.application_material_types.split(',')
-        unless params[:attachments].nil?
-          i = 1
-          materials.each do |amt|
-            unless params[:attachments][i.to_s]['file'].nil?
-              params[:attachments][i.to_s]['description'] = amt
-            end  
-            i = i + 1
-          end 
-        end   
-        
-        attachments = Attachment.attach_files(@job_application_material, params[:attachments])
-        render_attachment_warning_if_needed(@job_application_material)
-        
-        #send referrer emails
-        unless params[:email].nil?
-          @emails = params[:email].split(',')
-          @emails.each do |email|
-            Notification.deliver_request_referral(@job_application, email)
-          end
-        end
-      
-        #Send Notification
-        Notification.deliver_application_submitted(@job_application) 
-        
-        flash[:notice] = l(:notice_successful_create)
-        # no errors, redirect with success message
-        format.html { redirect_to(job_applications_url(:apptracker_id => @job_application.apptracker_id, :applicant_id => @job_application.applicant_id), :notice => "Application has been submitted.") }
-      else
-        # validation prevented save; redirect back to new.html.erb with error messages
-        format.html { render :action => "new" }
-      end
+    #prepare the job application material attachments
+    materials = @job_application.job.application_material_types.split(',')
+    error_files = Array.new
+    unless params[:attachments].nil?
+      i = 1
+      materials.each do |amt|
+        unless params[:attachments][i.to_s].nil?
+          params[:attachments][i.to_s]['description'] = amt
+        else
+          error_files << amt  
+        end  
+        i = i + 1
+      end 
+    else
+      error_files = materials  
     end
+    
+    respond_to do |format|
+      if error_files.empty?
+        @job_application.update_attributes(params[:job_application])
+        @job_application[:submission_status] = "Submitted"
+        if(@job_application.save)
+        
+          # #if job application saved then create the job application material
+          job_app_file = Hash.new
+          job_app_file["job_application_id"] = @job_application.id
+          @job_application_material = @job_application.job_application_materials.build(job_app_file)
+          @job_application_material.save
+        
+          attachments = Attachment.attach_files(@job_application_material, params[:attachments])
+          render_attachment_warning_if_needed(@job_application_material)
+        
+          # job_app_file = Hash.new
+          # job_app_file["job_application_id"] = @job_application.id
+          # @job_application_material = @job_application.job_application_materials.build(job_app_file)
+          # @job_application_material.save
+          # materials = @job_application.job.application_material_types.split(',')
+          # unless params[:attachments].nil?
+          #   i = 1
+          #   materials.each do |amt|
+          #     unless params[:attachments][i.to_s].nil?
+          #       params[:attachments][i.to_s]['description'] = amt
+          #     end  
+          #     i = i + 1
+          #   end 
+          # end   
+        
+          # attachments = Attachment.attach_files(@job_application_material, params[:attachments])
+          # render_attachment_warning_if_needed(@job_application_material)
+        
+          #send referrer emails
+          unless params[:email].nil?
+            @emails = params[:email].split(',')
+            @emails.each do |email|
+              Notification.deliver_request_referral(@job_application, email)
+            end
+          end
+      
+          #Send Notification
+          Notification.deliver_application_submitted(@job_application) 
+        
+          flash[:notice] = l(:notice_successful_create)
+          # no errors, redirect with success message
+          format.html { redirect_to(job_applications_url(:apptracker_id => @job_application.apptracker_id, :applicant_id => @job_application.applicant_id), :notice => "Application has been submitted.") }
+        else
+          # validation prevented save; redirect back to new.html.erb with error messages
+          format.html { render :action => "new" }
+        end
+      else
+        # job material validation prevented save; redirect back to new.html.erb with error messages
+        message = ""
+        error_files.each do |material|
+          line = material + " " + "cannot be empty."
+          message = message + line + "\n"
+        end
+        message = message + "You will need to re-upload all documents."
+        flash[:error] = message
+        @job_application = JobApplication.new(params[:job_application])
+        format.html { render :action => "new" }  
+      end  
+    end  
   end
 
   # PUT /job_applications/1
