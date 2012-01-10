@@ -16,8 +16,10 @@
 		  <%= sort_header_tag('created_at', :caption => 'Deadline') %>
 		  <%= sort_header_tag('submission_status', :caption => 'Submission Status') %>
 		  <%= sort_header_tag('acceptance_status', :caption => 'Acceptance Status') %>
+		  <!--
 		  <th style="width:5%; text-align:left;">Referrals Required</th>
 		  <th style="width:5%; text-align:left;">Referrals Received</th>
+		  -->
 		  <th style="width:5%; text-align:left;">Admin Notes</th>
 		  <th style="width:5%; text-align:left;"></th>
 		  <th style="width:5%; text-align:left;"></th>
@@ -28,8 +30,10 @@
 	      <th style="width:10%; text-align:left;">Date Submitted</th>
 	      <th style="width:10%; text-align:left;">Deadline</th>
 	      <th style="width:5%; text-align:left;">Submission Status</th>
-	      <th style="width:5%; text-align:left;">Referrals Required</th>
+	      <!--
+		  <th style="width:5%; text-align:left;">Referrals Required</th>
 	      <th style="width:5%; text-align:left;">Referrals Received</th>
+		  -->
 		  <th style="width:5%; text-align:left;"></th>
 		  <th style="width:5%; text-align:left;"></th>
 		  <th style="width:5%; text-align:left;"></th>
@@ -60,8 +64,6 @@
 		  <td style="width:10%"><%= ja.job.submission_date.month %>/<%= ja.job.submission_date.day %>/<%= ja.job.submission_date.year %> <%= ja.job.submission_date.strftime("%I:%M %p") %></td>
 		  <td style="width:10%"><%= ja.submission_status %></td>
 		  <td style="width:10%"><%= ja.acceptance_status %></td>
-		  <td style="width:5%"><%= ja.job.referrer_count %></td>
-		  <td style="width:5%"><%= ja.job_application_referrals.all.empty? ? 0 : ja.job_application_referrals.all.length %></td>
  		  <td style="width:5%"><%= ja.notes.nil? || ja.notes.blank? ? 'No' : 'Yes' %></td>
 		  <td style="width:5%"><%= link_to 'Edit', edit_job_application_url(ja.id, :apptracker_id => ja.apptracker_id), :class => 'icon icon-edit' %></td>
           <td style="width:5%"><%= link_to 'Delete', job_application_url(:id => ja.id), 
@@ -76,8 +78,6 @@
 		  <td style="width:10%"><%= ja.created_at.month %>/<%= ja.created_at.day %>/<%= ja.created_at.year %> <%= ja.created_at.strftime("%I:%M %p") %></td>
 		  <td style="width:10%"><%= ja.job.submission_date.month %>/<%= ja.job.submission_date.day %>/<%= ja.job.submission_date.year %> <%= ja.job.submission_date.strftime("%I:%M %p") %></td>
 		  <td style="width:10%"><%= ja.submission_status %></td>
-		  <td style="width:5%"><%= ja.job.referrer_count %></td>
-		  <td style="width:5%"><%= ja.job_application_referrals.all.empty? ? 0 : ja.job_application_referrals.all.length %></td>
 		  <td style="width:5%"><%= link_to 'View', job_application_url(ja.id, :apptracker_id => ja.apptracker_id), :class => 'icon icon-view' %></td>
 		  <% if ja.job.submission_date > DateTime.now %>
 		    <td style="width:5%"><%= link_to 'Edit', edit_job_application_url(ja.id, :apptracker_id => ja.apptracker_id), :class => 'icon icon-edit' %></td>

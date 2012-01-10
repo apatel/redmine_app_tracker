@@ -33,9 +33,9 @@
         <!-- Admin scope -->
         <td><%= link_to "#{job.title}", job_url(job.id, :apptracker_id => params[:apptracker_id]) %></a></td>
         <td><%=h job.category %></a></td>
-        <td><%= textilizable job.description %></td>
+        <td><%= textilizable job.short_desc %></td>
         <td><%=h job.status %></td>
-		<td><%=h job.submission_date.month %>/<%=h job.submission_date.day %>/<%=h job.submission_date.year %> <%= job.submission_date.strftime("%I:%M %p") %></td>
+		<td><%=h job.submission_date.month %>/<%=h job.submission_date.day %>/<%=h job.submission_date.year %> <%= job.submission_date.strftime("%I:%M %p") %> ET</td>
         <td><%= link_to 'Edit', edit_job_url(job.id, :apptracker_id => params[:apptracker_id]), :class => 'icon icon-edit' %></td>
         <td><%= link_to 'Delete', job_url(:id => job.id, :apptracker_id => params[:apptracker_id]), 
           :confirm => "All links to applicants will be destroyed.  Are you sure you want to delete the \"#{job.title}\" job?", 
@@ -47,15 +47,15 @@
           <!-- Applicant scope -->
           <td><%= link_to "#{job.title}", job_url(job.id, :apptracker_id => params[:apptracker_id]) %></td>
           <td><%=h job.category %></td>
-          <td><%= textilizable job.description %></td>
-		  <td><%=h job.submission_date.month %>/<%=h job.submission_date.day %>/<%=h job.submission_date.year %> <%= job.submission_date.strftime("%I:%M %p") %></td>
+          <td><%= textilizable job.short_desc %></td>
+		  <td><%=h job.submission_date.month %>/<%=h job.submission_date.day %>/<%=h job.submission_date.year %> <%= job.submission_date.strftime("%I:%M %p") %> ET</td>
           <td></td>
         <% else %>
           <!-- Anonymous scope -->
           <td><%= link_to "#{job.title}", job_url(job.id, :apptracker_id => params[:apptracker_id]) %></a></td>
           <td><%=h job.category %></a></td>
-          <td><%= textilizable job.description %></td>
-		  <td><%=h job.submission_date.month %>/<%=h job.submission_date.day %>/<%=h job.submission_date.year %> <%= job.submission_date.strftime("%I:%M %p") %></td>
+          <td><%= textilizable job.short_desc %></td>
+		  <td><%=h job.submission_date.month %>/<%=h job.submission_date.day %>/<%=h job.submission_date.year %> <%= job.submission_date.strftime("%I:%M %p") %> ET</td>
         <% end %>
       <% end %>
     </tr>
