@@ -10,7 +10,7 @@ module CustomFieldsHelperPatch
     end
 
     module InstanceMethods
-      # Adds a rates tab to the user administration page
+      # Adds a job application tab to the user administration page
       def custom_fields_tabs_with_job_application_tab
         tabs = custom_fields_tabs_without_job_application_tab
         tabs << {:name => 'JobApplicationCustomField', :partial => 'custom_fields/index', :label => 'Job Applications'}

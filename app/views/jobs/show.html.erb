@@ -70,7 +70,7 @@ function toggle() {
 	    <!-- go to job application -->
 		<%= link_to "Apply to this job", new_job_application_url(:apptracker_id => params[:apptracker_id], :job_id => @job.id, :user_id => User.current.id) %>
 	  <% else %>
-	    You have already created an application for this job. To view it, please go to the "My Job Applications" tab.  
+	    You have already submitted an application for this job. To view what you've submitted, please go to the "My Job Applications" tab.
 	  <% end %>	
   <% else %>
     <%= link_to "Apply to this job", new_job_application_url(:apptracker_id => params[:apptracker_id], :job_id => @job.id, :user_id => User.current.id) %>
