@@ -154,7 +154,7 @@ class JobApplicationsController < ApplicationController
     @job_application = @applicant.job_applications.find(params[:id])
     
     @job = Job.find @job_application.job_id
-    @apptracker = Apptracker.find(params[:apptracker_id])
+    @apptracker = Apptracker.find(params[:job_application][:apptracker_id])
     @job_application_materials = @job_application.job_application_materials.find :all, :include => [:attachments]
         
     # update the job_application's attributes, and indicate a message to the user opon success/failure
