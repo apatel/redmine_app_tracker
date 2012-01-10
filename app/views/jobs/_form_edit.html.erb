@@ -1,3 +1,4 @@
+<span class="required">*</span> Required Fields
 <% form_for(@job, :html => {:multipart => true}) do |f| %>
   <%= f.error_messages %>
   <%= f.hidden_field(:apptracker_id, :value => @apptracker.id ) %>

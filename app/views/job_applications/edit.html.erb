@@ -12,7 +12,7 @@ document.observe("dom:loaded", function() {
 <h2><%=h Apptracker.find(@job_application.apptracker_id).title %>: <%=h Job.find(@job_application.job_id).title %> </h2>
 
 <%= render :partial => "shared/tabs" %>
-
+<span class="required">*</span> Required Fields
 <%= render :partial => 'applicant_info', :locals => { :applicant => @applicant, :apptracker_id => params[:apptracker_id] } %>
 <br /><br />
 <% form_for(@job_application, :html => {:multipart => true}) do |f| %>

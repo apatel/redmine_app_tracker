@@ -1,7 +1,7 @@
 <h2>Job Application Referral</h2>
 
 <%= render :partial => "shared/tabs" %>
-
+<span class="required">*</span> Required Fields
 <% form_for(@job_application_referral, :html => {:multipart => true}) do |jar| %>
   <%= jar.error_messages %>
   <%= jar.hidden_field(:job_application_id, :value => @job_application.id ) %>
