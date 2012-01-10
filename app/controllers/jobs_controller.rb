@@ -201,7 +201,11 @@ class JobsController < ApplicationController
     if custom_field.save
       flash[:notice] = l(:notice_successful_create)
       call_hook(:controller_custom_fields_new_after_save, :params => params, :custom_field => custom_field)
-      cf = {"job_application_custom_field_ids" => [custom_field.id]}
+      cf_ids = job.all_job_app_custom_fields.collect {|cfield| cfield.id }
+      cf_ids << custom_field.id
+      cf = {"job_application_custom_field_ids" => cf_ids}
+      p "custom fields"
+      p cf_ids
       job.attributes = cf
       job.save
     else
