@@ -176,10 +176,12 @@ class JobApplicationsController < ApplicationController
         attachments = Attachment.attach_files(@job_application_material, params[:attachments])
         render_attachment_warning_if_needed(@job_application_material)
         
-        #send referrer emails
-        @emails = params[:email].split(',')
-        @emails.each do |email|
-          Notification.deliver_request_referral(@job_application, email)
+        unless params[:email].nil?
+          #send referrer emails
+          @emails = params[:email].split(',')
+          @emails.each do |email|
+            Notification.deliver_request_referral(@job_application, email)
+          end
         end
         
         #Send Notification
