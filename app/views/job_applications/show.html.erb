@@ -29,28 +29,30 @@ Job Title: <%= link_to Job.find(@job_application.job_id).title, job_path(@job_ap
   No attachments.
 <% end %>
 <br />
-<h3>Job Application Referrals</h3>
-<% if User.current.admin? %>
-	<% unless @job_application_referrals.nil? || @job_application_referrals.blank? %>
-	  <% @job_application_referrals.each do |jar| %>
-	    <p>
-	      Name: <%= jar.first_name %> <%= jar.last_name %><br />
-	      Email: <%= jar.email %><br />
-	      Title: <%= jar.title %><br />
-	      Notes: <%= jar.notes %><br />
-	      <%= link_to_attachments jar %>
-	    </p>
-	  <% end %>
-	<% else %>
-	  No referrals.
-	<% end %>
-	</p>
-	<br />
+<% unless @job_application.job.referrer_count == "0" %>
+	<h3>Job Application Referrals</h3>
+	<% if User.current.admin? %>
+		<% unless @job_application_referrals.nil? || @job_application_referrals.blank? %>
+		  <% @job_application_referrals.each do |jar| %>
+		    <p>
+		      Name: <%= jar.first_name %> <%= jar.last_name %><br />
+		      Email: <%= jar.email %><br />
+		      Title: <%= jar.title %><br />
+		      Notes: <%= jar.notes %><br />
+		      <%= link_to_attachments jar %>
+		    </p>
+		  <% end %>
+		<% else %>
+		  No referrals.
+		<% end %>
+		</p>
+		<br />
 	
-	<h3>Admin Notes</h3>
-  	<p><%= @job_application.notes %></p>
-<% else %>
-    <p>Referrals Submitted: <%= @job_application.job_application_referrals.all.empty? ? 0 : @job_application.job_application_referrals.all.length %></p>
+		<h3>Admin Notes</h3>
+	  	<p><%= @job_application.notes %></p>
+	<% else %>
+	    <p>Referrals Submitted: <%= @job_application.job_application_referrals.all.empty? ? 0 : @job_application.job_application_referrals.all.length %></p>
+	<% end %>
 <% end %>
 
 <% if @job_application.job.submission_date > DateTime.now || User.current.admin? %>

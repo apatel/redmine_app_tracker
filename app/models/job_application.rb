@@ -26,9 +26,6 @@ class JobApplication < ActiveRecord::Base
   ACCEPTANCE_STATUS = ['Accepted', 'Declined', 'Pending'] 
   
   def available_custom_fields
-    p "in here"
-    p self
     self.job.all_job_app_custom_fields || []
-    
   end
 end
