@@ -30,7 +30,7 @@ class Job < ActiveRecord::Base
 
   # validation
   validates_presence_of :category, :status, :title, :short_desc, :description, :referrer_count, :application_followup_message
-  validates_length_of :short_desc, :maximum => 100
+  validates_length_of :short_desc, :maximum => 255
   
   # constants
   # TODO convert these values into variables that can be set from a settings page within Redmine
