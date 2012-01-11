@@ -7,6 +7,7 @@ class Notification < Mailer
     subject "Application Submitted"
     body :user => Applicant.find_by_id(job_application.applicant_id),
          :url => url_for(:controller => 'job_application', :action => 'show', :id => job_application.id, :apptracker_id => job_application.apptracker_id)
+    content_type "text/html"     
   end
   
   def application_updated(job_application)
@@ -15,6 +16,7 @@ class Notification < Mailer
     subject "Application Updated"
     body :user => Applicant.find_by_id(job_application.applicant_id),
          :url => url_for(:controller => 'job_application', :action => 'show', :id => job_application.id, :apptracker_id => job_application.apptracker_id)
+    content_type "text/html"
   end
   
   def request_referral(job_application, email)
@@ -24,6 +26,7 @@ class Notification < Mailer
     subject "Referral Request"
     body :user => Applicant.find_by_id(job_application.applicant_id),
          :url => url_for(:controller => 'job_application', :action => 'show', :id => job_application.id, :apptracker_id => job_application.apptracker_id)
+    content_type "text/html"     
   end
   
   def referral_complete(job_application, referrer_email)
@@ -33,6 +36,7 @@ class Notification < Mailer
     subject "Referral Complete"
     body :user => Applicant.find_by_id(job_application.applicant_id),
          :url => url_for(:controller => 'job_application', :action => 'show', :id => job_application.id, :apptracker_id => job_application.apptracker_id)
+    content_type "text/html"     
   end
   
 end
