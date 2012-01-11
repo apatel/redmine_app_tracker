@@ -129,8 +129,6 @@ function toggle2() {
 <%=h @job.referrer_count %> reference(s) are required for this position.<br />
 <% end %>
 
-<strong>Short Description:</strong> <%= textilizable @job.short_desc %><br />
-
 <strong>Description:</strong> <%= textilizable @job.description %><br />
 
 <% if User.current.admin? %>
