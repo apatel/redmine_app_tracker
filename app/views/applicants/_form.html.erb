@@ -68,9 +68,10 @@
   </p>
   <% unless @applicant.state.nil? %>
 	<% begin %>
-	  <div id='state_select'></div>
+	  <%= render :partial => 'states', :locals => {:states => Carmen::states(Carmen::country_code(@applicant.country))} %>
 	<% rescue %>
-      <%= render :partial => 'states', :locals => {:states => Carmen::states(Carmen::country_code(@applicant.country))} %>
+	  <% logger.warn "in rescue"%>
+      <%= render :partial => 'states', :locals => {:states => nil} %>
 	<% end %>
   <% else %>
     <div id='state_select'></div>
