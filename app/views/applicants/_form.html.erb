@@ -1,8 +1,8 @@
 <% content_for :header_tags do %>
     <script type="text/javascript" charset="utf-8">
-	  function change_state_select(state_code)
+	  function change_state_select(country_code)
 	 {
-	    new Ajax.Request('/applicants/country_select/'+state_code,
+	    new Ajax.Request('<%= url_for(:action => "country_select") %>/'+country_code,
 	    {
 	      method: 'get',
 	      onSuccess: function(transport) {
