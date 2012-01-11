@@ -7,7 +7,8 @@
 
 <% if @user.auth_source_id.nil? %>
 <p><label for="user_login">Username <span class="required">*</span></label>
-<%= text_field 'user', 'login', :size => 25 %></p>
+<%= text_field 'user', 'login', :size => 25 %><br />
+<em>No spaces, maximum 30 characters.</em></p>
 
 <p><label for="password"><%=l(:field_password)%> <span class="required">*</span></label>
 <%= password_field_tag 'password', nil, :size => 25  %><br />

@@ -20,7 +20,7 @@ class Notification < Mailer
   end
   
   def request_referral(job_application, email)
-    @job_application = job_application#, Applicant.find_by_id(job_application.applicant_id).email
+    @job_application = job_application
     # Send email to referrer
     recipients email
     subject "Referral Request"
