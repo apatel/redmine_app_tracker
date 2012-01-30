@@ -4,6 +4,8 @@ class JobApplicationsController < ApplicationController
   # TODO find out how to use authentication for allowing access to :new and :edit actions
   before_filter :require_admin, :except => [:index, :show, :new, :edit, :create, :update, :destroy] 
 
+#  before_filter :access_check, :except => [:index, :new]
+
   helper :attachments
   include AttachmentsHelper
   helper :custom_fields
@@ -53,8 +55,13 @@ class JobApplicationsController < ApplicationController
     # secure the parent apptracker id and find requested job_application
     @job_application = JobApplication.find(params[:id])
     @applicant = @job_application.applicant
+
+	unless User.current.admin? || @applicant.email == User.current.mail
+		redirect_to('/') and return
+	end
     
-    @job_application_materials = @job_application.job_application_materials.find :all, :include => [:attachments]
+# el oh el - why twice?
+#    @job_application_materials = @job_application.job_application_materials.find :all, :include => [:attachments]
     @job_application_referrals = @job_application.job_application_referrals.find :all, :include => [:attachments]
     
     respond_to do |format|
@@ -88,6 +95,9 @@ class JobApplicationsController < ApplicationController
     @job_application = JobApplication.find(params[:id])
     @job = Job.find @job_application.job_id
     @applicant = @job_application.applicant
+	unless User.current.admin? || @applicant.email == User.current.mail
+		redirect_to('/') and return
+	end
     @apptracker = Apptracker.find(params[:apptracker_id])
     @job_application_materials = @job_application.job_application_materials.find :all, :include => [:attachments]
   end
@@ -174,6 +184,9 @@ class JobApplicationsController < ApplicationController
   def update
     # find the job_application within its parent applicant
     @applicant = Applicant.find(params[:job_application][:applicant_id])
+	unless User.current.admin? || @applicant.email == User.current.mail
+		redirect_to('/') and return
+	end
     @job_application = @applicant.job_applications.find(params[:id])
     
     @job = Job.find @job_application.job_id
@@ -228,6 +241,9 @@ class JobApplicationsController < ApplicationController
     # create a job_application in the context of its parent applicant
     @job_application = JobApplication.find(params[:id])
     @applicant = Applicant.find(@job_application.applicant_id)
+	unless User.current.admin? || @applicant.email == User.current.mail
+		redirect_to('/') and return
+	end
     @apptracker = Apptracker.find(@job_application.apptracker_id)
     
 

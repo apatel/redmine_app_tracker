@@ -29,7 +29,9 @@ class ApplicantsController < ApplicationController
   def show 
     @apptracker = Apptracker.find(params[:apptracker_id])
     @applicant = Applicant.find(params[:id])
-
+	unless User.current.admin? || @applicant.email == User.current.mail
+		redirect_to('/') and return
+	end
     # TODO uncomment this after job applications are implemented
     # @job_applications = @applicant.job_applications
 
@@ -71,11 +73,17 @@ class ApplicantsController < ApplicationController
     @apptracker = Apptracker.find(params[:apptracker_id]) 
     @applicant = Applicant.find(params[:id])
     @user = User.current
+	unless User.current.admin? || @applicant.email == User.current.mail
+		redirect_to('/') and return
+	end
   end
   
   # POST /applicants
   # POST applicants_url
   def create
+  	#TODO - probably need to verify a user can't submit applications
+	# under another's account --DJCP
+
     # create an applicant and attach it to its parent apptracker
     @apptracker = Apptracker.find(params[:apptracker_id])
     @applicant = @apptracker.applicants.new(params[:applicant])
@@ -109,6 +117,10 @@ class ApplicantsController < ApplicationController
     params[:applicant].delete(:apptracker_id)
     @applicant = Applicant.find(params[:id])
     @user = User.current
+
+	unless User.current.admin? || @applicant.email == User.current.mail
+		redirect_to('/') and return
+	end
     
     # attempt to update attributes, and flash the result to the user
     respond_to do |format|
@@ -128,6 +140,10 @@ class ApplicantsController < ApplicationController
     # find the applicant via its parent apptracker
     @apptracker = Apptracker.find(params[:apptracker_id])
     @applicant = Applicant.find(params[:id])
+
+	unless User.current.admin? || @applicant.email == User.current.mail
+		redirect_to('/') and return
+	end
 
     # attempt to destroy the applicant (ouch), and flash the result to the user
     @applicant.destroy ? flash[:notice] = "#{@applicant.first_name} #{@applicant.last_name}\'s record has been deleted." : flash[:error] = "Error: #{@applicant.first_name} #{@applicant.last_name}\'s record could not be deleted."
