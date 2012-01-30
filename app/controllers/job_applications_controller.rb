@@ -60,8 +60,8 @@ class JobApplicationsController < ApplicationController
 		redirect_to('/') and return
 	end
     
-# el oh el - why twice?
-#    @job_application_materials = @job_application.job_application_materials.find :all, :include => [:attachments]
+# note these two lines are NOT the same, one is job materials the other is job referrals
+    @job_application_materials = @job_application.job_application_materials.find :all, :include => [:attachments]
     @job_application_referrals = @job_application.job_application_referrals.find :all, :include => [:attachments]
     
     respond_to do |format|
